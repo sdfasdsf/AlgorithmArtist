@@ -51,7 +51,7 @@ class ArticleDetail(APIView):
         if request.user != article.author:
             return Response({'detail': '수정 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
         
-        serializer = ArticleDetailSerializer(article, data=request.data)  # 상세 Serializer 사용
+        serializer = ArticleDetailSerializer(article, data=request.data, partial=True)  # 상세 Serializer 사용
         if serializer.is_valid():
             serializer.save(author = article.author)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -106,8 +106,9 @@ class CommentListDelete(APIView):
     def put(self, request, article_pk, comment_pk):
         article = self.get_article(article_pk)
         comment = self.get_comment(article, comment_pk)
-
-        if request.user != article.author:
+        print("request",request.user)
+        print("article", comment.author)
+        if request.user != comment.author:
             return Response({'detail': '수정 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
         
         serializer = CommentSerializer(comment, data=request.data)
@@ -120,7 +121,7 @@ class CommentListDelete(APIView):
         article = self.get_article(article_pk)
         comment = self.get_comment(article, comment_pk)
 
-        if request.user != article.author:
+        if request.user != comment.author:
             return Response({'detail': '삭제 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
         
         comment.delete()  # 게시글 삭제
