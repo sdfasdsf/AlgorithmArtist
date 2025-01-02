@@ -5,7 +5,7 @@ from .models import Comment
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
-
+    """게시글 목록 조회 Serializer"""
     class Meta:
         model = Article
         fields = (
@@ -14,12 +14,13 @@ class ArticleListSerializer(serializers.ModelSerializer):
             "title",
             "created_at",
             "image",
+            "rating"
         )
         read_only_fields = ("author",)
 
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
-    """게시글 상세 조회 및 생성 Serializer"""
+    """게시글 상세 조회 및 수정 및 생성 Serializer"""
 
     author = serializers.ReadOnlyField(
         source="author.email"
@@ -44,10 +45,11 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
         if obj.image:
             return request.build_absolute_uri(obj.image.url)
         return None
+    
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """댓글 조회 및 생성 Serializer"""
+    """댓글 조회 및 생성 및 수정 Serializer"""
 
     author = serializers.ReadOnlyField(source="author.email")
 

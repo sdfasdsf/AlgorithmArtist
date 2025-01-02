@@ -43,19 +43,6 @@ class ArticleDetail(APIView):
         """게시글 상세 조회"""
         article = self.get_object(article_pk)
 
-        # # 로그인한 사용자이고 작성자가 아닌 경우에만 조회수 증가 처리
-        # # 24시간 동안 같은 IP에서 같은 게시글 조회 시 조회수가 증가하지 않음
-        # if request.user != article.author:
-        #     # 해당 사용자의 IP와 게시글 ID로 캐시 키를 생성
-        #     cache_key = f"view_count_{request.META.get('REMOTE_ADDR')}_{article_pk}"
-
-        #     # 캐시에 없는 경우에만 조회수 증가
-        #     if not cache.get(cache_key):
-        #         article.view_count += 1
-        #         article.save()
-        #         # 캐시 저장 (24시간 유효)
-        #         cache.set(cache_key, True, 5)
-
         serializer = ArticleDetailSerializer(article)  # 상세 Serializer 사용
         return Response(serializer.data)
     
@@ -104,3 +91,38 @@ class CommentListCreate(APIView):
             serializer.save(author=request.user, article=article)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+class CommentListDelete(APIView):
+
+    def get_article(self, article_pk):
+        return get_object_or_404(Article, pk=article_pk)
+    
+    def get_comment(self, article, comment_pk):
+        return get_object_or_404(Comment, pk=comment_pk, article=article)
+
+    def put(self, request, article_pk, comment_pk):
+        article = self.get_article(article_pk)
+        comment = self.get_comment(article, comment_pk)
+
+        if request.user != article.author:
+            return Response({'detail': '수정 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,request, article_pk, comment_pk):
+        article = self.get_article(article_pk)
+        comment = self.get_comment(article, comment_pk)
+
+        if request.user != article.author:
+            return Response({'detail': '삭제 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        comment.delete()  # 게시글 삭제
+        return Response(status=status.HTTP_204_NO_CONTENT)  # 204 No Content 응답
+
