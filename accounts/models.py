@@ -21,31 +21,44 @@ class CustomUserManager(BaseUserManager):
 
 # Create your models here.
 class User(AbstractUser):
-    email = models.EmailField("이메일", unique=True)
-    username = models.CharField("닉네임", max_length=150, unique=True)
-    profile_image = models.ImageField(
-        "프로필 이미지", upload_to="profile_images/", blank=True, null=True
-    )
-    name = models.CharField("이름", max_length=30)  # 이름 필드 추가
-    birthdate = models.DateField("생일", blank=True, null=True)  # 생일 필드 추가
-    gender = models.CharField(
-        "성별",
-        max_length=10,
-        choices=[("male", "남성"), ("female", "여성"), ("other", "기타")],
-        blank=True,
-    )  # 성별 필드 추가
-    introduction = models.TextField("자기소개", blank=True)
-
+    email = models.EmailField('이메일', unique=True)
+    username = models.CharField('닉네임', max_length=150)  # unique=True 제거
+    profile_image = models.ImageField('프로필 이미지', upload_to='profile_images/', blank=True, null=True)
+    
     # ManyToManyField로 팔로우 기능 구현
     followings = models.ManyToManyField(
-        "self",  # 자기 자신과의 관계
+        'self',  # 자기 자신과의 관계
         symmetrical=False,  # 대칭 관계가 아님 (단방향)
-        related_name="followers",  # 역참조 이름
-        through="Follow",  # 중간 테이블
+        related_name='followers',  # 역참조 이름
+        through='Follow',  # 중간 테이블
+        blank=True
     )
 
-    USERNAME_FIELD = "email"  # 로그인 시 이메일 사용
-    REQUIRED_FIELDS = ["username", "name"]  # email은 자동으로 필수
+    # 새로운 필드 추가 부분_____________________________
+    #_____________________________________________________________선이다
+    gender = models.CharField(  # 성별 추가
+        '성별',
+        max_length=10,
+        choices=[('male', '남성'), ('female', '여성'), ('other', '기타')],
+        blank=True, null=True  # 선택 사항
+    )
+    
+    ssn = models.CharField(  # 주민등록번호 추가
+        '주민등록번호',
+        max_length=13,  # 주민등록번호는 13자리
+        unique=True,  # 주민등록번호는 고유해야 함
+        blank=True, null=True  # 선택 사항
+    )
+
+    phone_number = models.CharField(  # 전화번호 추가
+        '전화번호',
+        max_length=15,  # 전화번호의 최대 길이
+        unique=True,  # 전화번호는 고유해야 함
+        blank=True, null=True  # 선택 사항
+    )
+#__________________________________________________________추가한부분 
+    USERNAME_FIELD = 'email'    # 로그인 시 이메일 사용
+    REQUIRED_FIELDS = []        # email은 자동으로 필수
 
     objects = CustomUserManager()
 
