@@ -44,7 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class FollowSerializer(serializers.ModelSerializer):
         class Meta:
             model = User
-            fields = ("id", "email", "username", "profile_image")
+            fields = ("id", "email", "username", "profile_image",)
 
     followers = FollowSerializer(many=True, read_only=True)
     followings = FollowSerializer(many=True, read_only=True)
@@ -71,6 +71,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "follower_count",
             "following_count",
             "profile_image",
+            "gender",        # 성별 필드 추가
+            "ssn",           # 주민등록번호 필드 추가
+            "phone_number",  # 전화번호 필드 추가
         ]  # 반환할 필드
 
     def get_profile_image(self, obj):
