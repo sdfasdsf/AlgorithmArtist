@@ -87,3 +87,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("username", "profile_image")  # 수정 가능한 필드
+
+class passwordchangeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["password"]  # 수정 가능한 필드
+    
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])  # 비밀번호 해시화
+        instance.save()
+        return instance
+

@@ -93,6 +93,7 @@ dill @ file:///C:/b/abs_f79eg27d2q/croot/dill_1715094735295/work
 distributed @ file:///C:/b/abs_27jqurd3gk/croot/distributed_1715844512065/work
 distro @ file:///C:/b/abs_71xr36ua5r/croot/distro_1714488282676/work
 Django==4.2.8
+django-extensions==3.2.3
 django-seed==0.3.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.1
