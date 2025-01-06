@@ -75,14 +75,10 @@ def login(request):
 @authentication_classes([])  # 전역 인증 설정 무시
 @permission_classes([AllowAny])  # 전역 IsAuthenticated 설정 무시
 def logout(request):
-    print("---")
     try:
         refresh_token = request.data.get("refresh")
-        print(refresh_token)
         token = RefreshToken(refresh_token)
-        print(token)
         token.blacklist()
-        print("---")
         return Response({"message": "로그아웃 성공"})
     except Exception:
         return Response({"error": "로그아웃 실패"}, status=status.HTTP_400_BAD_REQUEST)
