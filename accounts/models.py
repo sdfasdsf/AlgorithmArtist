@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -56,6 +57,8 @@ class User(AbstractUser):
         unique=True,  # 전화번호는 고유해야 함
         blank=True, null=True  # 선택 사항
     )
+
+    article_likes = models.ManyToManyField('articles.Article', related_name='liked_by', blank=True)
 #__________________________________________________________추가한부분 
     USERNAME_FIELD = 'email'    # 로그인 시 이메일 사용
     REQUIRED_FIELDS = []        # email은 자동으로 필수

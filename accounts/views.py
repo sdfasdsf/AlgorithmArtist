@@ -8,6 +8,7 @@ from rest_framework.decorators import (
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import SignupSerializer, UserUpdateSerializer, UserProfileSerializer, passwordchangeSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import authenticate, logout, get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
@@ -72,6 +73,7 @@ def login(request):
 
 
 @api_view(["POST"])
+@authentication_classes([JWTAuthentication])  # JWT 인증 명시적으로 사용
 @authentication_classes([IsAuthenticated])  # 전역 인증 설정 무시
 def logout(request):
     try:
@@ -90,6 +92,7 @@ def profile(request):
 
     if request.method == "GET":
         serializer = UserProfileSerializer(user, context={"request": request})
+        
         return Response(serializer.data, status=200)
 
     if request.method in ("PUT", "PATCH"):
