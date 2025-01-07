@@ -21,10 +21,9 @@ class SignupSerializer(serializers.ModelSerializer):
             "password2",
             "username",
             "profile_image",
-            "name",
-            "birthdate",
             "gender",
-            "introduction",
+            "ssn",
+            "phone_number",
         )
 
     def validate(self, data):
@@ -44,7 +43,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class FollowSerializer(serializers.ModelSerializer):
         class Meta:
             model = User
-            fields = ("id", "email", "username", "profile_image")
+            fields = ("id", "email", "username", "profile_image",)
 
     followers = FollowSerializer(many=True, read_only=True)
     followings = FollowSerializer(many=True, read_only=True)
@@ -54,6 +53,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
     )
     profile_image = serializers.SerializerMethodField()  # 커스텀 필드로 처리
 
+    # 추가된 필드 ___________________________________________________________________
+    gender = serializers.CharField(source='get_gender_display', read_only=True)  # 성별 추가
+    ssn = serializers.CharField(read_only=True)  # 주민등록번호 추가
+    phone_number = serializers.CharField(read_only=True)  # 전화번호 추가
+    #_____________________________________________________________________
+    
     class Meta:
         model = User
         fields = [
@@ -65,6 +70,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "follower_count",
             "following_count",
             "profile_image",
+            "gender",        # 성별 필드 추가
+            "ssn",           # 주민등록번호 필드 추가
+            "phone_number",  # 전화번호 필드 추가
         ]  # 반환할 필드
 
     def get_profile_image(self, obj):

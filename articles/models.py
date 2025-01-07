@@ -1,8 +1,8 @@
+# articles/models.py
+
 from django.db import models
 from django.conf import settings
 
-
-# articles/models.py
 class Article(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"

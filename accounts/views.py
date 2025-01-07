@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# accounts/views.py
 from rest_framework import status
 from rest_framework.decorators import (
     api_view,
@@ -28,6 +28,19 @@ def signup(request):
             status=status.HTTP_201_CREATED,
         )
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])  # 로그인된 사용자만 접근 가능
+def signout(request):
+    user = request.user
+
+    # 사용자 삭제
+    user.delete()
+
+    return Response({
+        "message": "회원탈퇴가 되었습니다."
+    }, status=status.HTTP_204_NO_CONTENT)
+
 
 
 @api_view(["POST"])
@@ -62,14 +75,10 @@ def login(request):
 @authentication_classes([])  # 전역 인증 설정 무시
 @permission_classes([AllowAny])  # 전역 IsAuthenticated 설정 무시
 def logout(request):
-    print("---")
     try:
         refresh_token = request.data.get("refresh")
-        print(refresh_token)
         token = RefreshToken(refresh_token)
-        print(token)
         token.blacklist()
-        print("---")
         return Response({"message": "로그아웃 성공"})
     except Exception:
         return Response({"error": "로그아웃 실패"}, status=status.HTTP_400_BAD_REQUEST)
@@ -128,4 +137,3 @@ def follow(request, user_pk):
         },
         status=status.HTTP_200_OK,
     )
-
