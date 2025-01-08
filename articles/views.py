@@ -46,7 +46,7 @@ class ArticleDetail(APIView):
         serializer = ArticleDetailSerializer(article)  # 상세 Serializer 사용
         return Response(serializer.data)
     
-    def post(self,request,article_pk):
+    def post(self,request,article_pk): # 게시글 좋아요 기능 추가
         article = self.get_object(article_pk)
         me = request.user
         if me == article.author:

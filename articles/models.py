@@ -19,7 +19,7 @@ class Article(models.Model):
         on_delete=models.CASCADE,    # User가 삭제될 때 게시글도 삭제
         null=True
     )
-    article_like = models.ManyToManyField('accounts.User', related_name='liked_articles' ,blank=True)
+    article_like = models.ManyToManyField('accounts.User', related_name='liked_articles' ,blank=True) # 게시글 좋아요 필드 추가
 
     def __str__(self):
         return self.title
@@ -39,7 +39,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,    # User가 삭제될 때 게시글도 삭제
         null=True
     )
-    comment_like = models.ManyToManyField(User, related_name='comment_likes' ,blank=True)
+    comment_like = models.ManyToManyField('accounts.User', related_name='liked_comments' ,blank=True) # 댓글 좋아요 필드 추가
 
     def __str__(self):
         return f"{self.author} - {self.content}"
