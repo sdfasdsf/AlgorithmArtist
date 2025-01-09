@@ -6,7 +6,7 @@ def TMOVINGBOT(request):
     user_message = request.GET.get('message', '').lower()
 
     # 영화 추천 로직
-    if "추천" in user_message:
+    if "최신" or "인기" or "추천" in user_message:
         movie = Movie.objects.order_by('?').first() # 랜덤 영화
         return JsonResponse({
             "response": f"제가 추천하는 영화는 '{movie.title}'입니다. 장르는 {movie.genre}이고, {movie.description}"
