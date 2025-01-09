@@ -1,11 +1,12 @@
 import os
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage
 from langchain_community.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStore
 from langchain_core.prompts import ChatPromptTemplate 
+from langchain.text_splitter import CharacterTextSplitter
 from langchain_core.runnables import RunnablePassthrough
 from langchain.chains import LLMchain
 
@@ -16,6 +17,14 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 model = ChatOpenAI(model="gpt-4o-mini")
 
 # 문서 리스트, 임베딩 함수 사용하여 FAISS 벡터 저장소 생성
+text_splitter = CharacterTextSplitter(
+    chunk_size=100,
+    chunk_overlap=10,
+    length_fuction=len,
+    is_separator_regex=False,
+)
+
+splits = text_splitter.split
 vectorstore = FAISS.from_documents(documents=splits, embedding=embeddings)
 
 #
@@ -49,12 +58,12 @@ class RetrieverWrapper:
         response_docs = self.retriever.get_relevant_documents(query)
         return response_docs
 
-llm_chain = LLMChain(llm=model, prompt=contextual_prompt)
+llm_chain = LLMchain(llm=model, prompt=contextual_prompt)
 
 # RAG 체인 설정
 rag_chain_debug = {
     "context": RetrieverWrapper(retriever),
-    "prompt": ContextToPrompt(contextual_prompt),
+    "prompt": ContextoPrompt(contextual_prompt),
     "llm": model
 }
 
