@@ -15,6 +15,7 @@ class Article(models.Model):
     created_at = models.DateTimeField("작성일", auto_now_add=True)
     updated_at = models.DateTimeField("수정일", auto_now=True)
     rating = models.IntegerField("평점", choices=[(i, str(i)) for i in range(1, 6)])
+    views = models.IntegerField("조회수", default=0)
     writer = models.ForeignKey(
         User,  # 커스텀 User 모델 사용
         on_delete=models.CASCADE,    # User가 삭제될 때 게시글도 삭제

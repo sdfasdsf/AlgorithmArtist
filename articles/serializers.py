@@ -60,6 +60,7 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
             "updated_at",
             "rating",
             "comments",
+            "views",
         )
 
     def get_image(self, obj):

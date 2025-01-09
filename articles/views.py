@@ -42,8 +42,22 @@ class ArticleDetail(APIView):
     def get(self, request, article_pk):
         """게시글 상세 조회"""
         article = self.get_object(article_pk)
+        
+        # 로그인한 사용자이고 작성자가 아닌 경우에만 조회수 증가 처리
+        # 24시간 동안 같은 IP에서 같은 게시글 조회 시 조회수가 증가하지 않음
+        if request.user != article.author:
+            # 해당 사용자의 IP와 게시글 ID로 캐시 키를 생성
+            cache_key = f"view_count_{request.META.get('REMOTE_ADDR')}_{article_pk}"
+            
+            # 캐시에 없는 경우에만 조회수 증가
+            if not cache.get(cache_key):
+                article.views += 1
+                article.save()
+                # 캐시 저장 (24시간 유효)
+                cache.set(cache_key, True, 60 * 30) # 30분마다 조회수 증가
 
         serializer = ArticleDetailSerializer(article)  # 상세 Serializer 사용
+        
         return Response(serializer.data)
     
     def post(self,request,article_pk): # 게시글 좋아요 기능 추가
