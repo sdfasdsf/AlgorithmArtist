@@ -31,8 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "AI",
-    "Main",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,6 +46,8 @@ INSTALLED_APPS = [
     # apps
     'accounts',
     'articles',
+    'AI',
+    'Main',
 ]
 
 MIDDLEWARE = [

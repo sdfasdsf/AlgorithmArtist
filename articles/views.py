@@ -46,6 +46,34 @@ class ArticleDetail(APIView):
         serializer = ArticleDetailSerializer(article)  # 상세 Serializer 사용
         return Response(serializer.data)
     
+    def post(self,request,article_pk): # 게시글 좋아요 기능 추가
+        article = self.get_object(article_pk)
+        me = request.user
+        if me == article.author:
+            return Response(
+                {"error": "자신의 글은 좋아요 할 수 없습니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        if article.article_like.filter(id=me.id).exists():
+            article.article_like.remove(me)
+            is_liked = False
+            message = f"{article.title}을 좋아요를 취소했습니다."
+        
+        else :
+            article.article_like.add(me)
+            is_liked = True
+            message = f"{article.title}을 좋아요를 했습니다."
+
+        return Response(
+        {
+            "is_liked": is_liked,
+            "message": message,
+        },
+        status=status.HTTP_200_OK,
+        )
+
+    
     def put(self, request, article_pk):
         article = self.get_object(article_pk)
         if request.user != article.author:
@@ -69,6 +97,10 @@ class ArticleDetail(APIView):
             os.remove(file_path)
         article.delete()  # 게시글 삭제
         return Response(status=status.HTTP_204_NO_CONTENT)  # 204 No Content 응답
+    
+
+
+        
 
 
 class CommentListCreate(APIView):
@@ -93,6 +125,38 @@ class CommentListCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+class CommentLike(APIView):
+
+    def get_article(self, comment_pk):
+        return get_object_or_404(Article, pk=comment_pk)
+    
+    def post(self, request, article_pk, comment_pk):
+        comment = Comment.objects.get(id=comment_pk, article_id=article_pk)
+        me = request.user
+
+        if me == comment.author:
+            return Response(
+                {"error": "자신의 댓글은 좋아요 할 수 없습니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        if comment.comment_like.filter(id=me.id).exists():
+            comment.comment_like.remove(me)
+            is_liked = False
+            message = "댓글 좋아요를 취소했습니다."
+        
+        else :
+            comment.comment_like.add(me)
+            is_liked = True
+            message = "댓글 좋아요를 했습니다."
+
+        return Response(
+        {
+            "is_liked": is_liked,
+            "message": message,
+        },
+        status=status.HTTP_200_OK,
+        )
 
 
 class CommentListDelete(APIView):

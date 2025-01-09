@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Movie
 
-def TMOVINGBOT_response(request):
+def TMOVINGBOT(request):
     user_message = request.GET.get('message', '').lower()
 
     # 영화 추천 로직
@@ -18,6 +18,3 @@ def TMOVINGBOT_response(request):
         return JsonResponse({"response": response})
     else:
         return JsonResponse({"response": "도움을 원하시면 '추천' 또는 '감독'이라고 입력해보세요."})
-    
-def TMOVINGBOT(request):
-    return render(request, 'TMOVINGBOT/TMOVINGBOTHOME.html')

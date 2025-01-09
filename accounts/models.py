@@ -1,6 +1,7 @@
+# accounts/models.py
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.contrib.auth.models import User
+
 
 
 class CustomUserManager(BaseUserManager):
@@ -56,6 +57,9 @@ class User(AbstractUser):
         unique=True,  # 전화번호는 고유해야 함
         blank=True, null=True  # 선택 사항
     )
+
+    article_likes = models.ManyToManyField('articles.Article', related_name='liked_by', blank=True)
+    comment_likes = models.ManyToManyField('articles.Comment', related_name='liked', blank = True)
 #__________________________________________________________추가한부분 
     USERNAME_FIELD = 'email'    # 로그인 시 이메일 사용
     REQUIRED_FIELDS = []        # email은 자동으로 필수
@@ -81,13 +85,3 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.follower} follows {self.following}"
-    
-    class Post(models.Model):
-        title = models.CharField(max_length=40)
-        contents = models.TextField()
-        create_date = models.DateTimeField(auto_now_add=True)
-        writer = models.ForeignKey(User, on_delete=models.CASCADE)
-        like = models.ManyToManyField(User, related_name='likes', blank=True)
-
-        def __str__(self):
-            return 'id : {}, title : {}'.format(self.id, self.title, self.contents)

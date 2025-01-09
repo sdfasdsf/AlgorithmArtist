@@ -32,7 +32,8 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "author",
-            "title",
+            "Article_title",
+            "movie_title",
             "content",
             "image",
             "created_at",
@@ -52,6 +53,7 @@ class CommentSerializer(serializers.ModelSerializer):
     """댓글 조회 및 생성 및 수정 Serializer"""
 
     author = serializers.ReadOnlyField(source="author.email")
+    
 
     class Meta:
         model = Comment
@@ -62,5 +64,6 @@ class CommentSerializer(serializers.ModelSerializer):
             "content",
             "created_at",
             "updated_at",
+            
         )
         read_only_fields = ("article", "like_users")

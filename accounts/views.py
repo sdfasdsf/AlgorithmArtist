@@ -7,7 +7,8 @@ from rest_framework.decorators import (
 )
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import SignupSerializer, UserUpdateSerializer, UserProfileSerializer
+from .serializers import SignupSerializer, UserUpdateSerializer, UserProfileSerializer, passwordchangeSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import authenticate, logout, get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
@@ -72,8 +73,8 @@ def login(request):
 
 
 @api_view(["POST"])
-@authentication_classes([])  # 전역 인증 설정 무시
-@permission_classes([AllowAny])  # 전역 IsAuthenticated 설정 무시
+@authentication_classes([JWTAuthentication])  # JWT 인증 명시적으로 사용
+@authentication_classes([IsAuthenticated])  # 전역 인증 설정 무시
 def logout(request):
     try:
         refresh_token = request.data.get("refresh")
@@ -91,6 +92,7 @@ def profile(request):
 
     if request.method == "GET":
         serializer = UserProfileSerializer(user, context={"request": request})
+        
         return Response(serializer.data, status=200)
 
     if request.method in ("PUT", "PATCH"):
@@ -108,6 +110,24 @@ def profile(request):
                 status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["PUT", "PATCH"])
+def passwordchange(request):
+    user = request.user  # JWT 인증을 통해 얻은 현재 사용자
+
+    serializer = passwordchangeSerializer(
+            instance=user, data=request.data, partial=True
+        )  # partial=True로 일부 업데이트 허용
+    if serializer.is_valid():
+            serializer.save()  # 수정 내용 저장
+            return Response(
+                {
+                    "message": "비밀번호가 성공적으로 수정되었습니다.",
+                    "user": serializer.data,
+                },
+                status=status.HTTP_200_OK,
+            )
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST"])
