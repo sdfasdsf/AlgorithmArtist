@@ -8,7 +8,8 @@ class Article(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"
     )
-    title = models.CharField("제목", max_length=200)
+    Article_title = models.CharField("게시글 제목", max_length=200)
+    movie_title = models.CharField("영화 제목", max_length=200)
     content = models.TextField("내용")
     image = models.ImageField("영화 이미지", upload_to="images/", blank=True, null=True)
     created_at = models.DateTimeField("작성일", auto_now_add=True)
@@ -20,6 +21,7 @@ class Article(models.Model):
         null=True
     )
     article_like = models.ManyToManyField('accounts.User', related_name='liked_articles' ,blank=True) # 게시글 좋아요 필드 추가
+    
 
     def __str__(self):
         return self.title

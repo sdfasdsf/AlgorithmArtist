@@ -55,9 +55,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     )
     # 추가된 필드 ___________________________________________________________________
     class article_likeSerializer(serializers.ModelSerializer): # 좋아요 한 게시글 정보
+        author_username = serializers.CharField(source='author.username', read_only=True)  # 작성자의 username을 가져옴
         class Meta:
             model = Article
-            fields = ("title", "image", "rating", "author_id")
+            fields = ("Article_title", "movie_title","image", "rating", "author_username")
     
     Favorite_articles = article_likeSerializer(
         many=True, 
@@ -68,10 +69,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         source="liked_articles.count", read_only=True  # 개수 필드도 source 수정
     )
     class comment_likeSerializer(serializers.ModelSerializer): # 좋아요 한 게시글 정보
-        title = serializers.CharField(source='article.title', read_only=True)  # Article의 title을 가져옴
+        Article_title = serializers.CharField(source='article.Article_title', read_only=True)  # Article의 title을 가져옴
+        author_username = serializers.CharField(source='author.username', read_only=True)  # 작성자의 username을 가져옴
+
         class Meta:
             model = Comment
-            fields = ("content", "created_at", "title")
+            fields = ("content", "created_at", "Article_title","author_username")
     Favorite_comments = comment_likeSerializer(
         many=True, 
         read_only=True, 
