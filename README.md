@@ -39,3 +39,5 @@
 - 작성자 닉네임(username)
 
 ---
+## AI앱의 models.py 생성했습니다. 필드는 serializers.py에서 user_question(사용자 질문) 필드만 가져다가 처리하여 사용자 질문이 form-data로 같이 들어오면 결과를 serializers.py에서 처리하면 되지 않을까 싶습니다. 
+---
