@@ -155,6 +155,8 @@ SIMPLE_JWT = {
 }
 
 
+
+
 # 미디어 파일 설정
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
