@@ -74,13 +74,13 @@ class ArticleDetail(APIView):
             article.article_like.remove(me)
             is_liked = False
             message = f"{article.Article_title}을 좋아요를 취소했습니다."
-            article.total_likes_count = article.article_like.count()  # 좋아요 수 갱신
+            article.total_likes_count = article.article_like.count()  # 게시글 좋아요 수 갱신
 
         else :
             article.article_like.add(me)
             is_liked = True
             message = f"{article.Article_title}을 좋아요를 했습니다."
-            article.total_likes_count = article.article_like.count()  # 좋아요 수 갱신
+            article.total_likes_count = article.article_like.count()  # 게시글 좋아요 수 갱신
         
         article.save()  # 좋아요 수 반영 후 저장
 
@@ -163,11 +163,15 @@ class CommentLike(APIView):
             comment.comment_like.remove(me)
             is_liked = False
             message = "댓글 좋아요를 취소했습니다."
+            comment.total_commentlikes_count = comment.comment_like.count()  # 댓글 좋아요 수 갱신
         
         else :
             comment.comment_like.add(me)
             is_liked = True
             message = "댓글 좋아요를 했습니다."
+            comment.total_commentlikes_count = comment.comment_like.count()  # 댓글 좋아요 수 갱신
+
+        comment.save()  # 좋아요 수 반영 후 저장
 
         return Response(
         {

@@ -23,6 +23,7 @@ class Article(models.Model):
     )
     article_like = models.ManyToManyField('accounts.User', related_name='liked_articles' ,blank=True) # 게시글 좋아요 필드 추가
     total_likes_count = models.IntegerField("좋아요 수", default=0) # 게시글 총 좋아요 수 필드 추가
+    
 
     def __str__(self):
         return self.Article_title
@@ -43,6 +44,7 @@ class Comment(models.Model):
         null=True
     )
     comment_like = models.ManyToManyField('accounts.User', related_name='liked_comments' ,blank=True) # 댓글 좋아요 필드 추가
+    total_commentlikes_count = models.IntegerField("좋아요 수", default=0) # 댓글 총 좋아요 수 필드 추가
 
     def __str__(self):
         return f"{self.author} - {self.content}"

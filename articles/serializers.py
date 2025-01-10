@@ -18,6 +18,7 @@ class CommentSerializer(serializers.ModelSerializer):
             "content",
             "created_at",
             "updated_at",
+            "total_commentlikes_count",
             
         )
         read_only_fields = ("article", "like_users")
