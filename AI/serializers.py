@@ -27,17 +27,34 @@ class ExternalAPIService:
             return f"Error: {str(e)}"
 
 # AI 서비스 호출 기능을 제공하는 메서드
+
 class AIService:
-    def query_ai_engine(self, prompt, api_key):
+    # Meta 클래스를 사용하여 AI 모델의 필드 설정
+    class Meta:
+        model = AI  # AI 모델 지정
+        fields = ['user_question', 'bot_response', 'created_at']  # 필요한 필드들
+
+    def __init__(self, prompt, api_key):
+        self.prompt = prompt  # 프롬프트
+        self.api_key = api_key  # API 키
+
+    def query_ai_engine(self):
         """AI 엔진에 프롬프트를 보내고 응답을 받는 메서드"""
         try:
-            import openai
-            openai.api_key = api_key
+            openai.api_key = self.api_key  # API 키 설정
             response = openai.Completion.create(
                 engine="text-davinci-003",  # 사용하려는 모델
-                prompt=prompt,
+                prompt=self.prompt,  # 사용자의 프롬프트
                 max_tokens=150
             )
             return response.choices[0].text.strip()  # 생성된 텍스트 반환
         except Exception as e:
             return f"Error: {str(e)}"
+
+    def get_ai_data(self):
+        """모델 데이터와 응답을 결합하여 반환하는 메서드"""
+        # 예시: AI 모델에서 데이터를 불러오는 과정
+        ai_instance = AI.objects.create(user_question=self.prompt)  # 질문을 저장
+        ai_instance.bot_response = self.query_ai_engine()  # 챗봇 응답
+        ai_instance.save()  # 모델 저장
+        return ai_instance  # AI 인스턴스 반환
