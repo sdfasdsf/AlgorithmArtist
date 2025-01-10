@@ -8,7 +8,7 @@ openai_api_key = config.get('OPENAI_API_KEY')
 #from getpass import getpass
 #os.environ["OPENAI_API_KEY"] = getpass("OpenAI API key 입력: ")
 # 외부데이터셋 API KEY이름 =# config.get("NAVER_CLIENT_ID")
-moviedata_key =  config.get('환경변수 외부데이터셋 주소')
+moviedata_key =  config.get('http://www.omdbapi.com/?i=tt3896198&apikey=79649873')
 os.environ["OPENAI_API_KEY"] = openai_api_key
 # 2. 모델 초기화 (model)
 # model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
@@ -106,7 +106,7 @@ class ExternalAPIService:
             return response.json()  # 응답을 JSON 형식으로 반환
         except requests.exceptions.RequestException as e:
             return f"Error: {str(e)}"
-
+#______________________________
 # AI 서비스 호출 기능을 제공하는 메서드
 
 class AIService:
@@ -118,7 +118,7 @@ class AIService:
     def __init__(self, prompt, api_key):
         self.prompt = prompt  # 프롬프트
         self.api_key = api_key  # API 키
-
+#________________________________________
     def query_ai_engine(self):
         """AI 엔진에 프롬프트를 보내고 응답을 받는 메서드"""
         try:
@@ -131,7 +131,7 @@ class AIService:
             return response.choices[0].text.strip()  # 생성된 텍스트 반환
         except Exception as e:
             return f"Error: {str(e)}"
-
+#___________________________________________________________________
     def get_ai_data(self):
         """모델 데이터와 응답을 결합하여 반환하는 메서드"""
         # 예시: AI 모델에서 데이터를 불러오는 과정
