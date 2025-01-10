@@ -1,25 +1,26 @@
 from django.shortcuts import render
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
 from django.http import JsonResponse
-from .models import Movie, AI
+from .models import AI
+from .serializers import AIService 
+from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 import json
 
 def TMOVINGBOT(request):
     user_message = request.GET.get('message', '').lower()
 
-    # 영화 추천 로직
-    if "최신" or "인기" or "추천" in user_message:
-        movie = Movie.objects.order_by('?').first() # 랜덤 영화
-        return JsonResponse({
-            "response": f"제가 추천하는 영화는 '{movie.title}'입니다. 장르는 {movie.genre}이고, {movie.description}"
-        })
-    elif "감독" in user_message:
-        director = user_message.split()[-1]
-        movies = Movie.objects.filter(director__icontains=director)
-        response = ", ".join([movie.title for movie in movies]) or "해당 감독의 영화를 찾을 수 없습니다."
-        return JsonResponse({"response": response})
-    else:
-        return JsonResponse({"response": "도움을 원하시면 '추천' 또는 '감독'이라고 입력해보세요."})
+class AI_service_view(APIView):
+    """AI 서비스 호출"""
+    def post(self, request):
+        serializer = AIService(data=request.data)  # 상세 Serializer 사용
+        if serializer.is_valid():
+            serializer.save(author=request.user_question)
+            ai_instance = AI.objects.create(user_question=self.prompt)  # 질문을 저장
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @csrf_exempt  # CSRF 비활성화 (테스트용, 실제 운영에서는 주의 필요)
 def chat_view(request):

@@ -188,5 +188,5 @@ class CommentListDelete(APIView):
         if request.user != comment.author:
             return Response({'detail': '삭제 권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
         
-        comment.delete()  # 게시글 삭제
+        comment.delete() # 게시글 삭제
         return Response(status=status.HTTP_204_NO_CONTENT)  # 204 No Content 응답

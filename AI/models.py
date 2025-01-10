@@ -10,5 +10,6 @@ class AI(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions')  # 작성자 필드
     #session_id = models.CharField(max_length=100)  # 대화 세션 ID (모든 질문이 동일)
 
+
     def __str__(self):
         return f"{self.author.username}: {self.user_question} ({self.created_at})"
