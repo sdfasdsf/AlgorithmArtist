@@ -22,10 +22,10 @@ class Article(models.Model):
         null=True
     )
     article_like = models.ManyToManyField('accounts.User', related_name='liked_articles' ,blank=True) # 게시글 좋아요 필드 추가
-    
+    total_likes_count = models.IntegerField("좋아요 수", default=0) # 게시글 총 좋아요 수 필드 추가
 
     def __str__(self):
-        return self.title
+        return self.Article_title
 
 
 class Comment(models.Model):

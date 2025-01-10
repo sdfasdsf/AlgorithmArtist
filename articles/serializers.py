@@ -41,6 +41,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 class ArticleDetailSerializer(serializers.ModelSerializer):
     """게시글 상세 조회 및 수정 및 생성 Serializer"""
     comments = CommentSerializer(many=True, read_only=True)
+    
 
     author = serializers.ReadOnlyField(
         source="author.email"
@@ -61,6 +62,7 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
             "rating",
             "comments",
             "views",
+            "total_likes_count",
         )
 
     def get_image(self, obj):

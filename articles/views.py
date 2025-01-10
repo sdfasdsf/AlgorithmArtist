@@ -62,6 +62,7 @@ class ArticleDetail(APIView):
     
     def post(self,request,article_pk): # 게시글 좋아요 기능 추가
         article = self.get_object(article_pk)
+        serializer = ArticleDetailSerializer(article, data=request.data, partial=True)  # 상세 Serializer 사용
         me = request.user
         if me == article.author:
             return Response(
@@ -72,12 +73,16 @@ class ArticleDetail(APIView):
         if article.article_like.filter(id=me.id).exists():
             article.article_like.remove(me)
             is_liked = False
-            message = f"{article.title}을 좋아요를 취소했습니다."
-        
+            message = f"{article.Article_title}을 좋아요를 취소했습니다."
+            article.total_likes_count = article.article_like.count()  # 좋아요 수 갱신
+
         else :
             article.article_like.add(me)
             is_liked = True
-            message = f"{article.title}을 좋아요를 했습니다."
+            message = f"{article.Article_title}을 좋아요를 했습니다."
+            article.total_likes_count = article.article_like.count()  # 좋아요 수 갱신
+        
+        article.save()  # 좋아요 수 반영 후 저장
 
         return Response(
         {
