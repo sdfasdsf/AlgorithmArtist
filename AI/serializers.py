@@ -91,6 +91,78 @@ vectorstore = FAISS.from_documents(documents=splits, embedding=embeddings)  # �
 # 8. 검색기 (Retriever) 생성
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})  # 벡터 저장소에서 유사한 항목을 검색
 
+# 9. 프롬프트 템플릿 정의
+contextual_prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a chatbot who recommends movies, please answer in Korean"),
+    ("user", "Context: {context}\\n\\nQuestion: {question}")
+])
+
+# # 10. RAG 체인 구성
+ # 디버깅을 위해 만든 클래스
+
+ # 프롬프트 클래스 (response docs -> context)
+class ContextToPrompt:
+    def __init__(self, prompt_template):
+        self.prompt_template = prompt_template
+    def invoke(self, inputs):
+        # response_docs 내용을 trim해줌 (가독성을 높여줌)
+        if isinstance(inputs, list): # inputs가 list인 경우. 즉 여러개의 문서들이 검색되어 리스트로 전달된 경우
+            context_text = "\n".join([doc.page_content for doc in inputs]) # \n을 구분자로 넣어서 한 문자열로 합쳐줌
+        else:
+            context_text = inputs # 리스트가 아닌경우는 그냥 리턴해줌
+        # 프롬프트
+        formatted_prompt = self.prompt_template.format_messages( # 템플릿의 변수에 삽입해줌
+            context=context_text, # {context} 변수에 context_text, 즉 검색된 문서 내용을 삽입함
+            question=inputs.get("question", "")
+        )
+        return formatted_prompt
+ # Retriever 클래스 (query)
+class RetrieverWrapper:
+    def __init__(self, retriever):
+        self.retriever = retriever
+    def invoke(self, inputs):
+        # 0단계 : query의 타입에 따른 전처리
+        if isinstance(inputs, dict): # inputs가 딕셔너리 타입일경우, question 키의 값을 검색 쿼리로 사용
+            query = inputs.get("question", "")
+        else: # 질문이 문자열로 주어지면, 그대로 검색 쿼리로 사용
+            query = inputs
+        # 1단계 : query를 리트리버에 넣어주고, response_docs를 얻어모
+        response_docs = self.retriever.get_relevant_documents(query) # 검색을 수행하고 검색 결과를 response_docs에 저장
+        return response_docs
+# RAG 체인 설정
+rag_chain_debug = {
+    'context':RetrieverWrapper(retriever),
+    'prompt':ContextToPrompt(contextual_prompt),
+    'llm':model
+}
+def generate_response(query_text: str, history: List[Dict[str, str]]):
+    try:
+        print(retriever.get_relevant_documents(query_text))
+        # 1. 리트리버로 question에 대한 검색 결과를 response_docs에 저장함
+        response_docs = rag_chain_debug["context"].invoke({"question": query_text})
+        # 2. 컨텍스트 텍스트 추출
+        context_text = "\n".join([doc.page_content for doc in response_docs])
+        # 3. 메시지 구성
+        messages = []
+        # 시스템 메시지 추가
+        messages.append(SystemMessage(content="Answer the user's questions using the provided context. And if user wants, please provide summary as well. "))
+        # If the context does not contain the answer, say that you do not know.
+        # 컨텍스트를 시스템 메시지로 추가
+        messages.append(SystemMessage(content=f"Context:\n{context_text}"))
+        # 대화 내역 추가
+        for past_message in history:
+            if past_message['role'] == 'user':
+                messages.append(HumanMessage(content=past_message['content']))
+            elif past_message['role'] == 'assistant':
+                messages.append(AIMessage(content=past_message['content']))
+        # 현재 사용자 메시지 추가
+        messages.append(HumanMessage(content=query_text))
+        # 4. LLM에 메시지 전달
+        result = rag_chain_debug["llm"].invoke(messages)
+        return result.content  # 결과 반환
+    except Exception as e:
+        print("Error in generate_response:", str(e))
+        raise e  # 예외가 발생하면 처리하고, 적절한 메시지 반환
 # serializer 직렬화 하는중
 #__________________________________________
 # 외부 API 데이터 조회 기능을 제공하는 메서드
@@ -109,15 +181,15 @@ class ExternalAPIService:
 #______________________________
 # AI 서비스 호출 기능을 제공하는 메서드
 
-class AIService:
+class AIService(serializers.Serializer):
     # Meta 클래스를 사용하여 AI 모델의 필드 설정
     class Meta:
         model = AI  # AI 모델 지정
         fields = ['user_question', 'bot_response', 'created_at']  # 필요한 필드들
 
-    def __init__(self, prompt, api_key):
-        self.prompt = prompt  # 프롬프트
-        self.api_key = api_key  # API 키
+    def __init__(self, contextualprompt, api_key):
+         self.prompt = contextual_prompt  # 프롬프트
+         self.api_key = api_key  # API 키
 #________________________________________
     def query_ai_engine(self):
         """AI 엔진에 프롬프트를 보내고 응답을 받는 메서드"""
