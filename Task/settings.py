@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# .env 파일 불러오기
+load_dotenv()
+
+# 환경 변수에서 API 키 가져오기
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+MOVIEDATA_API_KEY = os.getenv("MOVIEDATA_API_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
