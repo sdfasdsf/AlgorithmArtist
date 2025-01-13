@@ -11,10 +11,10 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain.chains import LLMchain
 
 # API 키 설정
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = "sk-proj--xDmEWiEHAhLfTjbsqs761r_evDN5uUhXzirMtGt5O88tu-jBdsvULQD0seYgnqGJ8FF7YGg35T3BlbkFJPxPItMw0RarTHSRf4hiIBrgCKok7MA_BDhIz0PdlnrNy637Xvvlov5muiFCKHL6_V7l5FA0zEAY"
 
 # 모델 초기화
-model = ChatOpenAI(model="gpt-4o-mini")
+model = ChatOpenAI(model="gpt-4")
 
 # 문서 리스트, 임베딩 함수 사용하여 FAISS 벡터 저장소 생성
 text_splitter = CharacterTextSplitter(
