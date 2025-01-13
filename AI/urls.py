@@ -1,8 +1,8 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 app_name = "AI"
 
 urlpatterns = [
-    path("tmovingbot/", views.TMOVINGBOT, name="TMOVINGBOT"),
+    path("TMOVINGBOT/", views.TMOVINGBOT, name="TMOVINGBOT"),
 ]

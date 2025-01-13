@@ -5,23 +5,24 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import AI
-from .serializers import AIService
+from .serializers import AIRequestSerializer
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 import json
+
 
 class AIList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """AI 대화 목록 조회"""
-        articles = AI.objects.all()
-        serializer = AIListSerializer(
+        AIes = AI.objects.all()
+        serializer = AIRequestSerializer(
             AI, many=True
         )  # 목록용 Serializer 사용
         return Response(serializer.data)
 
-class ArticleDetail(APIView):
+class AIDetail(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self, AI_pk):
@@ -30,14 +31,14 @@ class ArticleDetail(APIView):
     def get(self, request, AI_pk):
         """목록 상세 조회"""
         AI_find = self.get_object(AI_pk)
-        serializer = ArticleDetail(AI_find)  # 상세 Serializer 사용
+        serializer = AIDetail(AI_find)  # 상세 Serializer 사용
         return Response(serializer.data)
 
+def TMOVINGBOT(request):
+    user_message = request.GET.get('message', '').lower()
 
 
 
-# def TMOVINGBOT(request):
-#     user_message = request.GET.get('message', '').lower()
 
 # class AI_service_view(APIView):
 #     """AI 서비스 호출"""
