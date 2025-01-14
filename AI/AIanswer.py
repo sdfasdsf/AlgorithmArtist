@@ -27,7 +27,7 @@ def generate_response_with_setup(query_text: str):
         # 모델 초기화
         model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
-        moviedata_url = "https://api.themoviedb.org/3/search/movie"
+        moviedata_url = "https://openapi.naver.com/v1/search/news.json"
         headers = {"Authorization": f"Bearer {moviedata_key}"} # Bearer 토큰 방식으로 API 키 전달
         # 외부 API 호출 함수
         def get_movies(query, display=80):
@@ -42,7 +42,7 @@ def generate_response_with_setup(query_text: str):
 
             return movies_data
         
-        movies_data = get_movies(query="영화")
+        movies_data = get_movies(query="Veteran")
         
         class MoviesLoader:
             def __init__(self, movies_data):
