@@ -9,7 +9,6 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_community.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStore
 from langchain_core.runnables import RunnablePassthrough
-from langchain.chains import LLMchain
 from .models import AI
 import openai
 from dotenv import dotenv_values
@@ -17,7 +16,7 @@ from langchain.schema import Document
 from typing import List, Dict
 
 
-def generate_response_with_setup(query_text: str, history: List[Dict[str, str]]):
+def generate_response_with_setup(query_text: str):
     try:
         # 환경 변수에서 API 키 가져오기
         config = dotenv_values(".env")
@@ -28,7 +27,7 @@ def generate_response_with_setup(query_text: str, history: List[Dict[str, str]])
         # 모델 초기화
         model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
-        moviedata_url = "아직안정함.json"
+        moviedata_url = "https://api.themoviedb.org/3/search/movie"
         headers = {"Authorization": f"Bearer {moviedata_key}"} # Bearer 토큰 방식으로 API 키 전달
         # 외부 API 호출 함수
         def get_movies(query, display=80):
@@ -36,12 +35,14 @@ def generate_response_with_setup(query_text: str, history: List[Dict[str, str]])
             params = {"query": query, "display": display}
             response = requests.get(moviedata_url, headers=headers, params=params)
             # 응답 데이터를 JSON으로 변환
-            moviesdata = response.json()
+            movies_data = response.json()
             # JSON 파일로 저장
             with open('response.json', 'w', encoding='utf-8') as f:
-                json.dump(moviesdata, f, ensure_ascii=False, indent=4)
+                json.dump(movies_data, f, ensure_ascii=False, indent=4)
 
-            return moviesdata
+            return movies_data
+        
+        movies_data = get_movies(query="영화")
         
         class MoviesLoader:
             def __init__(self, movies_data):
@@ -136,11 +137,6 @@ def generate_response_with_setup(query_text: str, history: List[Dict[str, str]])
             SystemMessage(content=f"Context:\n{context_text}")
         ]
         
-        for past_message in history:
-            if past_message['role'] == 'user':
-                messages.append(HumanMessage(content=past_message['content']))
-            elif past_message['role'] == 'assistant':
-                messages.append(AIMessage(content=past_message['content']))
 
         messages.append(HumanMessage(content=query_text))
         result = rag_chain_debug["llm"].invoke(messages)

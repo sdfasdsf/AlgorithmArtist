@@ -9,7 +9,6 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_community.vectorstores import FAISS
 from langchain.vectorstores.base import VectorStore
 from langchain_core.runnables import RunnablePassthrough
-from langchain.chains import LLMchain
 from .models import AI
 import openai
 from dotenv import dotenv_values
@@ -18,6 +17,7 @@ from typing import List, Dict
 
 # AI 응답 생성을 위한 Serializer(직렬화)
 class AIRequestSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
     class Meta:
         model = AI
         fields = (
@@ -27,7 +27,7 @@ class AIRequestSerializer(serializers.ModelSerializer):
             "created_at",
             "author",  # ForeignKey 필드도 포함
         )# 이 부분들이 json 형식으로 응답 됨
-        read_only_fields = ("bot_response", "created_at")  # 수정 불가능한 필드
+        read_only_fields = ("bot_response", "created_at","author")  # 수정 불가능한 필드
     #___________________________________#
     
     
