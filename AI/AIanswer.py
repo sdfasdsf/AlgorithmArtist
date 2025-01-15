@@ -9,7 +9,8 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_community.vectorstores import FAISS
 from dotenv import dotenv_values
 from langchain.schema import Document
-
+from django.shortcuts import get_object_or_404
+from articles.models import Article
 
 def generate_response_with_setup(query_text: str):
     try:
@@ -74,8 +75,21 @@ def generate_response_with_setup(query_text: str):
             length_function=len,       # 텍스트의 길이를 계산할 함수
             is_separator_regex=False   # 구분자가 정규식인지를 설정
         )
+        # 리뷰도 추가
+        Movie_Review = Article.objects.values("movie_title", "rating" ,"content")
+        movie_review_docs = [
+            Document(
+                page_content=item['content'],
+                metadata={
+                    "movie_title": item['movie_title'],
+                    "rating": item['rating'],
+                }
+            )
+            for item in Movie_Review
+        ]
         # 문서를 분할하여 chunks를 생성
         splits = recursive_text_splitter.split_documents(docs)
+        splits += recursive_text_splitter.split_documents(movie_review_docs)
         # 6. 임베딩 (Embedding)
         embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
         # 7. 벡터 저장소 (Vector Store) 생성
@@ -86,7 +100,7 @@ def generate_response_with_setup(query_text: str):
 
         # 9. 프롬프트 템플릿 정의
         contextual_prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a chatbot who recommends movies, please answer in Korean"),
+            ("system", "You are a chatbot who recommends movies. Please answer the image and information of the movie you recommended in Korean"),
             ("user", "Context: {context}\\n\\nQuestion: {question}")
         ])
         class ContextToPrompt:
