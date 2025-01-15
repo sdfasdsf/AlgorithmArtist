@@ -1,5 +1,5 @@
 """
-URL configuration for accounts project.
+URL configuration for Task project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -25,5 +25,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('articles/', include('articles.urls')),
     path('', include('Main.urls')),
-    path('AI/', include('AI.urls')),
+    path('AI/',include('AI.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
