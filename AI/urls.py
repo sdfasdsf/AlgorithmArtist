@@ -4,5 +4,5 @@ from . import views
 app_name = "AI"
 
 urlpatterns = [
-    path("TMOVINGBOT/", views.TMOVINGBOT, name="TMOVINGBOT"),
+    path("TMOVINGBOT/", views.AIanswer.as_view(), name="TMOVINGBOT"),
 ]

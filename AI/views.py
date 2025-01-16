@@ -1,27 +1,12 @@
-from django.shortcuts import render
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import AI
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
-import json
 from .serializers import AIRequestSerializer
 from .AIanswer import generate_response_with_setup
-
-# class AIList(APIView):
-#     permission_classes = [IsAuthenticatedOrReadOnly]
-
-#     def get(self, request):
-#         """AI 대화 목록 조회"""
-#         articles = AI.objects.all()
-#         serializer = AIListSerializer(
-#             AI, many=True
-#         )  # 목록용 Serializer 사용
-#         return Response(serializer.data)
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly

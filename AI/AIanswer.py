@@ -1,38 +1,39 @@
+#LLM & RAG 챗봇 생성 및 응답 생성
 import json
-from rest_framework import serializers
 import requests
 import os
-from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_community.vectorstores import FAISS
-from langchain.vectorstores.base import VectorStore
-from langchain_core.runnables import RunnablePassthrough
-from .models import AI
-import openai
 from dotenv import dotenv_values
 from langchain.schema import Document
-from typing import List, Dict
-
+from django.shortcuts import get_object_or_404
+from articles.models import Article
 
 def generate_response_with_setup(query_text: str):
     try:
         # 환경 변수에서 API 키 가져오기
         config = dotenv_values(".env")
         openai_api_key = config.get('OPENAI_API_KEY')
-        moviedata_key = config.get('MOVIEDATA_API_KEY')
+        moviedata_token = config.get('MOVIEDATA_TOKEN')
         os.environ["OPENAI_API_KEY"] = openai_api_key
 
         # 모델 초기화
         model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
-        moviedata_url = "https://openapi.naver.com/v1/search/news.json"
-        headers = {"Authorization": f"Bearer {moviedata_key}"} # Bearer 토큰 방식으로 API 키 전달
+        moviedata_url = "https://api.themoviedb.org/3/trending/movie/day?language=ko-KR"
+        headers = {"Authorization": f"Bearer {moviedata_token}"} # Bearer 토큰 방식으로 API 키 전달
+
+        # moviedata_url = "https://api.themoviedb.org/3"
+        # search_movie_endpoint = f"{moviedata_url}/search/movie"
+
+        
         # 외부 API 호출 함수
-        def get_movies(query, display=80):
+        def get_movies(page=1):
             
-            params = {"query": query, "display": display}
+            params = {"page": page,}
             response = requests.get(moviedata_url, headers=headers, params=params)
             # 응답 데이터를 JSON으로 변환
             movies_data = response.json()
@@ -42,7 +43,7 @@ def generate_response_with_setup(query_text: str):
 
             return movies_data
         
-        movies_data = get_movies(query="Veteran")
+        movies_data = get_movies()
         
         class MoviesLoader:
             def __init__(self, movies_data):
@@ -51,14 +52,15 @@ def generate_response_with_setup(query_text: str):
             def load(self):
                 documents = [
                     Document(
-                        page_content=item['title'] + item['link'],
+                        page_content=item['title'] + item['overview'],
                         metadata={
-                            "link": item['link'],
-                            "description": item['description'],
-                            "pubDate": item['pubDate']
+                            "title": item['title'],
+                            "release_date": item['release_date'],
+                            "vote_average": item['vote_average'],
+                            "id": item['id'],
                         }
                     )
-                    for item in self.movies_data['items']
+                    for item in self.movies_data['results']
                 ]
                 return documents
 
@@ -73,8 +75,21 @@ def generate_response_with_setup(query_text: str):
             length_function=len,       # 텍스트의 길이를 계산할 함수
             is_separator_regex=False   # 구분자가 정규식인지를 설정
         )
+        # 리뷰도 추가
+        Movie_Review = Article.objects.values("movie_title", "rating" ,"content")
+        movie_review_docs = [
+            Document(
+                page_content=item['content'],
+                metadata={
+                    "movie_title": item['movie_title'],
+                    "rating": item['rating'],
+                }
+            )
+            for item in Movie_Review
+        ]
         # 문서를 분할하여 chunks를 생성
         splits = recursive_text_splitter.split_documents(docs)
+        splits += recursive_text_splitter.split_documents(movie_review_docs)
         # 6. 임베딩 (Embedding)
         embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
         # 7. 벡터 저장소 (Vector Store) 생성
@@ -85,7 +100,7 @@ def generate_response_with_setup(query_text: str):
 
         # 9. 프롬프트 템플릿 정의
         contextual_prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a chatbot who recommends movies, please answer in Korean"),
+            ("system", "You are a chatbot who recommends movies. Please answer the image and information of the movie you recommended in Korean"),
             ("user", "Context: {context}\\n\\nQuestion: {question}")
         ])
         class ContextToPrompt:

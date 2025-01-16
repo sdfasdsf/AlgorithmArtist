@@ -1,19 +1,6 @@
-import json
 from rest_framework import serializers
-import requests
-import os
-from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from langchain_community.vectorstores import FAISS
-from langchain.vectorstores.base import VectorStore
-from langchain_core.runnables import RunnablePassthrough
 from .models import AI
-import openai
-from dotenv import dotenv_values
-from langchain.schema import Document
-from typing import List, Dict
+
 
 # AI 응답 생성을 위한 Serializer(직렬화)
 class AIRequestSerializer(serializers.ModelSerializer):
@@ -82,8 +69,3 @@ class AIRequestSerializer(serializers.ModelSerializer):
 #         ai_instance.bot_response = self.query_ai_engine()  # 챗봇 응답
 #         ai_instance.save()  # 모델 저장
 #         return ai_instance  # AI 인스턴스 반환
-    
-    
-# #________________________________________________########
-# # 
-# # 예전 코드  ai 코드들
