@@ -5,14 +5,15 @@ import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_community.vectorstores import FAISS
 from dotenv import dotenv_values
 from langchain.schema import Document
 from django.shortcuts import get_object_or_404
 from articles.models import Article
+from typing import List, Dict , Optional
 
-def generate_response_with_setup(query_text: str):
+def generate_response_with_setup(query_text: str, history: Optional[List[Dict[str, str]]] = None):
     try:
         # 환경 변수에서 API 키 가져오기
         config = dotenv_values(".env")
@@ -152,6 +153,15 @@ def generate_response_with_setup(query_text: str):
             SystemMessage(content=f"Context:\n{context_text}")
         ]
         
+        for past_message in history:
+            try:
+                if past_message['role'] == 'user':
+                    messages.append(HumanMessage(content=past_message['content']))
+                elif past_message['role'] == 'assistant':
+                    messages.append(AIMessage(content=past_message['content']))
+            except KeyError as e:
+                print(f"KeyError: {str(e)} in past_message: {past_message}")
+
 
         messages.append(HumanMessage(content=query_text))
         result = rag_chain_debug["llm"].invoke(messages)
@@ -160,3 +170,4 @@ def generate_response_with_setup(query_text: str):
     except Exception as e:
         print("Error:", str(e))
         return "An error occurred during response generation."
+
