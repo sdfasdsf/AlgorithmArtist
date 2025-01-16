@@ -16,6 +16,18 @@ from django.shortcuts import get_object_or_404
 
 User = get_user_model()
 
+# class SignupPage(APIView):
+#     renderer_classes = [TemplateHTMLRenderer] # HTML 렌더링 지원
+#     template_name = 'accounts/signup.html' # 사용할 템플릿
+#     def get(self, request):
+#         serializer = SignupSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(
+#                 {"message": "회원가입이 성공적으로 완료되었습니다."},
+#                 status=status.HTTP_201_CREATED,
+#         )
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 @authentication_classes([])  # 전역 인증 설정 무시
