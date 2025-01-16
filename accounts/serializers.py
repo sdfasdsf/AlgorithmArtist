@@ -55,26 +55,27 @@ class UserProfileSerializer(serializers.ModelSerializer):
     )
     # 추가된 필드 ___________________________________________________________________
     class TimovingbotSerializer(serializers.ModelSerializer):
-        author_username = serializers.CharField(source='author.username', read_only=True)
+        author_username = serializers.CharField(source='author.username', read_only=True) # 작성자의 username을 가져옴
         class Meta:
             model = AI
             fields = ("user_question", "bot_response", "created_at", "author_username")  # 정확한 필드명으로 수정
+    # TimovingbotSerializer를 사용하여 사용자 프로필에 포함될 새로운 챗봇 대화 기록 필드를 생성
     bot_Conversation_List = TimovingbotSerializer(
         many=True, 
         read_only=True,
-        source="questions"
-    )
+        source="questions" # # AI 모델의 author 필드와 연결된 질문 목록 (related_name='questions' 사용)
+    ) 
 
     class article_likeSerializer(serializers.ModelSerializer): # 좋아요 한 게시글 정보
         author_username = serializers.CharField(source='author.username', read_only=True)  # 작성자의 username을 가져옴
         class Meta:
             model = Article
             fields = ("Article_title", "movie_title","image", "rating", "author_username")
-    
+    # article_likeSerializer를 사용하여 사용자 프로필에 포함될 새로운 게시글 좋아요 목록 필드를 생성
     Favorite_articles = article_likeSerializer(
         many=True, 
         read_only=True, 
-        source="liked_articles"  # User 모델의 'liked_articles'를 참조
+        source="liked_articles"  # Article 모델의 author 필드와 연결된 게시글 좋아요 목록 (related_name='liked_articles' 사용)
     )
     Favorite_articles_count = serializers.IntegerField(
         source="liked_articles.count", read_only=True  # 개수 필드도 source 수정
@@ -86,10 +87,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         class Meta:
             model = Comment
             fields = ("content", "created_at", "Article_title","author_username")
+    # comment_likeSerializer를 사용하여 사용자 프로필에 포함될 새로운 댓글 좋아요 목록 필드를 생성
     Favorite_comments = comment_likeSerializer(
         many=True, 
         read_only=True, 
-        source="liked_comments"  # User 모델의 'liked_comments'를 참조
+        source="liked_comments"  # Comment 모델의 author 필드와 연결된 댓글 좋아요 목록 (related_name='liked_comments' 사용)
     )
     Favorite_comments_count = serializers.IntegerField(
         source="liked_comments.count", read_only=True  # 개수 필드도 source 수정
