@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from .models import Follow
 from articles.models import Article, Comment
-
+from AI.models import AI
 
 User = get_user_model()
 
@@ -54,6 +54,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
         source="followings.count", read_only=True
     )
     # 추가된 필드 ___________________________________________________________________
+    class TimovingbotSerializer(serializers.ModelSerializer):
+        author_username = serializers.CharField(source='author.username', read_only=True)
+        class Meta:
+            model = AI
+            fields = ("user_question", "bot_response", "created_at", "author_username")  # 정확한 필드명으로 수정
+    bot_Conversation_List = TimovingbotSerializer(
+        many=True, 
+        read_only=True,
+        source="questions"
+    )
+
     class article_likeSerializer(serializers.ModelSerializer): # 좋아요 한 게시글 정보
         author_username = serializers.CharField(source='author.username', read_only=True)  # 작성자의 username을 가져옴
         class Meta:
@@ -111,7 +122,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "Favorite_articles", # 좋아요 한 게시글 정보
             "Favorite_articles_count", # 좋아요 한 게시글 수
             "Favorite_comments", # 좋아요한 댓글 정보
-            "Favorite_comments_count" # 좋아요 한 댓글 수
+            "Favorite_comments_count", # 좋아요 한 댓글 수
+            "bot_Conversation_List" # 챗봇 대화 리스트
         ]  # 반환할 필드
 
     def get_profile_image(self, obj):
