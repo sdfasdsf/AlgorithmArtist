@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Sparta Market</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/products/">Sparta Market</a></h1>
+        <nav>
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:profile' user.username %}">내 프로필</a>
+                <a href="{% url 'accounts:logout' %}">로그아웃</a>
+            {% else %}
+                <a href="{% url 'accounts:signup' %}">회원가입</a>
+                <a href="{% url 'accounts:login' %}">로그인</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>© Sparta Market</p>
+    </footer>
+</body>
+</html>

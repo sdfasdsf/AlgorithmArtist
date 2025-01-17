@@ -8,3 +8,12 @@ def Main(request):
     return render(request, 'Home.html', {})
 # def Main(request):
 #     return render(request, 'Main.html', {})
+
+def movie(request):
+    return render(request, 'movie.html')
+
+def movieboard(request):
+    return render(request, 'movieboard.html')
+
+def reviewboard(request):
+    return render(request, 'reviewboard.html')

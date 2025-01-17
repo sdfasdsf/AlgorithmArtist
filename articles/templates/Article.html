@@ -1,11 +1,41 @@
+# articles/templates/articles/articles_list.html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    
+<h1>Articles</h1>
+<div id="articles"></div>
+<script>
+    $(document).ready(function() {
+    $.ajax({
+         url: 'http://127.0.0.1:8000/articles/', // 요청을 보낼 URL
+         method: 'GET', // HTTP 메서드
+        success: function(data) {
+           // 요청이 성공하면 실행되는 콜백 함수
+           $('#articles').append('<ul id="article-list"></ul>'); // 기사 목록을 담을 <ul> 생성
+           // 각 기사를 순회하며 HTML로 추가
+        $.each(data, function(index, article) {
+            $('#article-list').append(`
+            <li>
+                <h2>${article.title}</h2>
+                <img src="${article.image}" alt="${article.title}" style="width:100px;">
+                <p>Rating: ${article.rating}</p>
+                <p>Created At: ${new Date(article.created_at).toLocaleString()}</p>
+            </li>
+            `);
+        });
+        },
+        error: function(xhr, status, error) {
+           // 요청이 실패하면 실행되는 콜백 함수
+        console.error("Error fetching articles:", error);
+        }
+    });
+    });
+</script>
 </body>
 </html>

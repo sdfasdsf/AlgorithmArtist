@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from .models import Follow
 from articles.models import Article, Comment
 from AI.models import AI
+from django.contrib.auth.models import User
 
 User = get_user_model()
 
