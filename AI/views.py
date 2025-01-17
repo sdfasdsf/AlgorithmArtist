@@ -31,29 +31,25 @@ class AIanswer(APIView):
             ai_instance = serializer.save(author=request.user)  # 자동으로 처리되는 부분
 
             user_question = ai_instance.user_question
-
+            
             # if request.user ==
-            try:
-                a = AI.objects.get(id=ai_instance.id-1)
-                history = []
-                for i in range(1,6):
-                    a = AI.objects.get(id=ai_instance.id-i)
-                    if a == None:
-                        break
-                    history.append({"role": "user", "content": a.user_question})
-                    history.append({"role": "assistant", "content": a.bot_response})
-                answer = generate_response_with_setup(user_question, history)
+            history = []
+            recent_entries = AI.objects.filter(author=request.user).exclude(id=ai_instance.id).order_by('-id')[:5]
 
-                ai_instance.bot_response = answer
-                ai_instance.save()
-                
+
+            for entry in recent_entries:
+                print(entry)
+                if entry.bot_response and entry.bot_response != "An error occurred during response generation.":
+                    history.append({"role": "user", "content": entry.user_question})
+                    history.append({"role": "assistant", "content": entry.bot_response})
+            print("history:", history)
             # 답변 생성 (여기서는 함수 호출로 처리하는 부분)
-            except AI.DoesNotExist :
-                answer = generate_response_with_setup(user_question)
+            answer = generate_response_with_setup(user_question, history)
 
-                ai_instance.bot_response = answer
-                ai_instance.save()
-
+            ai_instance.bot_response = answer
+            ai_instance.save()
+                
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

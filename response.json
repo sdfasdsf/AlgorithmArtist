@@ -2,7 +2,47 @@
     "page": 1,
     "results": [
         {
-            "backdrop_path": "/v9Du2HC3hlknAvGlWhquRbeifwW.jpg",
+            "backdrop_path": "/haX32ZQxOgDWcJO5sTiTUEE1Ulr.jpg",
+            "id": 1388694,
+            "title": "달력 살인자",
+            "original_title": "Sebastian Fitzeks Der Heimweg",
+            "overview": "클라라는 오늘, 남편을 죽이지 않으면 자신이 죽을 운명이다. 달력 살인자는 클라라에게 그렇게 불가능한 선택지를 던져놓았다. 홀로 귀가하는 여성들에게 안전 서비스를 제공하기 위해 야간 근무를 시작한 줄스에게 클라라의 전화가 걸려 온다. 줄스는 클라라의 생존을 위한 마지막 희망이 되어 시간과 싸움을 벌인다.",
+            "poster_path": "/zhRd2ViPcaxPuwIgMubHieT6Fa.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "de",
+            "genre_ids": [
+                53,
+                80,
+                18
+            ],
+            "popularity": 45.933,
+            "release_date": "2025-01-15",
+            "video": false,
+            "vote_average": 6.6,
+            "vote_count": 9
+        },
+        {
+            "backdrop_path": "/nxZDr6UZIhgYJev4yUzWTPZXQ3G.jpg",
+            "id": 1101448,
+            "title": "멈출 수 없는 앤서니 로블스",
+            "original_title": "Unstoppable",
+            "overview": "《멈출 수 없는 앤서니 로블스》는 태어날 때부터 다리 한쪽이 없는 앤서니 로블스 가 강한 의지와 노력으로 모든 한계를 넘어 꿈을 이룬 감동적인 이야기이다.",
+            "poster_path": "/p8GxJDi9Zl79G7HlwR3pPZ63TI5.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "en",
+            "genre_ids": [
+                18
+            ],
+            "popularity": 20.805,
+            "release_date": "2024-12-06",
+            "video": false,
+            "vote_average": 5.5,
+            "vote_count": 4
+        },
+        {
+            "backdrop_path": "/iFsWkmAcu1QcMJ2LhqN8bU0Oj7.jpg",
             "id": 539972,
             "title": "크레이븐 더 헌터",
             "original_title": "Kraven the Hunter",
@@ -16,32 +56,11 @@
                 12,
                 53
             ],
-            "popularity": 1201.619,
+            "popularity": 1682.267,
             "release_date": "2024-12-11",
             "video": false,
-            "vote_average": 6.1,
-            "vote_count": 390
-        },
-        {
-            "backdrop_path": "/haX32ZQxOgDWcJO5sTiTUEE1Ulr.jpg",
-            "id": 1388694,
-            "title": "달력 살인자",
-            "original_title": "Sebastian Fitzeks Der Heimweg",
-            "overview": "클라라는 오늘, 남편을 죽이지 않으면 자신이 죽을 운명이다. 달력 살인자는 클라라에게 그렇게 불가능한 선택지를 던져놓았다. 홀로 귀가하는 여성들에게 안전 서비스를 제공하기 위해 야간 근무를 시작한 줄스에게 클라라의 전화가 걸려 온다. 줄스는 클라라의 생존을 위한 마지막 희망이 되어 시간과 싸움을 벌인다. 제바스티안 피체크의 베스트셀러 스릴러가 원작인 독일 영화.",
-            "poster_path": "/zhRd2ViPcaxPuwIgMubHieT6Fa.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "de",
-            "genre_ids": [
-                53,
-                80,
-                18
-            ],
-            "popularity": 32.809,
-            "release_date": "2025-01-15",
-            "video": false,
-            "vote_average": 9.0,
-            "vote_count": 2
+            "vote_average": 6.2,
+            "vote_count": 429
         },
         {
             "backdrop_path": "/wwARk7hRIfHfh2n2ubN6N7lvTne.jpg",
@@ -57,50 +76,11 @@
                 27,
                 53
             ],
-            "popularity": 266.262,
+            "popularity": 372.767,
             "release_date": "2025-01-15",
             "video": false,
-            "vote_average": 8.7,
-            "vote_count": 8
-        },
-        {
-            "backdrop_path": "/2ERLqcEBaJCIpBVR9O7RAapMGrw.jpg",
-            "id": 1059128,
-            "title": "퀴어",
-            "original_title": "Queer",
-            "overview": "",
-            "poster_path": "/xe4b2TMciLKA1C0JlhWxb4ENLln.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "en",
-            "genre_ids": [
-                18,
-                10749
-            ],
-            "popularity": 136.515,
-            "release_date": "2024-11-27",
-            "video": false,
-            "vote_average": 7.3,
-            "vote_count": 66
-        },
-        {
-            "backdrop_path": "/nxZDr6UZIhgYJev4yUzWTPZXQ3G.jpg",
-            "id": 1101448,
-            "title": "멈출 수 없는 앤서니 로블스",
-            "original_title": "Unstoppable",
-            "overview": "《멈출 수 없는 앤서니 로블스》는 태어날 때부터 다리 한쪽이 없는 앤서니 로블스 가 강한 의지와 노력으로 모든 한계를 넘어 꿈을 이룬 감동적인 이야기이다.",
-            "poster_path": "/p8GxJDi9Zl79G7HlwR3pPZ63TI5.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "en",
-            "genre_ids": [
-                18
-            ],
-            "popularity": 14.861,
-            "release_date": "2024-12-06",
-            "video": false,
-            "vote_average": 7.0,
-            "vote_count": 1
+            "vote_average": 7.2,
+            "vote_count": 15
         },
         {
             "backdrop_path": "/uKb22E0nlzr914bA9KyA5CVCOlV.jpg",
@@ -117,51 +97,31 @@
                 10749,
                 14
             ],
-            "popularity": 1358.43,
+            "popularity": 1270.61,
             "release_date": "2024-11-20",
             "video": false,
-            "vote_average": 7.169,
-            "vote_count": 1271
+            "vote_average": 7.149,
+            "vote_count": 1291
         },
         {
-            "backdrop_path": "/uWOJbarUXfVf6B4o0368dh138eR.jpg",
-            "id": 426063,
-            "title": "노스페라투",
-            "original_title": "Nosferatu",
-            "overview": "오랜 시간 통제할 수 없는 강력한 힘에 이끌려 악몽과 괴로움에 시달려 온 ‘엘렌’. 남편 ‘토마스’가 거액의 부동산 계약을 위해 머나먼 ‘올록성’으로 떠난 후부터 엘렌은 불안 증세가 심해지고 알 수 없는 말을 되뇌인다. “그가 오고 있어…” 기이한 현상들이 일어나며 마을로 점점 짙게 번져오는 그림자. 영원한 어둠 속에서 깨어난 올록 백작이 찾아오는데…",
-            "poster_path": "/xeiARSpxGdVCw5KkCDgj31MO45o.jpg",
+            "backdrop_path": "/fViElUGfdoZjtnVxvSpJX8TwxY6.jpg",
+            "id": 1013850,
+            "title": "리얼 페인",
+            "original_title": "A Real Pain",
+            "overview": "생김새부터 성격, 취향까지 모든 것이 다른 두 사촌 '데이비드'와 '벤지'. 돌아가신 할머니를 기리기 위해 오랜만에 재회한다. 한때는 형제처럼 친밀했지만 각자의 삶과 가족 등의 이유로 멀어졌던 둘의 관계는 할머니의 고향인 폴란드를 방문해 투어를 떠나게 되면서 새로운 국면을 맞이한다. 둘의 극과 극 성격은 투어에서도 균열을 만들고, 예상치 못한 일들이 생기면서, 미묘한 감정의 골 또한 더욱 커져만 가는데...",
+            "poster_path": "/yaOmgi2rdkusPK6oHj8XFru3kb8.jpg",
             "media_type": "movie",
             "adult": false,
             "original_language": "en",
             "genre_ids": [
-                18,
-                14,
-                27
-            ],
-            "popularity": 594.141,
-            "release_date": "2024-12-25",
-            "video": false,
-            "vote_average": 6.766,
-            "vote_count": 995
-        },
-        {
-            "backdrop_path": "/9Xx0BCkxDsF47niAPsb8lQ0O9Qu.jpg",
-            "id": 1088514,
-            "title": "룸 넥스트 도어",
-            "original_title": "La habitación de al lado",
-            "overview": "유명 작가인 ‘잉그리드’(줄리안 무어)는 오래전 잡지사에서 함께 일했던 절친한 친구 ‘마사’(틸다 스윈튼)가 암 투병 중이라는 소식을 듣고 병원으로 찾아간다. 연락이 닿지 않았던 시간 동안의 안부를 묻고 서로가 처한 현재의 문제에 대해 진실한 대화를 나누는 두 사람. ‘마사’는 ‘잉그리드’에게 중요한 순간 자신의 곁에 있어달라고 부탁하는데…",
-            "poster_path": "/br12yKDqq94jj6NLjKlWLQmdz5p.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "es",
-            "genre_ids": [
+                35,
                 18
             ],
-            "popularity": 221.386,
-            "release_date": "2024-10-07",
+            "popularity": 339.05,
+            "release_date": "2024-11-01",
             "video": false,
-            "vote_average": 7.1,
-            "vote_count": 207
+            "vote_average": 6.7,
+            "vote_count": 187
         },
         {
             "backdrop_path": "/4cp40IyTpFfsT2IKpl0YlUkMBIR.jpg",
@@ -178,11 +138,32 @@
                 35,
                 18
             ],
-            "popularity": 384.958,
+            "popularity": 434.204,
             "release_date": "2024-10-14",
             "video": false,
-            "vote_average": 7.0,
-            "vote_count": 720
+            "vote_average": 6.953,
+            "vote_count": 727
+        },
+        {
+            "backdrop_path": "/uWOJbarUXfVf6B4o0368dh138eR.jpg",
+            "id": 426063,
+            "title": "노스페라투",
+            "original_title": "Nosferatu",
+            "overview": "오랜 시간 통제할 수 없는 강력한 힘에 이끌려 악몽과 괴로움에 시달려 온 ‘엘렌’. 남편 ‘토마스’가 거액의 부동산 계약을 위해 머나먼 ‘올록성’으로 떠난 후부터 엘렌은 불안 증세가 심해지고 알 수 없는 말을 되뇌인다. “그가 오고 있어…” 기이한 현상들이 일어나며 마을로 점점 짙게 번져오는 그림자. 영원한 어둠 속에서 깨어난 올록 백작이 찾아오는데…",
+            "poster_path": "/xeiARSpxGdVCw5KkCDgj31MO45o.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "en",
+            "genre_ids": [
+                18,
+                14,
+                27
+            ],
+            "popularity": 527.243,
+            "release_date": "2024-12-25",
+            "video": false,
+            "vote_average": 6.742,
+            "vote_count": 1021
         },
         {
             "backdrop_path": "/zOpe0eHsq0A2NvNyBbtT6sj53qV.jpg",
@@ -200,32 +181,72 @@
                 35,
                 10751
             ],
-            "popularity": 2553.141,
+            "popularity": 2525.912,
             "release_date": "2024-12-19",
             "video": false,
             "vote_average": 7.6,
-            "vote_count": 577
+            "vote_count": 590
         },
         {
-            "backdrop_path": "/vZG7PrX9HmdgL5qfZRjhJsFYEIA.jpg",
-            "id": 912649,
-            "title": "베놈: 라스트 댄스",
-            "original_title": "Venom: The Last Dance",
-            "overview": "환상의 케미스트리의 에디 브록과 그의 심비오트 베놈은 그들을 노리는 정체불명 존재의 추격을 피해 같이 도망을 다니게 된다. 한편 베놈의 창조자 널은 고향 행성에서부터 그들을 찾아내기 위해 지구를 침략하고 에디와 베놈은 그동안 겪어보지 못한 최악의 위기를 맞이하게 되는데…",
-            "poster_path": "/3flIDcZF3tnR7m5OU2h7lLPQwmr.jpg",
+            "backdrop_path": "/2ERLqcEBaJCIpBVR9O7RAapMGrw.jpg",
+            "id": 1059128,
+            "title": "퀴어",
+            "original_title": "Queer",
+            "overview": "",
+            "poster_path": "/xe4b2TMciLKA1C0JlhWxb4ENLln.jpg",
             "media_type": "movie",
             "adult": false,
             "original_language": "en",
             "genre_ids": [
-                28,
-                878,
+                18,
+                10749
+            ],
+            "popularity": 191.121,
+            "release_date": "2024-11-27",
+            "video": false,
+            "vote_average": 7.4,
+            "vote_count": 74
+        },
+        {
+            "backdrop_path": "/b3mdmjYTEL70j7nuXATUAD9qgu4.jpg",
+            "id": 823219,
+            "title": "플로우",
+            "original_title": "Straume",
+            "overview": "대홍수가 세상을 덮친 뒤, 유일한 피난처가 된 배 한 척을 타고 다양한 동물 친구들과 항해를 시작한 ‘고양이’의 눈부신 모험담",
+            "poster_path": "/kX9gzHyfwXCkTszBcPekQZxPnzP.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "lv",
+            "genre_ids": [
+                16,
+                14,
                 12
             ],
-            "popularity": 1749.53,
-            "release_date": "2024-10-22",
+            "popularity": 635.112,
+            "release_date": "2024-08-29",
             "video": false,
-            "vote_average": 6.813,
-            "vote_count": 2362
+            "vote_average": 8.402,
+            "vote_count": 767
+        },
+        {
+            "backdrop_path": "/ag66gJCiZ06q1GSJuQlhGLi3Udx.jpg",
+            "id": 1138194,
+            "title": "헤러틱",
+            "original_title": "Heretic",
+            "overview": "콜로라도의 작은 마을을 방문한 두 명의 젊은 몰몬교 여성 선교사들이 주민에게 복음을 전파하기 위해 집집마다 방문 중에 매력적인 리드 씨라는 인물을 만나게 되고, 그의 집에서 예상치 못한 위험에 휩싸이게 된다.",
+            "poster_path": "/5HJqjCTcaE1TFwnNh3Dn21be2es.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "en",
+            "genre_ids": [
+                27,
+                53
+            ],
+            "popularity": 523.951,
+            "release_date": "2024-10-31",
+            "video": false,
+            "vote_average": 7.2,
+            "vote_count": 852
         },
         {
             "backdrop_path": "/dMloNvayweggmvv0UD0iOJIkkbH.jpg",
@@ -243,51 +264,90 @@
                 80,
                 28
             ],
-            "popularity": 310.201,
+            "popularity": 434.281,
             "release_date": "2025-01-09",
             "video": false,
-            "vote_average": 6.4,
-            "vote_count": 121
+            "vote_average": 6.436,
+            "vote_count": 132
         },
         {
-            "backdrop_path": "/8or4S9BPhkeYK0vlKsPFee4JVWI.jpg",
-            "id": 1315986,
-            "title": "Man with No Past",
-            "original_title": "Man with No Past",
-            "overview": "",
-            "poster_path": "/cuPqxATt872rKIR1WZI83TcpKw6.jpg",
+            "backdrop_path": "/9Xx0BCkxDsF47niAPsb8lQ0O9Qu.jpg",
+            "id": 1088514,
+            "title": "룸 넥스트 도어",
+            "original_title": "La habitación de al lado",
+            "overview": "유명 작가인 ‘잉그리드’(줄리안 무어)는 오래전 잡지사에서 함께 일했던 절친한 친구 ‘마사’(틸다 스윈튼)가 암 투병 중이라는 소식을 듣고 병원으로 찾아간다. 연락이 닿지 않았던 시간 동안의 안부를 묻고 서로가 처한 현재의 문제에 대해 진실한 대화를 나누는 두 사람. ‘마사’는 ‘잉그리드’에게 중요한 순간 자신의 곁에 있어달라고 부탁하는데…",
+            "poster_path": "/br12yKDqq94jj6NLjKlWLQmdz5p.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "es",
+            "genre_ids": [
+                18
+            ],
+            "popularity": 309.94,
+            "release_date": "2024-10-07",
+            "video": false,
+            "vote_average": 7.1,
+            "vote_count": 212
+        },
+        {
+            "backdrop_path": "/vZG7PrX9HmdgL5qfZRjhJsFYEIA.jpg",
+            "id": 912649,
+            "title": "베놈: 라스트 댄스",
+            "original_title": "Venom: The Last Dance",
+            "overview": "환상의 케미스트리의 에디 브록과 그의 심비오트 베놈은 그들을 노리는 정체불명 존재의 추격을 피해 같이 도망을 다니게 된다. 한편 베놈의 창조자 널은 고향 행성에서부터 그들을 찾아내기 위해 지구를 침략하고 에디와 베놈은 그동안 겪어보지 못한 최악의 위기를 맞이하게 되는데…",
+            "poster_path": "/3flIDcZF3tnR7m5OU2h7lLPQwmr.jpg",
             "media_type": "movie",
             "adult": false,
             "original_language": "en",
             "genre_ids": [
                 28,
-                18
+                878,
+                12
             ],
-            "popularity": 68.278,
-            "release_date": "2025-01-13",
+            "popularity": 1694.909,
+            "release_date": "2024-10-22",
             "video": false,
-            "vote_average": 6.0,
-            "vote_count": 3
+            "vote_average": 6.8,
+            "vote_count": 2372
         },
         {
-            "backdrop_path": "/fViElUGfdoZjtnVxvSpJX8TwxY6.jpg",
-            "id": 1013850,
-            "title": "리얼 페인",
-            "original_title": "A Real Pain",
-            "overview": "생김새부터 성격, 취향까지 모든 것이 다른 두 사촌 '데이비드'와 '벤지'. 돌아가신 할머니를 기리기 위해 오랜만에 재회한다. 한때는 형제처럼 친밀했지만 각자의 삶과 가족 등의 이유로 멀어졌던 둘의 관계는 할머니의 고향인 폴란드를 방문해 투어를 떠나게 되면서 새로운 국면을 맞이한다. 둘의 극과 극 성격은 투어에서도 균열을 만들고, 예상치 못한 일들이 생기면서, 미묘한 감정의 골 또한 더욱 커져만 가는데...",
-            "poster_path": "/yaOmgi2rdkusPK6oHj8XFru3kb8.jpg",
+            "backdrop_path": "/7h6TqPB3ESmjuVbxCxAeB1c9OB1.jpg",
+            "id": 933260,
+            "title": "서브스턴스",
+            "original_title": "The Substance",
+            "overview": "더 나은 버전의 당신을 꿈꿔본 적 있나요? 당신의 인생을 바꿔줄 신제품 ‘서브스턴스’. ‘서브스턴스’는 또 다른 당신을 만들어냅니다. 새롭고, 젊고, 더 아름답고, 더 완벽한 당신을. 단 한가지 규칙, 당신의 시간을 공유하면 됩니다. 당신을 위한 일주일, 새로운 당신을 위한 일주일, 각각 7일간의 완벽한 밸런스. 쉽죠? 균형을 존중한다면… 무엇이 잘못될 수 있을까요?",
+            "poster_path": "/5TPPefBI1OzWnSQfBkOrv1OFGq5.jpg",
             "media_type": "movie",
             "adult": false,
             "original_language": "en",
             "genre_ids": [
-                35,
+                27,
+                878
+            ],
+            "popularity": 727.215,
+            "release_date": "2024-09-07",
+            "video": false,
+            "vote_average": 7.127,
+            "vote_count": 3272
+        },
+        {
+            "backdrop_path": "/hctfNoMpQGfn3VXdBYb9p0P5bT5.jpg",
+            "id": 1097549,
+            "title": "베이비걸",
+            "original_title": "Babygirl",
+            "overview": "",
+            "poster_path": "/A8HbTd0FemZyFCh5qvJFpHGiwF8.jpg",
+            "media_type": "movie",
+            "adult": false,
+            "original_language": "en",
+            "genre_ids": [
                 18
             ],
-            "popularity": 335.272,
-            "release_date": "2024-11-01",
+            "popularity": 269.224,
+            "release_date": "2024-12-25",
             "video": false,
-            "vote_average": 6.7,
-            "vote_count": 182
+            "vote_average": 5.7,
+            "vote_count": 89
         },
         {
             "backdrop_path": "/oHPoF0Gzu8xwK4CtdXDaWdcuZxZ.jpg",
@@ -304,31 +364,31 @@
                 10751,
                 16
             ],
-            "popularity": 2463.645,
+            "popularity": 2393.715,
             "release_date": "2024-12-18",
             "video": false,
-            "vote_average": 7.417,
-            "vote_count": 667
+            "vote_average": 7.4,
+            "vote_count": 682
         },
         {
-            "backdrop_path": "/7h6TqPB3ESmjuVbxCxAeB1c9OB1.jpg",
-            "id": 933260,
-            "title": "서브스턴스",
-            "original_title": "The Substance",
-            "overview": "더 나은 버전의 당신을 꿈꿔본 적 있나요? 당신의 인생을 바꿔줄 신제품 ‘서브스턴스’. ‘서브스턴스’는 또 다른 당신을 만들어냅니다. 새롭고, 젊고, 더 아름답고, 더 완벽한 당신을. 단 한가지 규칙, 당신의 시간을 공유하면 됩니다. 당신을 위한 일주일, 새로운 당신을 위한 일주일, 각각 7일간의 완벽한 밸런스. 쉽죠? 균형을 존중한다면… 무엇이 잘못될 수 있을까요?",
-            "poster_path": "/5TPPefBI1OzWnSQfBkOrv1OFGq5.jpg",
+            "backdrop_path": "/zpaodBqO2lcwJh2SQrFFf1Rn8Jy.jpg",
+            "id": 1100099,
+            "title": "위 리브 인 타임",
+            "original_title": "We Live in Time",
+            "overview": "",
+            "poster_path": "/ssFS25CiYQvRJqErqaEyHuVgyH7.jpg",
             "media_type": "movie",
             "adult": false,
             "original_language": "en",
             "genre_ids": [
-                27,
-                878
+                10749,
+                18
             ],
-            "popularity": 718.759,
-            "release_date": "2024-09-07",
+            "popularity": 233.405,
+            "release_date": "2024-10-10",
             "video": false,
-            "vote_average": 7.1,
-            "vote_count": 3254
+            "vote_average": 7.513,
+            "vote_count": 461
         },
         {
             "backdrop_path": "/euYIwmwkmz95mnXvufEmbL6ovhZ.jpg",
@@ -345,72 +405,11 @@
                 12,
                 18
             ],
-            "popularity": 1976.978,
+            "popularity": 1720.821,
             "release_date": "2024-11-05",
             "video": false,
-            "vote_average": 6.762,
-            "vote_count": 2330
-        },
-        {
-            "backdrop_path": "/b3mdmjYTEL70j7nuXATUAD9qgu4.jpg",
-            "id": 823219,
-            "title": "플로우",
-            "original_title": "Straume",
-            "overview": "대홍수가 세상을 덮친 뒤, 유일한 피난처가 된 배 한 척을 타고 다양한 동물 친구들과 항해를 시작한 ‘고양이’의 눈부신 모험담",
-            "poster_path": "/kX9gzHyfwXCkTszBcPekQZxPnzP.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "lv",
-            "genre_ids": [
-                16,
-                14,
-                12
-            ],
-            "popularity": 674.808,
-            "release_date": "2024-08-29",
-            "video": false,
-            "vote_average": 8.4,
-            "vote_count": 751
-        },
-        {
-            "backdrop_path": "/kf4RPLTFuOd8LPqCjVMIapAAGzy.jpg",
-            "id": 1241320,
-            "title": "킹덤 4: 대장군의 귀환",
-            "original_title": "キングダム　大将軍の帰還",
-            "overview": "때는 춘추전국시대, 천하대장군을 꿈꾸는 소년 ‘신’과 그가 이끄는 비신대는 조나라와의 전투에서 열세 끝에 승리하지만 그 기쁨도 잠시 자신을 무신이라 칭하는 조나라의 총대장 ‘방난’의 등장으로 치명상을 입고 위기에 처한다. 한편, 이 전황을 지켜보던 진나라의 총대장이자 전설의 대장군 ‘왕기’는 조나라의 계책을 눈치채고 9년 전부터 이어져온 악연 ‘방난’과의 숙명의 대결을 준비하는데…",
-            "poster_path": "/cCSkNWNtKxERBSH3cmt2pMk3nUP.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "ja",
-            "genre_ids": [
-                28,
-                12
-            ],
-            "popularity": 97.51,
-            "release_date": "2024-07-12",
-            "video": false,
-            "vote_average": 7.3,
-            "vote_count": 46
-        },
-        {
-            "backdrop_path": "/eP4RZSHliWu6lPT5WQyHr5ZZKuC.jpg",
-            "id": 945961,
-            "title": "에이리언: 로물루스",
-            "original_title": "Alien: Romulus",
-            "overview": "2142년, 부모 세대가 맞닥뜨렸던 암울한 미래를 피하려는 청년들이 더 나은 삶을 찾기 위해 식민지를 떠날 계획을 세운다. 하지만 버려진 우주 기지 로물루스에 도착한 이들은 악몽과도 같은 에이리언의 무자비한 공격에 쫓기기 시작한다. 그 누구도 그들의 절규를 들을 수 없는 우주 한가운데, 생존을 위한 치열한 사투를 벌여야 하는데...",
-            "poster_path": "/AmWTYg3RCMv7fbQxwCqrxiaUhkc.jpg",
-            "media_type": "movie",
-            "adult": false,
-            "original_language": "en",
-            "genre_ids": [
-                27,
-                878
-            ],
-            "popularity": 410.767,
-            "release_date": "2024-08-13",
-            "video": false,
-            "vote_average": 7.2,
-            "vote_count": 3022
+            "vote_average": 6.756,
+            "vote_count": 2343
         }
     ],
     "total_pages": 500,
