@@ -14,6 +14,18 @@ from articles.models import Article
 from typing import List, Dict , Optional
 import time
 
+# JSON 파일에서 데이터를 로드하는 함수
+def load_movies_from_file(filepath: str) -> List[Dict]:
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("영화 데이터를 저장한 파일을 찾을 수 없습니다.")
+        return []
+    except json.JSONDecodeError:
+        print("영화 데이터를 읽는 중 오류가 발생했습니다.")
+        return []
+
 def generate_response_with_setup(query_text: str, history: Optional[List[Dict[str, str]]] = None):
     try:
         # 환경 변수에서 API 키 가져오기
@@ -23,19 +35,9 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
         os.environ["OPENAI_API_KEY"] = openai_api_key
 
         # 모델 초기화
-        model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+        model = ChatOpenAI(model="gpt-4o", temperature=0)
 
-        # JSON 파일에서 데이터를 로드하는 함수
-        def load_movies_from_file(filepath: str) -> List[Dict]:
-            try:
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except FileNotFoundError:
-                print("영화 데이터를 저장한 파일을 찾을 수 없습니다.")
-                return []
-            except json.JSONDecodeError:
-                print("영화 데이터를 읽는 중 오류가 발생했습니다.")
-                return []
+        
 
         class MoviesLoader:
             def __init__(self, movies_data):
@@ -93,10 +95,35 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
         retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
         # 9. 프롬프트 템플릿 정의
-        contextual_prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a chatbot who recommends movies. Please answer the image and information of the movie you recommended in Korean"),
-            ("user", "Context: {context}\\n\\nQuestion: {question}")
-        ])
+        contextual_prompt = """You are a STRICT fact-based assistant that MUST follow these rules:
+                [CRITICAL RULES]
+                1. You can ONLY use facts explicitly stated in the context below
+                2. You CANNOT use ANY external knowledge
+                3. You MUST verify each statement against the context
+                4. If information is not in the context, you MUST say "해당 정보는 context에 없습니다"
+                5. NEVER combine or infer information not directly stated
+                6. When uncertain, ALWAYS err on the side of saying information is not available
+                [RESPONSE STRUCTURE]
+                1. First, quote the EXACT relevant text from context
+                2. Then, provide your answer using ONLY that quoted information
+                3. If asked about something not in quotes, say "context에서 확인할 수 없는 내용입니다"
+                [VERIFICATION STEPS]
+                Before answering, you MUST:
+                1. Search context for EXACT information requested
+                2. Only proceed if you find EXPLICIT mentions
+                3. Cross-reference any statement you make with context
+                4. Reject any urge to "fill in the gaps" with assumptions
+                Example:
+                Question: "영화 인터스텔라의 감독은 누구인가요?"
+                Bad Response: "크리스토퍼 놀란입니다." (외부 지식 사용)
+                Good Response: "Context에서 인터스텔라의 감독 정보를 찾을 수 없습니다."
+                [CONTEXT]
+                {context}
+                [QUESTION]
+                {question}
+                Remember: If you're not 100% certain based on the context, say you don't know.
+                """
+        print("contextual_propt:",contextual_prompt)
         class ContextToPrompt:
             def __init__(self, prompt_template):
                 self.prompt_template = prompt_template
@@ -139,12 +166,17 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
 
         # 응답 생성
         response_docs = rag_chain_debug["context"].invoke({"question": query_text})
+        print("DEBUG: response_docs:", response_docs)
         context_text = "\n".join([doc.page_content for doc in response_docs])
+        print("DEBUG: context_text:", context_text)
 
         messages = [
             SystemMessage(content="Answer the user's questions using the provided context."),
             SystemMessage(content=f"Context:\n{context_text}")
         ]
+        print("DEBUG: Generated messages:")
+        for msg in messages:
+            print(msg)
         
         for past_message in history:
             try:
@@ -158,6 +190,7 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
 
         messages.append(HumanMessage(content=query_text))
         result = rag_chain_debug["llm"].invoke(messages)
+        print("DEBUG: Model response:", result.content)
         return result.content
 
     except Exception as e:
