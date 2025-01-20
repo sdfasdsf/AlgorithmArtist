@@ -18,7 +18,6 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 User = get_user_model()
 
-
 class signup(APIView):
     permission_classes = [AllowAny]  # 인증이 필요하지 않음
     def post(self, request):
@@ -30,6 +29,7 @@ class signup(APIView):
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class signout(APIView):
     # 로그인 사용자에게는 삭제 권한까지 부여
