@@ -12,7 +12,7 @@ from langchain.schema import Document
 from django.shortcuts import get_object_or_404
 from articles.models import Article
 from typing import List, Dict , Optional
-import time
+from datetime import datetime, timedelta
 
 # JSON 파일에서 데이터를 로드하는 함수
 def load_movies_from_file(filepath: str) -> List[Dict]:
@@ -25,6 +25,29 @@ def load_movies_from_file(filepath: str) -> List[Dict]:
     except json.JSONDecodeError:
         print("영화 데이터를 읽는 중 오류가 발생했습니다.")
         return []
+    
+# 최신 및 인기 영화 필터링 함수
+def filter_response_docs(response_docs, query_text):
+    filtered_docs = []
+    now = datetime.now()
+    one_month_ago = now - timedelta(days=30)
+    one_month_ahead = now + timedelta(days=30)
+
+    for doc in response_docs:
+        metadata = doc.metadata
+        release_date = metadata.get('release_date')
+        vote_average = metadata.get('vote_average', 0)
+        popularity = metadata.get('popularity', 0)
+
+        if '최신' in query_text:
+            if release_date and one_month_ago <= datetime.strptime(release_date, "%Y-%m-%d") <= one_month_ahead \
+                    and popularity >= 500 and vote_average >= 7.0:
+                filtered_docs.append(doc)
+        elif '인기' in query_text:
+            if vote_average >= 7.3:
+                filtered_docs.append(doc)
+
+    return filtered_docs
 
 def generate_response_with_setup(query_text: str, history: Optional[List[Dict[str, str]]] = None):
     try:
@@ -71,21 +94,8 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
             length_function=len,       # 텍스트의 길이를 계산할 함수
             is_separator_regex=False   # 구분자가 정규식인지를 설정
         )
-        # 리뷰도 추가
-        Movie_Review = Article.objects.values("movie_title", "rating" ,"content")
-        movie_review_docs = [
-            Document(
-                page_content=item['content'],
-                metadata={
-                    "movie_title": item['movie_title'],
-                    "rating": item['rating'],
-                }
-            )
-            for item in Movie_Review
-        ]
         # 문서를 분할하여 chunks를 생성
         splits = recursive_text_splitter.split_documents(docs)
-        splits += recursive_text_splitter.split_documents(movie_review_docs)
         # 6. 임베딩 (Embedding)
         embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
         # 7. 벡터 저장소 (Vector Store) 생성
@@ -103,10 +113,34 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
                 4. If information is not in the context, you MUST say "해당 정보는 context에 없습니다"
                 5. NEVER combine or infer information not directly stated
                 6. When uncertain, ALWAYS err on the side of saying information is not available
+                7. Always prioritize the current question over any prior conversation history.
+                8. Use previous conversation history as reference material only if it explicitly aligns with the current question.
+                [ADDITIONAL CRITERIA FOR MOVIES]
+                1. Criteria for "Latest Movies":
+                - Release date: From one month before today to one month after today.
+                - Popularity: Must be 500 or higher.
+                - Vote average: Must be 7.0 or higher.
+
+                2. Criteria for "Popular Movies":
+                - Vote average: Must be 7.3 or higher.
+                - Release date is NOT considered for popular movies
+
                 [RESPONSE STRUCTURE]
                 1. First, quote the EXACT relevant text from context
                 2. Then, provide your answer using ONLY that quoted information
                 3. If asked about something not in quotes, say "context에서 확인할 수 없는 내용입니다"
+
+                4. For "Latest Movies":
+                - Title
+                - Release date
+                - Popularity
+                - Vote average
+                - Plot summary
+
+                5. For "Popular Movies":
+                - Title
+                - Vote average
+                - Plot summary
                 [VERIFICATION STEPS]
                 Before answering, you MUST:
                 1. Search context for EXACT information requested
@@ -166,7 +200,14 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
 
         # 응답 생성
         response_docs = rag_chain_debug["context"].invoke({"question": query_text})
-        print("DEBUG: response_docs:", response_docs)
+        
+
+        if '최신' in query_text or '인기' in query_text:
+            response_docs = filter_response_docs(response_docs, query_text)
+            print("실행됨")
+        print("DEBUG: response_docs:", response_docs)    
+
+
         context_text = "\n".join([doc.page_content for doc in response_docs])
         print("DEBUG: context_text:", context_text)
 
