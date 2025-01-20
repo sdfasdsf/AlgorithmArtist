@@ -69,3 +69,8 @@ class AIRequestSerializer(serializers.ModelSerializer):
 #         ai_instance.bot_response = self.query_ai_engine()  # 챗봇 응답
 #         ai_instance.save()  # 모델 저장
 #         return ai_instance  # AI 인스턴스 반환
+    
+    
+# #________________________________________________########
+# # 
+# # 예전 코드  ai 코드들

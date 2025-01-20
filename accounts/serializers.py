@@ -1,44 +1,64 @@
-# accounts/serializers.py
+# accounts/serializers.py _______________________________________수정한 내용 범위
+
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from .models import Follow
+from django.contrib.auth.hashers import make_password
 from articles.models import Article, Comment
 from AI.models import AI
-from django.contrib.auth.models import User
+import logging  
+# 로깅 설정
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
 
+
 class SignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
-    password2 = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True)
+    password2 = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = (
-            "email",
-            "password",
-            "password2",
-            "username",
-            "profile_image",
-            "gender",
-            "ssn",
-            "phone_number",
-        )
+        fields = ('username', 'email', 'password', 'password2')
 
     def validate(self, data):
-        if data["password"] != data["password2"]:
-            raise serializers.ValidationError(
-                {"password": "비밀번호가 일치하지 않습니다."}
-            )
+        # 비밀번호가 일치하는지 확인
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError({
+                "password": "비밀번호가 일치하지 않습니다."
+            })
+        
+        # 비밀번호 강도 체크
+        try:
+            validate_password(data['password'])  # Django의 비밀번호 강도 체크 함수
+        except Exception as e:
+            raise serializers.ValidationError({
+                "password": list(e.messages)
+            })
+
         return data
 
     def create(self, validated_data):
-        validated_data.pop("password2")  # password2 제거
-        return User.objects.create_user(**validated_data)
+        # 'password2'는 더 이상 필요 없으므로 제거
+        validated_data.pop('password2', None)
+
+        # 비밀번호 해싱 후 사용자 생성
+        user = User.objects.create_user(
+            **validated_data  # email과 password를 포함한 모든 validated_data 전달
+        )
+        return user
+
+
+
+    
+    # ____________________________________수정한 코드 위치 시작
+
+    
+    #_____________________________ 수정한 내용
+# 3. 유효성 검사 후 데이터 반환
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
