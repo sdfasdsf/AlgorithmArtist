@@ -65,6 +65,11 @@ class signup(APIView):
                 
                 # 성공 메시지 및 리다이렉션
                 messages.success(request, '회원가입이 완료되었습니다.')
+                return Response({
+                    'message': '회원가입이 완료되었습니다.',
+                    'user': user.username
+                }, status=201)  # 회원가입 성공 시 201 상태 코드 반환            
+                
             
                 
             # 유효성 검사 실패 시 에러 메시지 표시
@@ -89,9 +94,11 @@ class login(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'accounts/login.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
+
     def get(self, request):
-            """회원가입 폼 표시"""
-            return Response({'message': '로그인 페이지입니다.'})
+        """로그인 페이지 표시"""
+        return Response({'message': '로그인 페이지입니다.'})
+
     def post(self, request):
         """
         로그인 처리
@@ -103,21 +110,30 @@ class login(APIView):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
+        # 이메일 값 확인
+        if not email:
+            return JsonResponse({"error": "이메일을 입력해 주세요."}, status=400)
+        
+        # 비밀번호 값 확인
+        if not password:
+            return JsonResponse({"error": "비밀번호를 입력해 주세요."}, status=400)
+
         # 사용자 인증
         user = authenticate(request, email=email, password=password)
-        
+
+        # 인증 성공 시
         if user is not None:
-            # 인증 성공 시 JWT 토큰 생성
+            # JWT 토큰 생성
             refresh = RefreshToken.for_user(user)
-            return JsonResponse(
-                {
-                    "access": str(refresh.access_token),
-                    "refresh": str(refresh),
-                    "username": user.username,
-                    "message": "로그인 성공",
-                },
-                status=200,
-            )
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+
+            # 쿠키에 토큰 저장
+            response = redirect('Main')  # 'main'은 리다이렉트할 URL 패턴 이름
+            response.set_cookie('access_token', access_token, httponly=True)
+            response.set_cookie('refresh_token', refresh_token, httponly=True)
+
+            return response
         else:
             # 인증 실패 시 에러 메시지 반환
             return JsonResponse(

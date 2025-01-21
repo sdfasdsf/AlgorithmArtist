@@ -11,6 +11,8 @@ from .serializers import CommentSerializer
 from .models import Comment
 import os
 from django.conf import settings
+from AI.AIanswer import load_movies_from_file
+import json
 
 
 class ArticleListCreate(APIView):
@@ -30,6 +32,18 @@ class ArticleListCreate(APIView):
         serializer = ArticleDetailSerializer(data=request.data)  # 상세 Serializer 사용
         if serializer.is_valid():
             serializer.save(author=request.user) # 요청 사용자 정보를 작성자로 설정 후 저장
+            movies = load_movies_from_file("response.json")
+            article = Article.objects.filter(author = request.user).order_by("-id").first()
+            for movie in movies:
+                if movie.get("title") == article.movie_title:
+                    # 리뷰 키가 없으면 초기화
+                    if "reviews" not in movie:
+                        movie["reviews"] = []
+                    # 리뷰 추가
+                    movie["reviews"].append({"review": article.content, "rating": article.rating})
+                    print(f"'{article.movie_title}' 영화에 리뷰가 추가되었습니다.")
+                    with open("response.json", "w", encoding="utf-8") as f:
+                        json.dump(movies, f, ensure_ascii=False, indent=4)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

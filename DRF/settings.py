@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_extensions',
 
     # DRF
     'rest_framework',
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     'accounts',
     'articles',
     'Main',
-    'AI',
+    'AI'
 ]
 
 MIDDLEWARE = [

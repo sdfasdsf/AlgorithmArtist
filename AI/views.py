@@ -34,11 +34,10 @@ class AIanswer(APIView):
             
             # if request.user ==
             history = []
-            recent_entries = AI.objects.filter(author=request.user).exclude(id=ai_instance.id).order_by('-id')[:5]
+            recent_entries = AI.objects.filter(author=request.user).exclude(pk=ai_instance.pk).order_by('-id')[:5]
 
 
             for entry in recent_entries:
-                print(entry)
                 if entry.bot_response and entry.bot_response != "An error occurred during response generation.":
                     history.append({"role": "user", "content": entry.user_question})
                     history.append({"role": "assistant", "content": entry.bot_response})
