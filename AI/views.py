@@ -1,26 +1,30 @@
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import AI
 from rest_framework.views import APIView
 from .serializers import AIRequestSerializer
 from .AIanswer import generate_response_with_setup
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from .models import AI
 from .serializers import AIRequestSerializer
-from .AIanswer import generate_response_with_setup  
+from .AIanswer import generate_response_with_setup
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.throttling import AnonRateThrottle  
 
 
 class AIanswer(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'AI/Tmoving.html'
+    throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
 
-    def get_object(self):
-        return get_object_or_404(AI)
+    def get(self,request):
+        """챗봇 폼 표시"""
+        return Response({'message': '챗봇 페이지입니다.'})
 
     def post(self, request):
         """응답 생성"""
@@ -49,8 +53,12 @@ class AIanswer(APIView):
             ai_instance.save()
                 
             
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                    'user_question': user_question,
+                    'bot_response': answer,
+                    'history': history
+                }, status=status.HTTP_201_CREATED)
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

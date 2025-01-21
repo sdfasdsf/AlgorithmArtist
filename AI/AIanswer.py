@@ -57,6 +57,11 @@ def filter_response_docs(response_docs, query_text):
     return filtered_docs
 
 def generate_response_with_setup(query_text: str, history: Optional[List[Dict[str, str]]] = None):
+    print("\n")
+    print("\n")
+    print("\n")
+    print("\n")
+    print("\n")
     # 현재 날짜 가져오기
     today = datetime.now().strftime("%Y-%m-%d")
     try:
@@ -133,6 +138,10 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
         8. Use previous conversation history as reference material only if it explicitly aligns with the current question.
         9. For questions related to "Latest Movies" or "Popular Movies", ensure that the results are strictly based on the filtered context that meets the criteria.
         10. If no results match the criteria, explicitly state: "적합한 데이터를 찾을 수 없습니다. 다른 질문을 해주세요."
+        11. Do NOT prioritize previous conversation history over the current question.
+        12. For questions related to "Latest Movies", "Popular Movies", or "Upcoming Movies", focus strictly on the filtered context based on criteria.
+        13. When generating recommendations, avoid repeating movies already mentioned in prior responses.
+        14. Use previous conversation history as reference only to prevent duplication, not to prioritize earlier responses.
 
         [ADDITIONAL INFORMATION]
         Today's date is {today}.
@@ -159,6 +168,11 @@ def generate_response_with_setup(query_text: str, history: Optional[List[Dict[st
         1. First, quote the EXACT relevant text from context.
         2. Then, provide your answer using ONLY that quoted information.
         3. If asked about something not in quotes, say "context에서 확인할 수 없는 내용입니다."
+        4. Always select one random result from the context for your response.
+        5. Ensure the response is concise and directly answers the query.
+        6. Avoid repeating the same recommendation if the user asks multiple times.
+        7. By default, select one random movie for your response.
+        8. If the user requests "more than one movie," list up to 3 random movies from the filtered context.
 
         4. For "Latest Movies":
         - Title
@@ -260,7 +274,7 @@ Good Response: "Context에서 인터스텔라의 감독 정보를 찾을 수 없
             # 특정 키워드가 포함된 질문일 경우 이전 대화를 무시
             if '최신' in query_text or '인기' in query_text or '개봉 예정' in query_text:
                 print("DEBUG: Ignoring history for this query due to specific keywords.")
-                history = None
+                history = []
             else:
                 # 이전 대화를 메시지에 추가
                 for past_message in history:
