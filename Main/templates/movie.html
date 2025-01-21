@@ -1,1 +1,118 @@
-# 영화 목록
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 정보</title>
+    <style>
+        body {
+            background-color: #1d1d1d;
+            color: #eee;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .content {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            background-color: #2b2b2b;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+        .poster img {
+            width: 100%;
+            max-width: 300px;
+        }
+        .details {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .details h1 {
+            margin-top: 0;
+            color: #fff;
+        }
+        .details p {
+            color: #aaa;
+        }
+        .cast {
+            display: flex;
+            margin: 15px 0;
+        }
+        .cast-member {
+            text-align: center;
+            margin-right: 15px;
+        }
+        .cast-member img {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            object-fit: cover;
+            border: 2px solid #444;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .footer {
+            background-color: #202020;
+            color: #aaa;
+            padding: 10px;
+            text-align: center;
+        }
+        .footer div {
+            float: right;
+        }
+        .footer a {
+            color: #aaa;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="poster">
+                <img src="poster.jpg" alt="Movie Poster">
+            </div>
+            <div class="details">
+                <h1>영화명</h1>
+                <p>영화 줄거리</p>
+                <div class="cast">
+                    <div class="cast-member">
+                        <img src="actor1.jpg" alt="Actor Name">
+                        <p>배우 이름<br><small>배역(영화 속 캐릭터 이름)</small></p>
+                    </div>
+                    <div class="cast-member">
+                        <img src="actor2.jpg" alt="Actress Name">
+                        <p>여배우 이름<br><small>배역(영화 속 캐릭터 이름)</small></p>
+                    </div>
+                    <div class="cast-member">
+                        <img src="actor3.jpg" alt="Supporting Actor">
+                        <p>조연 배우<br><small>배역(영화 속 캐릭터 이름)</small></p>
+                    </div>
+                </div>
+                <p>출시일: March 15, 2024<br></p>
+                <p>장르: Action, Adventure<br></p>
+                <p>상영 시간: 2h 15m</p>
+                <div class="rating">
+                    <span>⭐⭐⭐⭐⭐</span>&nbsp;(4.5/5)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div>AI Chatbot Profile Contact Us</div>
+        &copy; 2024 FlickChat
+    </div>
+</body>
+</html>
