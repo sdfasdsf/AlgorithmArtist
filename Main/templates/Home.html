@@ -6,92 +6,169 @@
     <title>TMOVING</title>
     <style>
         body {
-            background-position: center;
-            background-size: cover;
-            color: grey;
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: grey;
+            font: bold
         }
-        .movies-row {
+        header {
+            background-color: #000;
+            color: white;
             display: flex;
-            overflow-x: auto;
-            gap: 20px;
+            justify-content: space-between;
+            padding: 10px 20px;
+            align-items: center;
         }
-        .movie {
-            flex: 0 0 auto;
-            width: 150px;
+        header img {
+            height: 50px;
         }
-        .movie img {
-            width: 100%;
-            border-radius: 8px;
+        header nav a {
+            color: grey;
+            text-decoration: none;
+            margin: 0 15px;
         }
-        .title {
+        .banner {
+            position: relative;
+            background-color: #444;
+            background-size: cover;
+            height: 300px;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            font-size: 16px;
-            margin-top: 5px;
+            padding: 20px;
+        }
+        .banner h1 {
+            margin: 0;
+            font-size: 3rem;
+        }
+        .banner p {
+            margin: 10px 0 0;
+        }
+        .section {
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        .section h2 {
+            margin: 0 0 20px;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .card {
+            background-color: #444;
+            margin: 10px;
+            padding: 15px;
+            width: 30%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .card img {
+            max-width: 100%;
+        }
+        .card h3 {
+            margin: 15px 0 5px;
+        }
+        .card p {
+            margin: 5px 0 0;
+        }
+        footer {
+            background-color: #444;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        footer div {
+            margin: 0 10px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <span>TMOVING</span>
+        </div>
+        <nav>
+            <nav class="navbar navbar-expand-lg navbar-black bg-black">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse justify-content-end">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="accounts/signup/" class="btn btn-primary">회원가입</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="accounts/login/" class="btn btn-primary">로그인</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </nav>
+    </header>
+    <div class="banner">
+        <h1>티무빙</h1>
+        <p>최근 혹은 인기 영화 목록이나 리뷰를 여기서 보실 수 있습니다!</p>
+    </div>
+    <section class="section latest-releases">
+        <h2>최근 영화 목록</h2>
+        <div class="card-container">
+            <div class="card">
+                <img src="path/to/movie1.jpg" alt="Movie 1">
+                <h3>Movie Title 1</h3>
+                <p>An exciting new movie that captivates audiences.</p>
+            </div>
+            <div class="card">
+                <img src="path/to/movie2.jpg" alt="Movie 2">
+                <h3>Movie Title 2</h3>
+                <p>A heartwarming story that will make you believe in love.</p>
+            </div>
+            <div class="card">
+                <img src="path/to/movie3.jpg" alt="Movie 3">
+                <h3>Movie Title 3</h3>
+                <p>A mystery thriller that keeps you on the edge of your seat.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section popular-categories">
+        <h2>인기 영화 목록</h2>
+        <div class="card-container">
+            <div class="card">
+                <h3>Action</h3>
+                <p>Explore adrenaline-pumping movies full of excitement.</p>
+            </div>
+            <div class="card">
+                <h3>Romance</h3>
+                <p>Dive into stories of love and passion.</p>
+            </div>
+            <div class="card">
+                <h3>Thriller</h3>
+                <p>Uncover mysteries and suspenseful tales.</p>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="quick-links">
+            <h4>Quick Links</h4>
+            <a href="#">Home</a><br>
+            <a href="#">Movie Lists</a><br>
+            <a href="#">Reviews</a>
+        </div>
+        <div class="contact-us">
+            <h4>Contact Us</h4>
+            <p>이메일: contact@teamsparta.co</p>
+            <p>Phone: +1 234 567 890</p>
+        </div>
+        <div class="social-media">
+            <h4>Follow Us</h4>
+            <span>Icons for social media</span>
+        </div>
+    </footer>
+</body>
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="">TMOVING</a>
-            <div class="collapse navbar-collapse justify-content-end">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="accounts/signup/" class="btn btn-primary">회원가입</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="accounts/login/">로그인</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="container mt-4">
-        <h1>최신 영화 목록</h1>
-        <div class="row">
-            {% for movie in latest_movies %}
-            <div class="col-md-3">
-                <div class="card">
-                    <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}">
-                    <ul>
-                        {% endfor %}
-
-                        {% for movie in movies %}
-                        <div class="card-body">            
-                            <li>
-                                <h2>{{ movie.title }}</h2>
-                                <p>{{ movie.overview }}</p>
-                            </li>
-                        <h5 class="card-title">{{ movie.title }}</h5>
-                        <p class="card-text">Release Date: {{ movie.release_date }}</p>
-                    </ul>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <h1 class="mt-5">인기 영화 목록</h1>
-        <div class="row">
-            {% for movie in popular_movies %}
-            <div class="col-md-3">
-                <div class="card">
-                    <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ movie.title }}</h5>
-                        <p class="card-text">Release Date: {{ movie.release_date }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</body>
-</html>
