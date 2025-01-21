@@ -3,7 +3,6 @@ import json
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_community.vectorstores import FAISS
 from dotenv import dotenv_values
