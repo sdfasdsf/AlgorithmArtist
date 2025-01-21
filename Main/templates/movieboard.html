@@ -1,1 +1,238 @@
-# 영화 게시판
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMOVING</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ccc;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #222;
+            padding: 10px 20px;
+            color: #fff;
+        }
+        header nav a {
+            color: #bfc4c3;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        header nav a:hover {
+            text-decoration: underline;
+        }
+        .main-content {
+            display: flex;
+            padding: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            margin-right: 20px;
+        }
+        .sidebar form,
+        .sidebar .genres,
+        .sidebar .user-rating,
+        .sidebar .movie-class {
+            margin-bottom: 20px;
+        }
+        .sidebar h3 {
+            margin-bottom: 10px;
+        }
+        .sidebar select,
+        .sidebar input[type="text"],
+        .sidebar button {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .search-results {
+            flex: 1;
+            background-color: #444;
+            color: #fff;
+            padding: 20px;
+        }
+        .search-results h2 {
+            margin: 0;
+        }
+        .filters {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .filters span {
+            margin-right: 10px;
+        }
+        .movie-item {
+            display: flex;
+            align-items: start;
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .movie-item img {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .movie-info {
+            flex: 1;
+        }
+        .movie-info h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .movie-info p {
+            margin: 5px 0;
+        }
+        .movie-rating {
+            display: flex;
+            align-items: center;
+        }
+        .movie-rating span {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        .buttons {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .buttons button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            background-color: #616161;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        footer a {
+            color: #bfc4c3;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>TMOVING</div>
+        <nav>
+            <!-- <a href="#">로그인</a>
+            <a href="#">회원가입</a> #이 사항은 보류처리 되었습니다.--> 
+            <!-- 사유 : 로그인을 한 상태에서 볼 수 있는 페이지 이기 때문에 -->
+        </nav>
+    </header>
+    <div class="main-content">
+        <aside class="sidebar">
+            <form>
+                <h3>영화 검색</h3>
+                <input type="text" placeholder="Enter movie title here">
+                <select>
+                    <option>장르 선택</option>
+                </select>
+                <select>
+                    <option>별점 선택</option>
+                </select>
+                <button>Search</button>
+            </form>
+            <div class="genres">
+                <h3>장르</h3>
+                <label><input type="checkbox"> 공포</label><br>
+                <label><input type="checkbox"> 코미디</label><br>
+                <label><input type="checkbox"> 액션</label><br>
+                <label><input type="checkbox"> 공상 과학</label><br>
+                <label><input type="checkbox"> 드라마</label>
+            </div>
+            <div class="user-rating">
+                <h3>별점</h3>
+                <label><input type="checkbox"> 5점</label><br>
+                <label><input type="checkbox"> 4점</label><br>
+                <label><input type="checkbox"> 3점</label><br>
+                <label><input type="checkbox"> 2점</label><br>
+                <label><input type="checkbox"> 1점</label>
+            </div>
+        </aside>
+        <section class="search-results">
+            <h2>30개의 리뷰가 있습니다</h2>
+            <div class="filters">
+                <span>Filters</span>
+            </div>
+            <div class="movie-item">
+                <img src="image1.jpg" alt="The Shawshank">
+                <div class="movie-info">
+                    <h3>The Shawshank</h3>
+                    <p>Full-HD</p>
+                    <div class="movie-rating">
+                        <span>4.7 / 5</span><button>Preview</button><button>Buy Now</button>
+                    </div>
+                </div>
+                <div class="pricing">
+                    <button>More Options</button>
+                </div>
+            </div>
+            <div class="movie-item">
+                <img src="image2.jpg" alt="The Godfather">
+                <div class="movie-info">
+                    <h3>The Godfather</h3>
+                    <p>Full-HD, watch trailer</p>
+                    <div class="movie-rating">
+                        <span>4.2 / 5</span><button>Preview</button><button>Buy Now</button>
+                    </div>
+                </div>
+                <div class="pricing">
+                    <button>More Options</button>
+                </div>
+            </div>
+            <div class="movie-item">
+                <img src="image3.jpg" alt="Movie Little Mermaid">
+                <div class="movie-info">
+                    <h3>Movie Little Mermaid</h3>
+                    <p>Excellent</p>
+                    <div class="movie-rating">
+                        <span>4.5 / 5</span><button>Preview</button><button>Buy Now</button>
+                    </div>
+                </div>
+                <div class="pricing">
+                    <button>See Streaming Options</button>
+                </div>
+            </div>
+            <div class="movie-item">
+                <img src="image4.jpg" alt="Movie Bebopk">
+                <div class="movie-info">
+                    <h3>Movie Bebopk</h3>
+                    <p>Comfortable soccer cartoon</p>
+                    <div class="movie-rating">
+                        <span>Average</span><button>Available</button>
+                    </div>
+                </div>
+                <div class="pricing">
+                    <button>가격</button>
+                    <button>See Streaming Option</button>
+                </div>
+            </div>
+            <div class="pagination">
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>4</button>
+                <button>5</button>
+            </div>
+        </section>
+    </div>
+    <footer>
+        <div>TMOVING &copy; <span>teamsparta.co</span> | <span>Team Algorithm Artist</span></div>
+    </footer>
+</body>
+</html>

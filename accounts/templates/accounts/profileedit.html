@@ -1,11 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프로필 수정창</title>
+    <title>User Profile</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            border: 3px solid #444;
+            border-radius: 8px;
+            background-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+        .header-left {
+            font-size: 20px;
+        }
+        .header-right {
+            display: flex;
+            gap: 20px;
+        }
+        .header-right a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+        }
+        .profile-card {
+            background-color: #4d4d4d;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-pic {
+            border-radius: 100px;
+            width: 120px;
+            margin-bottom: 10px;
+        }
+        .edit-tag {
+            display: inline-block;
+            background-color: #6e00ff;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            position: relative;
+            bottom: 25px;
+            left: 35px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            text-align: left;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: calc(100% - 20px);
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-actions button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn-cancel {
+            background-color: white;
+            color: black;
+        }
+        .btn-save {
+            background-color: #6e00ff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <span>👤</span> User Profile
+            </div>
+            <div class="header-right">
+                <a href="#">Dashboard</a>
+                <a href="#">Settings</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+        <div class="profile-card">
+            <img src="profile.jpg" alt="Profile" class="profile-pic">
+            <span class="edit-tag">Edit</span>
+            <form>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" value="닉네임을 적어주세요.">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" value="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" value="•••••••">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-save">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
