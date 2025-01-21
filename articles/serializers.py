@@ -66,6 +66,7 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
             "comments",  # 게시글에 달린 댓글 목록
             "views",  # 게시글 조회수
             "total_likes_count",  # 게시글 총 좋아요 수
+            "genre" # 영화 장르
         )
 
     def get_image(self, obj):
