@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMOVING</title>
+    <style>
+        /* 간단한 CSS */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+        .card {
+            background-color: #444;
+            margin: 10px;
+            padding: 15px;
+            width: 30%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .card img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <section class="section latest-releases">
+        <h2>최근 영화 목록</h2>
+        <div class="card-container" id="latest-movies">
+            <!-- JavaScript로 데이터를 추가합니다. -->
+        </div>
+    </section>
+
+    <!-- config.js 로드 -->
+    <script src="{% static 'config.js' %}"></script>
+    <script>
+        // API 호출
+        fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${CONFIG.API_KEY}` // config.js에서 API 키 사용
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const movies = data.results; // 영화 데이터 목록
+            const container = document.getElementById('latest-movies'); // 카드 컨테이너 선택
+            container.innerHTML = ''; // 기존 내용을 초기화
+
+            // 영화 데이터를 기반으로 카드를 생성합니다.
+            movies.forEach(movie => {
+                const card = document.createElement('div'); // 새로운 div 생성
+                card.className = 'card'; // 클래스 추가
+
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>${movie.overview}</p>
+                `;
+
+                container.appendChild(card); // 컨테이너에 카드 추가
+            });
+        })
+        .catch(error => console.error('Error fetching movies:', error));
+    </script>
+</body>
+</html>

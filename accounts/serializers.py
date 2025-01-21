@@ -10,10 +10,8 @@ User = get_user_model()
 
 
 class SignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
-    password2 = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True)
+    password2 = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
@@ -22,10 +20,6 @@ class SignupSerializer(serializers.ModelSerializer):
             "password",
             "password2",
             "username",
-            "profile_image",
-            "gender",
-            "ssn",
-            "phone_number",
         )
 
     def validate(self, data):
@@ -33,6 +27,14 @@ class SignupSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"password": "비밀번호가 일치하지 않습니다."}
             )
+        # 비밀번호 강도 체크
+        try:
+            validate_password(data['password'])  # Django의 비밀번호 강도 체크 함수
+        except Exception as e:
+            raise serializers.ValidationError({
+                "password": list(e.messages)
+            })
+
         return data
 
     def create(self, validated_data):

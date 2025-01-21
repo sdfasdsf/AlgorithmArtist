@@ -8,10 +8,13 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("이메일은 필수입니다")
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save()
+        if not password or password.strip() == "":
+            raise ValueError("비밀번호는 필수입니다.")
+        
+        email = self.normalize_email(email)  # 이메일 정규화
+        user = self.model(email=email, **extra_fields)  # User 모델 인스턴스 생성
+        user.set_password(password)  # 비밀번호 해싱
+        user.save(using=self._db)  # DB에 저장
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
