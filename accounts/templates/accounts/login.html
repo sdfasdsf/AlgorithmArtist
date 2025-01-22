@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="kr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,9 +54,10 @@
 <body>
     <div class="login-container">
         <h2>로그인</h2>
-        <form>
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
+        <form method="POST" action="/accounts/login/">
+            {% csrf_token %}
+            <input type="text" placeholder="email" required name="email">
+            <input type="password" placeholder="Password" required name="password">
             <button type="submit" class="login-button" href="">LOGIN</button>
         </form>
     </div>

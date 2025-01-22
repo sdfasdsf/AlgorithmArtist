@@ -11,7 +11,7 @@ MOVIEDATA_API_KEY = dotenv_values(".env")
 def Main(request):
         latest_movies = Movie.objects.order_by('-release_date')[:5]  # 최신 영화 5개
         popular_movies = Movie.objects.filter(is_popular=True)[:5]  # 인기 영화 5개
-        return render(request, 'Home.html', {})
+        return render(request, 'Main/Home.html', {})
 
 def fetch_movies(request):
     # API 호출 로직
@@ -25,7 +25,7 @@ def fetch_movies(request):
         # JSON 응답을 파싱
             data = response.json()
         movies = data.get('results', [])  # 영화 목록 추출
-        return render(request, "Home.html", {"movies": movies})
+        return render(request, "Main/Home.html", {"movies": movies})
         # else:
         # return JsonResponse({"error": "Failed to fetch movies"}, status=response.status_code)
 

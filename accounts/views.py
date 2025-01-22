@@ -32,14 +32,17 @@ import traceback
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
+
 class signup(APIView):
     permission_classes = [AllowAny]  # 인증이 필요하지 않음
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'accounts/signup.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
+    
     def get(self, request):
         """회원가입 폼 표시"""
         return Response({'message': '회원가입 페이지입니다.'})
+
     def post(self, request):
         """
         회원가입 처리
@@ -52,17 +55,23 @@ class signup(APIView):
             if serializer.is_valid():
                 # 수정된 코드 위치
                 user = serializer.save()  # serializer.save()에서 user 객체가 반환되어야 합니다.
+                
                 if not user:
                     raise ValueError('사용자 생성에 실패했습니다.')  # 사용자 생성 실패 시 예외 처리
+                
                 # 성공 메시지 및 리다이렉션
                 messages.success(request, '회원가입이 완료되었습니다.')
                 response = redirect('Main')
-                return response
+                return response     
+                
+            
+                
             # 유효성 검사 실패 시 에러 메시지 표시
             return Response({
                 'message': '회원가입 페이지입니다.',
                 'errors': serializer.errors
             }, status=400)
+            
         except Exception as e:
             # 예외 발생 시 로깅 및 에러 메시지
             error_message = traceback.format_exc()  # 예외의 스택 트레이스를 문자열로 가져옴
