@@ -43,9 +43,3 @@ def home(request):
 
 def movie(request):
     return render(request, 'movie.html')
-
-def movieboard(request):
-    return render(request, 'movieboard.html')
-
-def reviewboard(request):
-    return render(request, 'reviewboard.html')

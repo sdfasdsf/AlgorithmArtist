@@ -1,3 +1,4 @@
+<!-- 게시글 목록 및 리뷰 목록 보기 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -68,6 +69,68 @@
         }
         .filters span {
             margin-right: 10px;
+        }
+        .card-container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            gap: 10px;
+        }
+        .card-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .card-container::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+        }
+        .card-container::-webkit-scrollbar-track {
+            background-color: #333;
+        }
+        
+        .card {
+            background-color: #444;
+            margin: 10;
+            padding: 15px;
+            width: 300px;
+            flex: 0 0 auto;
+            max-width: 250px; /* 최대 크기 제한 */
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        @media (max-width: 768px) { /* 태블릿 크기 이하 */
+            .card {
+                width: 45%; /* 부모의 45% */
+                max-width: 200px; /* 더 작은 크기로 제한 */
+            }
+        }
+
+        @media (max-width: 480px) { /* 모바일 크기 이하 */
+            .card {
+                width: 90%; /* 부모의 90% */
+                max-width: 180px; /* 더 작은 크기로 제한 */
+            }
+        }
+        .card img {
+            width: 100%; /* 카드 너비에 맞게 이미지 크기 조정 */
+            height: 300px; /* 고정된 높이 설정 */
+            object-fit: cover; /* 이미지 비율을 유지하며 잘라냄 */
+            border-radius: 5px; /* 선택 사항: 이미지 모서리 둥글게 처리 */
+        }
+        .card h3 {
+            margin: 15px 0 5px;
+            font-size: 1rem;
+            display: -webkit-box; /* Flexbox 유사 */
+            line-clamp: 2;
+            -webkit-line-clamp: 2; /* 최대 두 줄까지만 표시 */
+            -webkit-box-orient: vertical; /* 세로 방향 정렬 */
+            overflow: hidden; /* 넘치는 텍스트 숨김 */
+            text-overflow: ellipsis; /* 말줄임표 추가 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            line-height: 1.2; /* 줄 간격 조정 */
+        }
+        .card p {
+            margin: 5px 0 0;
         }
         .movie-item {
             display: flex;
@@ -165,63 +228,8 @@
             </div>
         </aside>
         <section class="search-results">
-            <h2>30개의 리뷰가 있습니다</h2>
-            <div class="filters">
-                <span>Filters</span>
-            </div>
-            <div class="movie-item">
-                <img src="image1.jpg" alt="The Shawshank">
-                <div class="movie-info">
-                    <h3>The Shawshank</h3>
-                    <p>Full-HD</p>
-                    <div class="movie-rating">
-                        <span>4.7 / 5</span><button>Preview</button><button>Buy Now</button>
-                    </div>
-                </div>
-                <div class="pricing">
-                    <button>More Options</button>
-                </div>
-            </div>
-            <div class="movie-item">
-                <img src="image2.jpg" alt="The Godfather">
-                <div class="movie-info">
-                    <h3>The Godfather</h3>
-                    <p>Full-HD, watch trailer</p>
-                    <div class="movie-rating">
-                        <span>4.2 / 5</span><button>Preview</button><button>Buy Now</button>
-                    </div>
-                </div>
-                <div class="pricing">
-                    <button>More Options</button>
-                </div>
-            </div>
-            <div class="movie-item">
-                <img src="image3.jpg" alt="Movie Little Mermaid">
-                <div class="movie-info">
-                    <h3>Movie Little Mermaid</h3>
-                    <p>Excellent</p>
-                    <div class="movie-rating">
-                        <span>4.5 / 5</span><button>Preview</button><button>Buy Now</button>
-                    </div>
-                </div>
-                <div class="pricing">
-                    <button>See Streaming Options</button>
-                </div>
-            </div>
-            <div class="movie-item">
-                <img src="image4.jpg" alt="Movie Bebopk">
-                <div class="movie-info">
-                    <h3>Movie Bebopk</h3>
-                    <p>Comfortable soccer cartoon</p>
-                    <div class="movie-rating">
-                        <span>Average</span><button>Available</button>
-                    </div>
-                </div>
-                <div class="pricing">
-                    <button>가격</button>
-                    <button>See Streaming Option</button>
-                </div>
-            </div>
+            <h2>자유 게시판 목록<br><br></h2>
+            <div id="articles" class="card-container"></div>
             <div class="pagination">
                 <button>1</button>
                 <button>2</button>
@@ -231,6 +239,31 @@
             </div>
         </section>
     </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("http://127.0.0.1:8000/articles/") // API URL
+        .then((response) => response.json())
+        .then((data) => {
+            const container = document.getElementById("articles");
+            container.innerHTML = ""; // 기존 내용 초기화
+            data.forEach((article) => {
+                // 카드 형식으로 HTML 생성
+                const cardHTML = `
+                    <div class="card">
+                        <img src="${article.image}" alt="${article.title}">
+                        <h3>${article.title}</h3>
+                        <p>⭐ ${article.rating}점</p>
+                        <p>${new Date(article.created_at).toLocaleString()}</p>
+                    </div>
+                `;
+                container.innerHTML += cardHTML; // 카드 추가
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching articles:", error);
+        });
+});
+    </script>
     <footer>
         <div>TMOVING &copy; <span>teamsparta.co</span> | <span>Team Algorithm Artist</span></div>
     </footer>

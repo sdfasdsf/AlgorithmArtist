@@ -15,7 +15,6 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.exceptions import ValidationError
 
 
 
@@ -28,25 +27,19 @@ from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.throttling import AnonRateThrottle
 import logging 
-import traceback#추가한 내용 _________________
-#_____________________________________________________________이밑 내용 수정 한내용들
-# 로깅 설정
+import traceback
+#추가한 내용 _________________
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-
 class signup(APIView):
-    """회원가입 페이지 뷰"""
-        
-    permission_classes = [AllowAny]  # 인증 없이 접근 허용
+    permission_classes = [AllowAny]  # 인증이 필요하지 않음
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'accounts/signup.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
-    
     def get(self, request):
         """회원가입 폼 표시"""
         return Response({'message': '회원가입 페이지입니다.'})
-        
     def post(self, request):
         """
         회원가입 처리
@@ -59,25 +52,17 @@ class signup(APIView):
             if serializer.is_valid():
                 # 수정된 코드 위치
                 user = serializer.save()  # serializer.save()에서 user 객체가 반환되어야 합니다.
-                
                 if not user:
                     raise ValueError('사용자 생성에 실패했습니다.')  # 사용자 생성 실패 시 예외 처리
-                
                 # 성공 메시지 및 리다이렉션
                 messages.success(request, '회원가입이 완료되었습니다.')
-                return Response({
-                    'message': '회원가입이 완료되었습니다.',
-                    'user': user.username
-                }, status=201)  # 회원가입 성공 시 201 상태 코드 반환            
-                
-            
-                
+                response = redirect('Main')
+                return response
             # 유효성 검사 실패 시 에러 메시지 표시
             return Response({
                 'message': '회원가입 페이지입니다.',
                 'errors': serializer.errors
             }, status=400)
-            
         except Exception as e:
             # 예외 발생 시 로깅 및 에러 메시지
             error_message = traceback.format_exc()  # 예외의 스택 트레이스를 문자열로 가져옴
@@ -89,8 +74,22 @@ class signup(APIView):
             }, status=500)
 
 
+class signout(APIView):
+    # 로그인 사용자에게는 삭제 권한까지 부여
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    def delete(self, request):
+        user = request.user
+
+        # 사용자 삭제
+        user.delete()
+
+        return Response({
+            "message": "회원탈퇴가 되었습니다."
+    }, status=status.HTTP_204_NO_CONTENT)
+
+
 class login(APIView):
-    permission_classes = [AllowAny]  # 인증 없이 접근 허용
+    permission_classes = [AllowAny]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'accounts/login.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
@@ -99,14 +98,13 @@ class login(APIView):
         """로그인 페이지 표시"""
         return Response({'message': '로그인 페이지입니다.'})
 
-    def post(self, request):
+    def post(self,request):
         """
         로그인 처리
         - 인증
         - 에러 처리
         - 로그인 성공/실패 처리
         """
-        # 요청에서 이메일과 비밀번호 가져오기
         email = request.POST.get("email")
         password = request.POST.get("password")
 
@@ -134,27 +132,11 @@ class login(APIView):
             response.set_cookie('refresh_token', refresh_token, httponly=True)
 
             return response
+        
         else:
-            # 인증 실패 시 에러 메시지 반환
             return JsonResponse(
                 {"error": "이메일 또는 비밀번호가 올바르지 않습니다."}, status=400
             )
-#______________________________________________________________________________
-
-
-
-class signout(APIView):
-    # 로그인 사용자에게는 삭제 권한까지 부여
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    def delete(self, request):
-        user = request.user
-
-        # 사용자 삭제
-        user.delete()
-
-        return Response({
-            "message": "회원탈퇴가 되었습니다."
-    }, status=status.HTTP_204_NO_CONTENT)
 
 class logout(APIView):
     # 로그인 사용자만 로그아웃 가능

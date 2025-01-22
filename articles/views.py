@@ -1,5 +1,6 @@
 # articles/views.py
 from rest_framework.views import APIView
+from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -237,3 +238,6 @@ class CommentListDelete(APIView):
         
         comment.delete()  # 댓글 삭제
         return Response(status=status.HTTP_204_NO_CONTENT)  # 성공적으로 삭제됨
+
+def reviewboard(request):
+    return render(request, 'reviewboard.html')
