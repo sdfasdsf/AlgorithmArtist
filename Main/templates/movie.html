@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,35 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+        }
+        header {
+            background-color: #000;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            align-items: center;
+        }
+        header img {
+            height: 50px;
+        }
+        header nav a {
+            color: grey;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .banner {
+            position: relative;
+            background-color: #444;
+            background-size: cover;
+            height: 300px;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
         }
         .container {
             display: flex;
@@ -78,7 +107,39 @@
         }
     </style>
 </head>
+<style>
+    body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: grey;
+}
+
+</style>
+
+</body>
 <body>
+    <header>
+        <div class="logo">
+        <span>TMOVING</span>
+        </div>
+        <nav>
+        <nav class="navbar navbar-expand-lg navbar-black bg-black">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="accounts/signup/" class="btn btn-primary">회원가입</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="accounts/login/" class="btn btn-primary">로그인</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        </header>
+
     <div class="container">
         <div class="content">
             <div class="poster">
@@ -112,7 +173,6 @@
     </div>
     <div class="footer">
         <div>AI Chatbot Profile Contact Us</div>
-        &copy; 2024 FlickChat
     </div>
 </body>
 </html>

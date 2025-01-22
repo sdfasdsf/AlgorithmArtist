@@ -105,13 +105,6 @@ def data_receive():
         json.dump(list(unique_titles), f, ensure_ascii=False, indent=4)
     #---------------------------------------------------------------------------------
 
-
-    
-
-
-
-
-
 def start_receive():
     scheduler = BackgroundScheduler()
     scheduler.add_job(data_receive, 'interval', days=7)

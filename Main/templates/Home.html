@@ -1,5 +1,6 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,21 +59,62 @@
         }
         .card-container {
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            gap: 10px;
         }
+        .card-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .card-container::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+        }
+        .card-container::-webkit-scrollbar-track {
+            background-color: #333;
+        }
+        
         .card {
             background-color: #444;
-            margin: 10px;
+            margin: 10;
             padding: 15px;
-            width: 30%;
+            width: 300px;
+            flex: 0 0 auto;
+            max-width: 250px; /* 최대 크기 제한 */
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        @media (max-width: 768px) { /* 태블릿 크기 이하 */
+            .card {
+                width: 45%; /* 부모의 45% */
+                max-width: 200px; /* 더 작은 크기로 제한 */
+            }
+        }
+
+        @media (max-width: 480px) { /* 모바일 크기 이하 */
+            .card {
+                width: 90%; /* 부모의 90% */
+                max-width: 180px; /* 더 작은 크기로 제한 */
+            }
         }
         .card img {
-            max-width: 100%;
+            width: 100%; /* 카드 너비에 맞게 이미지 크기 조정 */
+            height: 300px; /* 고정된 높이 설정 */
+            object-fit: cover; /* 이미지 비율을 유지하며 잘라냄 */
+            border-radius: 5px; /* 선택 사항: 이미지 모서리 둥글게 처리 */
         }
         .card h3 {
             margin: 15px 0 5px;
+            font-size: 1rem;
+            display: -webkit-box; /* Flexbox 유사 */
+            line-clamp: 2;
+            -webkit-line-clamp: 2; /* 최대 두 줄까지만 표시 */
+            -webkit-box-orient: vertical; /* 세로 방향 정렬 */
+            overflow: hidden; /* 넘치는 텍스트 숨김 */
+            text-overflow: ellipsis; /* 말줄임표 추가 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            line-height: 1.2; /* 줄 간격 조정 */
         }
         .card p {
             margin: 5px 0 0;
@@ -113,45 +155,135 @@
     </header>
     <div class="banner">
         <h1>티무빙</h1>
-        <p>최근 혹은 인기 영화 목록이나 리뷰를 여기서 보실 수 있습니다!</p>
+        <p>최근 혹은 박스오피스 영화 정보나 리뷰를 여기서 보실 수 있습니다!</p>
     </div>
+
     <section class="section latest-releases">
-        <h2>최근 영화 목록</h2>
-        <div class="card-container">
-            <div class="card">
-                <img src="path/to/movie1.jpg" alt="Movie 1">
-                <h3>Movie Title 1</h3>
-                <p>An exciting new movie that captivates audiences.</p>
-            </div>
-            <div class="card">
-                <img src="path/to/movie2.jpg" alt="Movie 2">
-                <h3>Movie Title 2</h3>
-                <p>A heartwarming story that will make you believe in love.</p>
-            </div>
-            <div class="card">
-                <img src="path/to/movie3.jpg" alt="Movie 3">
-                <h3>Movie Title 3</h3>
-                <p>A mystery thriller that keeps you on the edge of your seat.</p>
-            </div>
+        <h2>최신 영화 목록</h2>
+        <div class="card-container" id="latest-movies">
+            <!-- JavaScript로 데이터를 추가합니다. -->
         </div>
     </section>
-    <section class="section popular-categories">
+
+    <!-- config.js 로드 -->
+    <script src="{% static 'config.js' %}"></script>
+    <script>
+        // API 호출
+        fetch('https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&region=KR&page=1', {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${CONFIG.API_KEY}` // config.js에서 API 키 사용
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const movies = data.results; // 영화 데이터 목록
+            const container = document.getElementById('latest-movies'); // 카드 컨테이너 선택
+            container.innerHTML = ''; // 기존 내용을 초기화
+
+            // 영화 데이터를 기반으로 카드를 생성합니다.
+            movies.forEach(movie => {
+                const card = document.createElement('div'); // 새로운 div 생성
+                card.className = 'card'; // 클래스 추가
+
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>${movie.release_date}</p>
+                `;
+
+                container.appendChild(card); // 컨테이너에 카드 추가
+            });
+        })
+        .catch(error => console.error('Error fetching movies:', error));
+    </script>
+
+    <section class="section latest-releases">
         <h2>인기 영화 목록</h2>
-        <div class="card-container">
-            <div class="card">
-                <h3>Action</h3>
-                <p>Explore adrenaline-pumping movies full of excitement.</p>
-            </div>
-            <div class="card">
-                <h3>Romance</h3>
-                <p>Dive into stories of love and passion.</p>
-            </div>
-            <div class="card">
-                <h3>Thriller</h3>
-                <p>Uncover mysteries and suspenseful tales.</p>
-            </div>
+        <div class="card-container" id="box-office-movies">
+            <!-- JavaScript로 데이터를 추가합니다. -->
         </div>
     </section>
+
+    <!-- config.js 로드 -->
+    <script src="{% static 'config.js' %}"></script>
+    <script>
+        const getYesterdayDate = () => {
+            const today = new Date();
+            today.setDate(today.getDate() - 1);
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}${month}${day}`;
+        };
+
+        const preprocessMovieTitle = (title) => {
+            // 숫자로만 이루어진 제목이면 그대로 반환
+            if (/^\d+$/.test(title)) {
+                return title;
+            }
+            // 그렇지 않다면 일반적인 전처리 수행
+            return title
+                .replace(/(\d)/g, ' $1') // 숫자 앞에 공백 추가
+                .replace(/ +/g, ' ')     // 중복 공백 제거
+                .trim();                 // 양쪽 공백 제거
+        };
+        // API 호출
+        // TMDB API에서 영화 데이터를 검색하는 함수
+        const fetchMovieFromTMDB = async (movieName) => {
+            const processedName = preprocessMovieTitle(movieName); // 전처리된 제목
+            const queries = [movieName, processedName]; // 다중 검색
+
+            for (const query of queries) {
+                const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=ko-KR`, {
+                    method: 'GET',
+                    headers: {
+                        accept: 'application/json',
+                        Authorization: `Bearer ${CONFIG.API_KEY}` // TMDB API 키 사용
+                    }
+                });
+
+                const data = await response.json();
+                if (data.results.length > 0) {
+                    return data.results[0]; // 첫 번째 검색 결과 반환
+                }
+            }
+
+            return null; // 검색 결과가 없으면 null 반환
+        };
+
+        // KOFIC 박스오피스 API 호출
+        fetch(`https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${boxCONFIG.API_KEY}&targetDt=${getYesterdayDate()}`)
+            .then(response => response.json())
+            .then(async data => {
+                const movies = data.boxOfficeResult.dailyBoxOfficeList;
+                const container = document.getElementById('box-office-movies');
+                container.innerHTML = ''; // 기존 내용을 초기화
+
+                for (const movie of movies) {
+                    const movieName = movie.movieNm;
+
+                    // TMDB API에서 추가 데이터 검색
+                    const tmdbMovie = await fetchMovieFromTMDB(movieName);
+                    const posterPath = tmdbMovie?.poster_path 
+                        ? `https://image.tmdb.org/t/p/w500${tmdbMovie.poster_path}`
+                        : '/static/images/default-poster.jpg'; // 기본 이미지
+
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${posterPath}" alt="${movieName}">
+                        <h3>${movieName}</h3>
+                        <p>순위: ${movie.rank}</p>
+                        <p>누적 관객수: ${movie.audiAcc}</p>
+                        <p>개봉일: ${movie.openDt}</p>
+                    `;
+                    container.appendChild(card);
+                }
+            })
+            .catch(error => console.error('KOFIC API Error:', error));
+    </script>
     <footer>
         <div class="quick-links">
             <h4>Quick Links</h4>
@@ -170,5 +302,5 @@
         </div>
     </footer>
 </body>
-    </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</html>
