@@ -17,9 +17,21 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.throttling import AnonRateThrottle
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.shortcuts import render
 
 
 class ArticleList(APIView):
+    permission_classes = [AllowAny]  # 인증이 필요하지 않음
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'articles/reviewboard.html'
+    throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
+
+    def get(self,request):
+        '''리뷰 목록 폼'''
+        return Response({'message': '리뷰 목록 페이지입니다.'})
+
+class ArticleListAPI(APIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
         """게시글 목록 조회"""
@@ -29,7 +41,7 @@ class ArticleList(APIView):
         )  # 목록용 Serializer 사용
         return Response(serializer.data) # 직렬화된 데이터 반환
 
-class AritcleCreate(APIView):
+class ArticleCreate(APIView):
 
     permission_classes = [IsAuthenticated] # 로그인 해야만 가능
     renderer_classes = [TemplateHTMLRenderer]
@@ -58,7 +70,7 @@ class AritcleCreate(APIView):
                     with open("response.json", "w", encoding="utf-8") as f:
                         json.dump(movies, f, ensure_ascii=False, indent=4)
                     
-            return redirect('article_detail', article_pk=article.id)           
+            return redirect('articles:article_detail', article_pk=article.id)           
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
