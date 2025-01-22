@@ -30,6 +30,7 @@ import logging
 import traceback
 #추가한 내용 _________________
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class signup(APIView):
@@ -60,10 +61,8 @@ class signup(APIView):
                 
                 # 성공 메시지 및 리다이렉션
                 messages.success(request, '회원가입이 완료되었습니다.')
-                return Response({
-                    'message': '회원가입이 완료되었습니다.',
-                    'user': user.username
-                }, status=201)  # 회원가입 성공 시 201 상태 코드 반환            
+                response = redirect('Main')
+                return response     
                 
             
                 
