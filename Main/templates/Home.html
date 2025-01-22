@@ -6,31 +6,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TMOVING</title>
     <style>
-        /* 간단한 CSS */
-        .card-container {
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: grey;
+            font: bold
+        }
+        header {
+            background-color: #000;
+            color: white;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: space-between;
+            padding: 10px 20px;
+            align-items: center;
+        }
+        header img {
+            height: 50px;
+        }
+        header nav a {
+            color: grey;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .banner {
+            position: relative;
+            background-color: #444;
+            background-size: cover;
+            height: 300px;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .banner h1 {
+            margin: 0;
+            font-size: 3rem;
+        }
+        .banner p {
+            margin: 10px 0 0;
+        }
+        .section {
             padding: 20px;
             background-color: #333;
-            color: white;
+            color: #fff;
         }
+        .section h2 {
+            margin: 0 0 20px;
+        }
+        .card-container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+            gap: 10px;
+        }
+        .card-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .card-container::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+        }
+        .card-container::-webkit-scrollbar-track {
+            background-color: #333;
+        }
+        
         .card {
             background-color: #444;
-            margin: 10px;
+            margin: 10;
             padding: 15px;
-            width: 30%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            flex: 0 0 auto;
+            max-width: 250px; /* 최대 크기 제한 */
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
             text-align: center;
         }
+        @media (max-width: 768px) { /* 태블릿 크기 이하 */
+            .card {
+                width: 45%; /* 부모의 45% */
+                max-width: 200px; /* 더 작은 크기로 제한 */
+            }
+        }
+
+        @media (max-width: 480px) { /* 모바일 크기 이하 */
+            .card {
+                width: 90%; /* 부모의 90% */
+                max-width: 180px; /* 더 작은 크기로 제한 */
+            }
+        }
         .card img {
-            max-width: 100%;
+            width: 100%; /* 카드 너비에 맞게 이미지 크기 조정 */
+            height: 300px; /* 고정된 높이 설정 */
+            object-fit: cover; /* 이미지 비율을 유지하며 잘라냄 */
+            border-radius: 5px; /* 선택 사항: 이미지 모서리 둥글게 처리 */
+        }
+        .card h3 {
+            margin: 15px 0 5px;
+            font-size: 1rem;
+            display: -webkit-box; /* Flexbox 유사 */
+            -webkit-line-clamp: 2; /* 최대 두 줄까지만 표시 */
+            -webkit-box-orient: vertical; /* 세로 방향 정렬 */
+            overflow: hidden; /* 넘치는 텍스트 숨김 */
+            text-overflow: ellipsis; /* 말줄임표 추가 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            line-height: 1.2; /* 줄 간격 조정 */
+        }
+        .card p {
+            margin: 5px 0 0;
+        }
+        footer {
+            background-color: #444;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        footer div {
+            margin: 0 10px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <span>TMOVING</span>
+        </div>
+        <nav>
+            <nav class="navbar navbar-expand-lg navbar-black bg-black">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse justify-content-end">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="accounts/signup/" class="btn btn-primary">회원가입</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="accounts/login/" class="btn btn-primary">로그인</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </nav>
+    </header>
+    <div class="banner">
+        <h1>티무빙</h1>
+        <p>최근 혹은 인기 영화 목록이나 리뷰를 여기서 보실 수 있습니다!</p>
+    </div>
+
     <section class="section latest-releases">
-        <h2>최근 영화 목록</h2>
+        <h2>최신 영화 목록</h2>
         <div class="card-container" id="latest-movies">
             <!-- JavaScript로 데이터를 추가합니다. -->
         </div>
@@ -40,7 +168,7 @@
     <script src="{% static 'config.js' %}"></script>
     <script>
         // API 호출
-        fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', {
+        fetch('https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&page=1', {
             method: 'GET',
             headers: {
                 accept: 'application/json',
@@ -61,7 +189,7 @@
                 card.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
                     <h3>${movie.title}</h3>
-                    <p>${movie.overview}</p>
+                    <p>${movie.release_date}</p>
                 `;
 
                 container.appendChild(card); // 컨테이너에 카드 추가
@@ -69,5 +197,64 @@
         })
         .catch(error => console.error('Error fetching movies:', error));
     </script>
+
+    <section class="section latest-releases">
+        <h2>인기 영화 목록</h2>
+        <div class="card-container" id="popular-movies">
+            <!-- JavaScript로 데이터를 추가합니다. -->
+        </div>
+    </section>
+
+    <!-- config.js 로드 -->
+    <script src="{% static 'config.js' %}"></script>
+    <script>
+        // API 호출
+        fetch('https://api.themoviedb.org/3/movie/popular?language=ko-KR&page=1', {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${CONFIG.API_KEY}` // config.js에서 API 키 사용
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const movies = data.results; // 영화 데이터 목록
+            const container = document.getElementById('popular-movies'); // 카드 컨테이너 선택
+            container.innerHTML = ''; // 기존 내용을 초기화
+
+            // 영화 데이터를 기반으로 카드를 생성합니다.
+            movies.forEach(movie => {
+                const card = document.createElement('div'); // 새로운 div 생성
+                card.className = 'card'; // 클래스 추가
+
+                card.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    <h3>${movie.title}</h3>
+                    <p>${movie.release_date}</p>
+                `;
+
+                container.appendChild(card); // 컨테이너에 카드 추가
+            });
+        })
+        .catch(error => console.error('Error fetching movies:', error));
+    </script>
+    <footer>
+        <div class="quick-links">
+            <h4>Quick Links</h4>
+            <a href="#">Home</a><br>
+            <a href="#">Movie Lists</a><br>
+            <a href="#">Reviews</a>
+        </div>
+        <div class="contact-us">
+            <h4>Contact Us</h4>
+            <p>팀 스파르타 주식회사</p>
+            <p>Team Algorithm Artist</p>
+        </div>
+        <div class="social-media">
+            <h4>Follow Us</h4>
+            <span>Icons for social media</span>
+        </div>
+    </footer>
 </body>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </html>
