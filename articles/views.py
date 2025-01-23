@@ -43,7 +43,7 @@ class ArticleListAPI(APIView):
 
 class ArticleCreate(APIView):
 
-    permission_classes = [IsAuthenticated] # 로그인 해야만 가능
+    permission_classes = [IsAuthenticatedOrReadOnly] # 로그인 해야만 가능
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'articles/articlecreate.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
@@ -54,6 +54,11 @@ class ArticleCreate(APIView):
 
     def post(self, request):
         """리뷰 생성"""
+
+        # 요청 데이터와 파일 데이터를 병합
+        data = request.data.copy()
+        data.update(request.FILES)
+
         serializer = ArticleDetailSerializer(data=request.data)  # 상세 Serializer 사용
         if serializer.is_valid():
             serializer.save(author=request.user) # 요청 사용자 정보를 작성자로 설정 후 저장
@@ -70,7 +75,7 @@ class ArticleCreate(APIView):
                     with open("response.json", "w", encoding="utf-8") as f:
                         json.dump(movies, f, ensure_ascii=False, indent=4)
                     
-            return redirect('articles:article_detail', article_pk=article.id)           
+            return Response({"article_id": article.id}, status=201)        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -160,7 +165,7 @@ class ArticleEdit(APIView):
     # 로그인 사용자만 수정 권한 부여
     permission_classes = [IsAuthenticated] # 로그인 해야만 가능
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'articles/articleedit.html'
+    template_name = 'articles/Articleedit.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
 
     # 게시글 ID를 통해 특정 게시글 객체를 가져오며, 없으면 404 오류 반환

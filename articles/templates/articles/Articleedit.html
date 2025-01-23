@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background-color: #212121;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], select, input[type="date"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background-color: #3a3a3a;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #3a3a3a;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+        }
+        textarea {
+            height: 200px; /* 기본 높이 설정 */
+            resize: vertical; /* 세로 방향으로 크기 조절 가능 */
+        }
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .button {
+            cursor: pointer;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-left: 10px;
+            font-size: 16px; /* 버튼 텍스트 크기 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+        }
+        .button.save {
+            background-color: #f1c40f;
+            color: #000;
+        }
+        .button.save:hover {
+            background-color: #d4ac2b; /* 호버 시 색상 변경 */
+            transform: translateY(-2px); /* 약간 위로 이동 */
+        }
+        .button.discard {
+            background-color: #fff;
+            color: #000;
+        }
+        .button.discard:hover {
+            background-color: #e0e0e0; /* 호버 시 색상 변경 */
+            transform: translateY(-2px); /* 약간 위로 이동 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>게시글 생성</h1>
+        <form id="createArticleForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
+            {% csrf_token %}
+            <label for="article_title">글 제목</label>
+            <input type="text" id="article_title" name="article_title" placeholder="글 제목을 입력하세요" required>
+
+            <label for="movie_title">영화 제목</label>
+            <input type="text" id="movie_title" name="movie_title" placeholder="영화 제목을 입력하세요" required>
+
+            <label for="content">내용</label>
+            <textarea id="content" name="content" placeholder="후기를 작성하세요" required></textarea>
+
+            <label for="image">이미지 업로드</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+
+            <label for="rating">평점</label>
+            <input type="text" id="rating" name="rating" placeholder="1~5점까지 정수 중 평점을 입력하세요" required>
+            
+            <label for="genre">장르</label>
+            <select id="genre" name="genre">
+                <option value="">선택하세요</option>
+                <option value="genre1">액션</option>
+                <option value="genre2">드라마</option>
+                <option value="genre3">코미디</option>
+                <option value="genre4">모험</option>
+                <option value="genre5">애니메이션</option>
+                <option value="genre6">범죄</option>
+                <option value="genre7">다큐</option>
+                <option value="genre8">판타지</option>
+                <option value="genre9">호러</option>
+                <option value="genre10">뮤지컬</option>
+                <option value="genre11">SF</option>
+                <option value="genre12">로맨스</option>
+                <option value="genre13">미스테리</option>
+                <option value="genre14">스포츠</option>
+                <option value="genre15">스릴러</option>
+                <option value="genre16">전쟁</option>
+            </select>
+            
+            <div class="buttons">
+                <button type="submit" class="button save">저장</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function handleFormSubmit(event) {
+            event.preventDefault(); // 기본 폼 제출 동작 막기
+
+            const form = document.getElementById("createArticleForm");
+            const formData = new FormData(form);
+
+            fetch("/articles/create/", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("서버 응답이 실패했습니다.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("게시글이 성공적으로 생성되었습니다!");
+                window.location.href = `/articles/${data.article_id}/`;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("게시글 생성 중 문제가 발생했습니다.");
+            });
+        }
+    </script>
+</body>
+</html>
