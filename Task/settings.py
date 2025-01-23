@@ -72,21 +72,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "Task.urls"
 
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = "Task.wsgi.application"
 
@@ -153,10 +138,11 @@ AUTH_USER_MODEL = 'accounts.User'
 REST_FRAMEWORK = {
     # 모든 API에 인증을 필수로 하는 전역 설정
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  
+        'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근 가능
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT 인증
+        'rest_framework.authentication.SessionAuthentication',        # 세션 인증
     ),
 }
 
@@ -166,6 +152,20 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'BLACKLIST_AFTER_ROTATION': True,  # 토큰 회전 후 블랙리스트에 추가
+
+    'AUTH_COOKIE': 'access_token',                # 쿠키 이름
+    'AUTH_COOKIE_DOMAIN': None,                   # 쿠키가 유효한 도메인 (기본값: None)
+    'AUTH_COOKIE_SECURE': False,                  # HTTPS만 허용 (개발 환경: False)
+    'AUTH_COOKIE_HTTP_ONLY': True,                # JavaScript에서 쿠키 접근 방지
+    'AUTH_COOKIE_PATH': '/',                      # 쿠키 경로
+    'AUTH_COOKIE_SAMESITE': 'Lax',                # SameSite 설정 ('Strict', 'Lax', 'None')
+
+    # 리프레시 토큰 회전 설정
+    'ROTATE_REFRESH_TOKENS': True,                # 리프레시 시 새로운 리프레시 토큰 발급
+    'BLACKLIST_AFTER_ROTATION': True,             # 기존 리프레시 토큰 블랙리스트 추가
+
+    # JWT 인증 헤더 형식
+    'AUTH_HEADER_TYPES': ('Bearer',),    
 }
 
 
