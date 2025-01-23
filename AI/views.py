@@ -7,7 +7,7 @@ from .serializers import AIRequestSerializer
 from .AIanswer import generate_response_with_setup
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from .models import AI
 from .serializers import AIRequestSerializer
@@ -16,16 +16,19 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.throttling import AnonRateThrottle  
 
 
-class AIanswer(APIView):
+class AIanswerbot(APIView):
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'AI/Tmoving.html'
+    template_name = 'AI/TMOVINGBOTHOME.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
 
     def get(self,request):
         """챗봇 폼 표시"""
-        return Response({'message': '챗봇 페이지입니다.'})
+        return Response({'message': '챗봇 페이지입니다.', 'user': request.user}, template_name=self.template_name)
 
+
+class AIanswer(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         """응답 생성"""
         # 사용자 질문을 기반으로 챗봇 응답을 생성합니다.

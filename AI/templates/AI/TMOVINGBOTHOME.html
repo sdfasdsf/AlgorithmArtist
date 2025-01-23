@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlickChat</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .navbar .menu {
+            font-size: 12px;
+        }
+
+        .chat-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 40px);
+        }
+
+        .chat-box {
+            background-color: #444;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px #000;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .message {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .message .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #555;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .message .text {
+            background-color: #666;
+            border-radius: 3px;
+            padding: 10px;
+            color: #fff;
+            max-width: 400px;
+        }
+
+        .message.user .text {
+            background-color: #ff0;
+            color: #000;
+        }
+
+        .message.assistant .text {
+            background-color: #666;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 5px;
+            background-color: #333;
+        }
+
+        .input-box {
+            flex: 1;
+            padding: 10px;
+            background-color: #222;
+            border: none;
+            color: #fff;
+            outline: none;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .send-button {
+            background-color: #ff0;
+            border: none;
+            padding: 10px;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">TMOVINGBOT</div>
+        <div class="menu">AI CHATBOT &nbsp; PROFILE &nbsp; MOVIE INFORMATION</div>
+    </div>
+    <div class="chat-container">
+        <div class="chat-box" id="chatBox">
+            <div class="message assistant">
+                <div class="avatar"></div>
+                <div class="text">Hello! I'm Flick, your AI assistant. How can I help you today?</div>
+            </div>
+            <div class="message user">
+                <div class="avatar"></div>
+                <div class="text">Can you recommend a good movie?</div>
+            </div>
+            <div class="message assistant">
+                <div class="avatar"></div>
+                <div class="text">Sure! I recommend watching 'Inception'. It's a mind-bending thriller that keeps you on
+                    the edge of your seat.</div>
+            </div>
+            <div class="input-container">
+
+                <form id="chatForm" method="post">
+                    {% csrf_token %}
+                </form>
+                <input type="text" class="input-box" id="userMessage" placeholder="Type your message...">
+                <button class="send-button" id="sendButton">SEND</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("sendButton").addEventListener("click", function () {
+            const messageInput = document.getElementById("userMessage");
+            const userMessage = messageInput.value;
+
+            if (userMessage.trim() === "") {
+                return; // 빈 메시지 전송 방지
+            }
+
+            // 사용자 메시지 표시
+            const userMessageHTML = `
+                <div class="message user">
+                    <div class="avatar"></div>
+                    <div class="text">${userMessage}</div>
+                </div>
+            `;
+
+            const chatBox = document.getElementById("chatBox");
+            chatBox.innerHTML += userMessageHTML;
+            messageInput.value = ""; // 입력창 초기화
+
+            chatBox.scrollTo(0, chatBox.scrollHeight);
+
+            const formData = new FormData();
+            formData.append("user_question", userMessage);
+
+            messageInput.disabled = true;
+            document.getElementById("sendButton").disabled = true;
+
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            // POST 요청 보내기
+            fetch("http://127.0.0.1:8000/AI/TMOVINGBOT/api/", { // DRF API 주소
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData // 사용자 메시지를 JSON 형태로 전송
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 서버 응답에서 bot_response만 가져오기
+                    const botResponse = data.bot_response || "죄송합니다, 현재 답변을 제공할 수 없습니다.";
+
+                    // AI 응답 표시
+                    const assistantMessageHTML = `
+                    <div class="message assistant">
+                        <div class="avatar"></div>
+                        <div class="text">${botResponse}</div> <!-- bot_response 사용 -->
+                    </div>
+                `;
+                    document.getElementById("chatBox").innerHTML += assistantMessageHTML;
+                    // 입력 박스 활성화
+                    messageInput.disabled = false;
+                    document.getElementById("sendButton").disabled = false;
+                    messageInput.focus(); // 입력 박스로 포커스
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    messageInput.disabled = false;
+                    document.getElementById("sendButton").disabled = false;
+                });
+        });
+    </script>
+</body>
+
+</html>
