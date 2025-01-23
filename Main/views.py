@@ -42,4 +42,4 @@ def home(request):
 
 
 def movie(request):
-    return render(request, 'movie.html')
+    return render(request, 'Main/movie.html')
