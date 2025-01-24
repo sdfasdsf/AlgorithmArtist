@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #000;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        header nav a:hover {
+            color: #f0c040;
+        }
+        .banner {
+            position: relative;
+            background: linear-gradient(to bottom, #222, #444);
+            height: 100px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .banner h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .movie-info {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 1800px;
+            height: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+        }
+        .movie-info img {
+            width: 500px;
+            height: 650px;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+        .details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .details .title {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffcc00;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+        }
+        .details .meta {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+        }
+        .details .meta .author {
+            font-size: 1rem;
+            color: #fff;
+        }
+        .details .meta .rating {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .details .content {
+            padding: 20px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #ddd;
+            height: 300px;
+            overflow-y: auto;
+        }
+        .comments {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #555;
+        border-radius: 8px;
+        background-color: #444;
+        color: #fff;
+        max-height: 300px; /* 댓글 전체 컨테이너의 최대 높이 */
+        overflow-y: auto; /* 스크롤 추가 */
+    }
+    .comments .comment {
+        padding: 5px 10px; /* 내부 여백 조정 */
+        margin-bottom: 10px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        font-size: 0.9rem; /* 폰트 크기 유지 */
+        background-color: #222; /* 댓글 배경 */
+        display: flex;
+        flex-direction: column; /* 작성자와 내용을 세로로 배치 */
+        height: 150px; /* 높이를 자동으로 설정 */
+    }
+    .comments .comment:last-child {
+        margin-bottom: 0;
+    }
+    .comments .comment .author {
+        font-weight: bold;
+        color: #ffd700;
+        margin-bottom: 5px; /* 작성자와 내용 간 간격 */
+    }
+    .comments .comment .content {
+        color: #fff;
+        overflow: hidden; /* 넘치는 텍스트 처리 */
+        text-overflow: ellipsis; /* 넘치는 텍스트 말줄임 */
+        white-space: nowrap; /* 한 줄로 표시 */
+    }
+    .comments .comment .timestamp {
+        font-size: 0.8rem;
+        color: #aaa;
+        margin-top: 5px; /* 내용과 시간 간 간격 */
+    }
+        footer {
+            background-color: #000;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>TMOVING</div>
+        <nav>
+            <a href="#">홈</a>
+            <a href="#">영화</a>
+            <a href="#">리뷰</a>
+        </nav>
+    </header>
+
+    <div class="banner">
+        <h1>리뷰 상세 정보</h1>
+        <a id="edit-link", href="#">수정</a>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentPath = window.location.pathname;
+            const articlePk = currentPath.split("/")[2];
+    
+            // 수정 버튼의 URL 설정
+            const editLink = document.getElementById("edit-link");
+            editLink.href = `/articles/${articlePk}/articleedit/`;
+        });
+    </script>
+    <div id="movie-container" class="movie-info">
+        <!-- 리뷰 정보가 여기에 동적으로 추가됩니다 -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentPath = window.location.pathname; // 현재 경로 예: /articles/21/api/
+            const pathSegments = currentPath.split("/"); // 슬래시로 분리
+            const articlePk = pathSegments[2]; // 두 번째 세그먼트가 article_pk
+
+            console.log("Extracted article_pk:", articlePk);
+
+            fetch(`http://127.0.0.1:8000/articles/${articlePk}/api/`) // API URL
+                .then(response => response.json())
+                .then(article => {
+                    // DOM 요소 참조
+                    const container = document.getElementById("movie-container");
+
+                    // 상세 정보 생성
+                    const movieHTML = `
+                        <img src="${article.image}" alt="${article.movie_title}">
+                        
+                        <div class="details">
+                            <div class="title">${article.movie_title}</div>
+                            <div class="meta">
+                                <div class="author">작성자: ${article.author}</div>
+                                <div class="rating">평점: ⭐ ${article.rating}</div>
+                            </div>
+                            <div class="content">${article.content}</div>
+                            <div class="comments">
+                                <h3>댓글</h3>
+                                ${article.comments.map(comment => `
+                                    <div class="comment">
+                                        <div class="author">${comment.author}</div>
+                                        <div class="content">${comment.content}</div>
+                                        <div class="timestamp">${new Date(comment.created_at).toLocaleString()}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+
+                    container.innerHTML = movieHTML;
+                })
+                .catch(error => {
+                    console.error("Error fetching article:", error);
+                });
+        });
+    </script>
+
+    <footer>
+        TMOVING &copy; Team Algorithm Artist
+    </footer>
+</body>
+</html>

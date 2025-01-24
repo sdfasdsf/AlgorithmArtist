@@ -6,8 +6,8 @@ from .models import Comment
 class CommentSerializer(serializers.ModelSerializer):
     """댓글 조회 및 생성 및 수정 Serializer"""
 
-    # 댓글 작성자의 이메일을 출력하기 위한 필드 (읽기 전용)
-    author = serializers.ReadOnlyField(source="author.email")
+    # 댓글 작성자의 닉네임을 출력하기 위한 필드 (읽기 전용)
+    author = serializers.ReadOnlyField(source="author.username")
     
 
     class Meta:
@@ -25,6 +25,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ArticleListSerializer(serializers.ModelSerializer):
     """게시글 목록 조회 Serializer"""
+    author = serializers.ReadOnlyField(
+        source="author.username"
+    )  # author 필드에 작성자의 이메일만 출력
+    image = serializers.ImageField() # 이미지 필드
     class Meta:
         model = Article
         fields = (
@@ -67,6 +71,7 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
             "views",  # 게시글 조회수
             "total_likes_count",  # 게시글 총 좋아요 수
             "genre" # 영화 장르
+            
         )
 
     def get_image(self, obj):

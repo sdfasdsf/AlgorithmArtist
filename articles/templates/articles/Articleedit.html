@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             width: 80%;
             max-width: 1000px;
@@ -21,15 +23,21 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
+
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin: 10px 0 5px;
         }
-        input[type="text"], select, input[type="date"], textarea {
+
+        input[type="text"],
+        select,
+        input[type="date"],
+        textarea {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
@@ -38,6 +46,7 @@
             border-radius: 4px;
             color: #fff;
         }
+
         input[type="file"] {
             margin-bottom: 10px;
             padding: 10px;
@@ -47,16 +56,21 @@
             color: #fff;
             cursor: pointer;
         }
+
         textarea {
-            height: 200px; /* 기본 높이 설정 */
-            resize: vertical; /* 세로 방향으로 크기 조절 가능 */
+            height: 200px;
+            /* 기본 높이 설정 */
+            resize: vertical;
+            /* 세로 방향으로 크기 조절 가능 */
         }
+
         .buttons {
             display: flex;
             justify-content: flex-end;
             align-items: center;
             margin-top: 20px;
         }
+
         .button {
             cursor: pointer;
             padding: 10px 20px;
@@ -65,34 +79,45 @@
             border-radius: 4px;
             transition: background-color 0.3s, transform 0.2s;
             margin-left: 10px;
-            font-size: 16px; /* 버튼 텍스트 크기 */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+            font-size: 16px;
+            /* 버튼 텍스트 크기 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            /* 그림자 효과 */
         }
+
         .button.save {
             background-color: #f1c40f;
             color: #000;
         }
+
         .button.save:hover {
-            background-color: #d4ac2b; /* 호버 시 색상 변경 */
-            transform: translateY(-2px); /* 약간 위로 이동 */
+            background-color: #d4ac2b;
+            /* 호버 시 색상 변경 */
+            transform: translateY(-2px);
+            /* 약간 위로 이동 */
         }
+
         .button.discard {
             background-color: #fff;
             color: #000;
         }
+
         .button.discard:hover {
-            background-color: #e0e0e0; /* 호버 시 색상 변경 */
-            transform: translateY(-2px); /* 약간 위로 이동 */
+            background-color: #e0e0e0;
+            /* 호버 시 색상 변경 */
+            transform: translateY(-2px);
+            /* 약간 위로 이동 */
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>게시글 생성</h1>
-        <form id="createArticleForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
+        <h1>게시글 수정</h1>
+        <form id="editArticleForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
             {% csrf_token %}
-            <label for="article_title">글 제목</label>
-            <input type="text" id="article_title" name="article_title" placeholder="글 제목을 입력하세요" required>
+            <label for="Article_title">글 제목</label>
+            <input type="text" id="Article_title" name="Article_title" placeholder="글 제목을 입력하세요" required>
 
             <label for="movie_title">영화 제목</label>
             <input type="text" id="movie_title" name="movie_title" placeholder="영화 제목을 입력하세요" required>
@@ -105,62 +130,91 @@
 
             <label for="rating">평점</label>
             <input type="text" id="rating" name="rating" placeholder="1~5점까지 정수 중 평점을 입력하세요" required>
-            
+
             <label for="genre">장르</label>
             <select id="genre" name="genre">
                 <option value="">선택하세요</option>
-                <option value="genre1">액션</option>
-                <option value="genre2">드라마</option>
-                <option value="genre3">코미디</option>
-                <option value="genre4">모험</option>
-                <option value="genre5">애니메이션</option>
-                <option value="genre6">범죄</option>
-                <option value="genre7">다큐</option>
-                <option value="genre8">판타지</option>
-                <option value="genre9">호러</option>
-                <option value="genre10">뮤지컬</option>
-                <option value="genre11">SF</option>
-                <option value="genre12">로맨스</option>
-                <option value="genre13">미스테리</option>
-                <option value="genre14">스포츠</option>
-                <option value="genre15">스릴러</option>
-                <option value="genre16">전쟁</option>
+                <option value="AC">액션</option>
+                <option value="DR">드라마</option>
+                <option value="CO">코미디</option>
+                <option value="AD">모험</option>
+                <option value="AM">애니메이션</option>
+                <option value="CM">범죄</option>
+                <option value="DM">다큐</option>
+                <option value="FT">판타지</option>
+                <option value="HO">호러</option>
+                <option value="MC">뮤지컬</option>
+                <option value="SF">SF</option>
+                <option value="RM">로맨스</option>
+                <option value="MS">미스테리</option>
+                <option value="SP">스포츠</option>
+                <option value="HR">스릴러</option>
+                <option value="WAR">전쟁</option>
             </select>
-            
+
             <div class="buttons">
                 <button type="submit" class="button save">저장</button>
             </div>
         </form>
     </div>
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentPath = window.location.pathname; // 현재 URL
+            const articleId = currentPath.split("/")[2]; // 예: /articles/21/edit/
+
+            fetch(`/articles/${articleId}/api/`) // API 엔드포인트 호출
+                .then(response => response.json())
+                .then(article => {
+                    // 가져온 데이터로 폼 필드 채우기
+                    document.getElementById("Article_title").value = article.Article_title;
+                    document.getElementById("movie_title").value = article.movie_title;
+                    document.getElementById("content").value = article.content;
+                    document.getElementById("rating").value = article.rating;
+                    document.getElementById("genre").value = article.genre; // 장르 선택
+                })
+                .catch(error => {
+                    console.error("Error fetching article data:", error);
+                    alert("게시글 데이터를 불러오지 못했습니다.");
+                });
+        });
+
         function handleFormSubmit(event) {
             event.preventDefault(); // 기본 폼 제출 동작 막기
 
-            const form = document.getElementById("createArticleForm");
-            const formData = new FormData(form);
+            const form = document.getElementById("editArticleForm");
+            if (!form) {
+                console.error("폼을 찾을 수 없습니다.");
+                alert("폼을 찾을 수 없습니다.");
+                return;
+            }
 
-            fetch("/articles/create/", {
-                method: "POST",
+            const formData = new FormData(form); // 폼 데이터 생성
+            const currentPath = window.location.pathname;
+            const articleId = currentPath.split("/")[2];
+
+            fetch(`/articles/${articleId}/articleedit/api/`, {
+                method: "PATCH", // 수정 요청은 PATCH 사용
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
                 },
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("서버 응답이 실패했습니다.");
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert("게시글이 성공적으로 생성되었습니다!");
-                window.location.href = `/articles/${data.article_id}/`;
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("게시글 생성 중 문제가 발생했습니다.");
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("서버 응답이 실패했습니다.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert("게시글이 성공적으로 수정되었습니다!");
+                    window.location.href = `/articles/${articleId}/`; // 상세 페이지로 리다이렉트
+                })
+                .catch(error => {
+                    console.error("Error updating article:", error);
+                    alert("게시글 수정 중 문제가 발생했습니다.");
+                });
         }
     </script>
 </body>
+
 </html>

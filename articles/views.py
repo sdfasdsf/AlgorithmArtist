@@ -35,7 +35,7 @@ class ArticleListAPI(APIView):
 
     def get(self, request):
         """게시글 목록 조회"""
-        articles = Article.objects.all() # 모든 게시글을 가져옴
+        articles = Article.objects.all().order_by('-created_at') # 모든 게시글을 가져옴
         serializer = ArticleListSerializer(
             articles, many=True
         )  # 목록용 Serializer 사용
@@ -43,7 +43,7 @@ class ArticleListAPI(APIView):
 
 class ArticleCreate(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly] # 로그인 해야만 가능
+    permission_classes = [IsAuthenticated] # 로그인 해야만 가능
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'articles/articlecreate.html'
     throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
@@ -52,6 +52,8 @@ class ArticleCreate(APIView):
         """리뷰 생성 폼 표시"""
         return Response({'message': '리뷰 생성 페이지입니다.'})
 
+class ArticleCreateAPI(APIView):
+    permission_classes = [IsAuthenticated] # 로그인 해야만 가능
     def post(self, request):
         """리뷰 생성"""
 
@@ -75,11 +77,24 @@ class ArticleCreate(APIView):
                     with open("response.json", "w", encoding="utf-8") as f:
                         json.dump(movies, f, ensure_ascii=False, indent=4)
                     
-            return Response({"article_id": article.id}, status=201)        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({"article_id": article.id}, status=201, content_type="application/json")
+        else: 
+            print("serializer",serializer.errors)      
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ArticleDetail(APIView):
+    permission_classes = [AllowAny]  # 인증이 필요하지 않음
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'articles/reviewdetail.html'
+    throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
+
+    def get(self, request, article_pk):
+        """리뷰 상세 폼 표시"""
+        return Response({'message': '리뷰 상세 페이지입니다.'})
+
+
+
+class ArticleDetailAPI(APIView):
     # 비로그인 사용자에게는 읽기 권한만, 로그인 사용자에게는 삭제 및 게시글 좋아요 권한 부여
     permission_classes = [IsAuthenticatedOrReadOnly]
     # 게시글 ID를 통해 특정 게시글 객체를 가져오며, 없으면 404 오류 반환
@@ -139,7 +154,7 @@ class ArticleDetail(APIView):
         status=status.HTTP_200_OK,
         )
 
-class ArticleDelete(APIView):
+class ArticleDeleteAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, article_pk):
@@ -148,8 +163,11 @@ class ArticleDelete(APIView):
 
         # 작성자 확인
         if request.user != article.author:
-            messages.error(request, '삭제 권한이 없습니다.')  # 오류 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
-            return redirect('article_detail', article_pk=article_pk)
+            return Response(
+                {'error': '삭제 권한이 없습니다.'},
+                status=403,
+                template_name='articles/reviewdetail.html'
+            )
 
         # 게시글에 첨부된 이미지 삭제
         file_path = os.path.join(settings.MEDIA_ROOT, article.image.name)
@@ -157,7 +175,6 @@ class ArticleDelete(APIView):
             os.remove(file_path)
 
         article.delete()
-        messages.success(request, '게시글이 성공적으로 삭제되었습니다.')  # 성공 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
         return redirect('article_list')  # 게시글 목록 페이지로 리다이렉트
     
 
@@ -173,29 +190,34 @@ class ArticleEdit(APIView):
         return get_object_or_404(Article, pk=article_pk)
 
     def get(self, request, article_pk):
-
         article = self.get_object(article_pk)
-        if request.user != article.author: # 작성자만 수정 가능
-            messages.error(request, '수정 권한이 없습니다.') # 오류 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
-            return redirect('article_detail', article_pk=article_pk)
-        """리뷰 수정 폼 표시"""
+        if request.user != article.author:
+            return Response(
+                {'error': '수정 권한이 없습니다.'},
+                status=403,
+                template_name='articles/error.html'
+            )
+
         serializer = ArticleDetailSerializer(article)
         return Response({'article': serializer.data, 'message': '리뷰 수정 페이지입니다.'})
 
-    def post(self, request, article_pk):
+class ArticleEditAPI(APIView):
+    permission_classes = [IsAuthenticated] # 로그인 해야만 가능
+
+    def get_object(self, article_pk):
+        return get_object_or_404(Article, pk=article_pk)
+    
+    def patch(self, request, article_pk):
         """게시글 수정"""
         article = self.get_object(article_pk)
         if request.user != article.author: # 작성자만 수정 가능
-            messages.error(request, '수정 권한이 없습니다.') # 오류 팝업 메시지 표시(html에서 가져와서 써야 사용자에게 보이는 듯)
             return redirect('article_detail', article_pk=article_pk)
         
         serializer = ArticleDetailSerializer(article, data=request.data, partial=True)  # 상세 Serializer 사용
         if serializer.is_valid():
             serializer.save(author = article.author) # 작성자 정보 유지
-            messages.success(request, '게시글이 성공적으로 수정되었습니다.') # 수정 성공 팝업 메시지 표시(html에서 가져와서 써야 사용자에게 보이는 듯)
             return Response(serializer.data, status=status.HTTP_200_OK)
         
-        messages.error(request, '입력한 데이터가 유효하지 않습니다.') # 수정 실패 팝업 메시지 표시(html에서 가져와서 써야 사용자에게 보이는 듯)
         return Response({'article': serializer.data, 'errors': serializer.errors})
 
         
@@ -222,9 +244,7 @@ class CommentCreate(APIView):
         serializer = CommentSerializer(data=request.data) # 댓글 생성용 Serializer
         if serializer.is_valid():
             serializer.save(author=request.user, article=article) # 작성자와 게시글 정보 저장
-            messages.success(request, '댓글이 성공적으로 작성되었습니다.') # 작성 성공 팝업 메시지 표시(html에서 가져와서 써야 사용자에게 보이는 듯)
             return redirect('article_detail', article_pk=article_pk)
-        messages.error(request, '댓글 작성에 실패했습니다.') # 작성 실패 팝업 메시지 표시(html에서 가져와서 써야 사용자에게 보이는 듯)
         return Response({'article': article, 'errors': serializer.errors})
     
 
@@ -286,7 +306,6 @@ class CommentEdit(APIView):
         article = self.get_article(article_pk)
         comment = self.get_object(article, comment_pk)
         if request.user != comment.author:
-            messages.error(request, '수정 권한이 없습니다.') # 오류 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
             return redirect('article_detail', article_pk=article_pk)
         return Response({'comment': comment, 'message': '댓글 수정 페이지입니다.'})
 
@@ -300,9 +319,7 @@ class CommentEdit(APIView):
         serializer = CommentSerializer(comment, data=request.data) # 수정용 Serializer
         if serializer.is_valid():
             serializer.save() # 댓글 내용 수정 저장
-            messages.success(request, '댓글이 성공적으로 수정되었습니다.') # 수정 성공 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
             return redirect('article_detail', article_pk=article_pk)
-        messages.error(request, '댓글 수정에 실패했습니다.') # 수정 실패 메시지 표시(html에서 가져와서 써야 보이는 듯)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CommentDelete(APIView):
@@ -316,10 +333,8 @@ class CommentDelete(APIView):
         """댓글 삭제"""
         comment = self.get_object(article_pk, comment_pk)
         if request.user != comment.author:
-            messages.error(request, '삭제 권한이 없습니다.') # 오류 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
             return redirect('article_detail', article_pk=article_pk)
 
         comment.delete()
-        messages.success(request, '댓글이 성공적으로 삭제되었습니다.') # 삭제 성공 팝업 메시지 표시(html에서 가져와서 써야 보이는 듯)
         return redirect('article_detail', article_pk=article_pk)
 

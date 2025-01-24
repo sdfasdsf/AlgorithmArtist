@@ -91,8 +91,8 @@
         <h1>게시글 생성</h1>
         <form id="createArticleForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
             {% csrf_token %}
-            <label for="article_title">글 제목</label>
-            <input type="text" id="article_title" name="article_title" placeholder="글 제목을 입력하세요" required>
+            <label for="Article_title">글 제목</label>
+            <input type="text" id="Article_title" name="Article_title" placeholder="글 제목을 입력하세요" required>
 
             <label for="movie_title">영화 제목</label>
             <input type="text" id="movie_title" name="movie_title" placeholder="영화 제목을 입력하세요" required>
@@ -109,22 +109,22 @@
             <label for="genre">장르</label>
             <select id="genre" name="genre">
                 <option value="">선택하세요</option>
-                <option value="genre1">액션</option>
-                <option value="genre2">드라마</option>
-                <option value="genre3">코미디</option>
-                <option value="genre4">모험</option>
-                <option value="genre5">애니메이션</option>
-                <option value="genre6">범죄</option>
-                <option value="genre7">다큐</option>
-                <option value="genre8">판타지</option>
-                <option value="genre9">호러</option>
-                <option value="genre10">뮤지컬</option>
-                <option value="genre11">SF</option>
-                <option value="genre12">로맨스</option>
-                <option value="genre13">미스테리</option>
-                <option value="genre14">스포츠</option>
-                <option value="genre15">스릴러</option>
-                <option value="genre16">전쟁</option>
+                <option value="AC">액션</option>
+                <option value="DR">드라마</option>
+                <option value="CO">코미디</option>
+                <option value="AD">모험</option>
+                <option value="AM">애니메이션</option>
+                <option value="CM">범죄</option>
+                <option value="DM">다큐</option>
+                <option value="FT">판타지</option>
+                <option value="HO">호러</option>
+                <option value="MC">뮤지컬</option>
+                <option value="SF">SF</option>
+                <option value="RM">로맨스</option>
+                <option value="MS">미스테리</option>
+                <option value="SP">스포츠</option>
+                <option value="HR">스릴러</option>
+                <option value="WAR">전쟁</option>
             </select>
             
             <div class="buttons">
@@ -139,7 +139,7 @@
             const form = document.getElementById("createArticleForm");
             const formData = new FormData(form);
 
-            fetch("/articles/create/", {
+            fetch("/articles/ArticleCreate/api/", {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value

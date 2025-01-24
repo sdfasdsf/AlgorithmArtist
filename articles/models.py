@@ -54,11 +54,6 @@ class Article(models.Model):
     updated_at = models.DateTimeField("수정일", auto_now=True)  # 게시글 수정 날짜
     rating = models.IntegerField("평점", choices=[(i, str(i)) for i in range(1, 6)]) # 평점 (1~5 사이의 값)
     views = models.IntegerField("조회수", default=0) # 게시글 조회수
-    writer = models.ForeignKey(
-        User,  # 커스텀 User 모델 사용
-        on_delete=models.CASCADE,    # User가 삭제될 때 게시글도 삭제
-        null=True
-    ) # 작성자 (User 모델과 연결)
     article_like = models.ManyToManyField('accounts.User', related_name='liked_articles' ,blank=True) # 좋아요를 누른 사용자 목록
     total_likes_count = models.IntegerField("좋아요 수", default=0) # 총 좋아요 수
     

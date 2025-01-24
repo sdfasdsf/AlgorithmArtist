@@ -10,6 +10,7 @@
             font-family: Arial, sans-serif;
             background-color: #ccc;
         }
+
         header {
             display: flex;
             justify-content: space-between;
@@ -18,167 +19,124 @@
             padding: 10px 20px;
             color: #fff;
         }
+
         header nav a {
             color: #BFC4C3;
             margin: 0 15px;
             text-decoration: none;
         }
+
         header nav a:hover {
             text-decoration: underline;
         }
+
         .main-content {
             display: flex;
             padding: 20px;
         }
+
         .sidebar {
             width: 250px;
             background-color: #F2F2F2;
             padding: 20px;
             margin-right: 20px;
         }
-        .sidebar form,
-        .sidebar .genres,
-        .sidebar .user-rating,
-        .sidebar .movie-class {
-            margin-bottom: 20px;
-        }
-        .sidebar h3 {
-            margin-bottom: 10px;
-        }
-        .sidebar select,
-        .sidebar input[type="text"],
-        .sidebar button {
-            width: 100%;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
+
         .search-results {
             flex: 1;
             background-color: #444;
             color: #fff;
             padding: 20px;
+            overflow-y: auto; /* 스크롤바 추가 */
+            max-height: 80vh; /* 게시글 영역의 최대 높이 */
         }
+
         .search-results h2 {
-            margin: 0;
+            margin: 0 0 20px;
+            display: inline-block;
         }
-        .filters {
+
+        .create-button {
+    float: right;
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.create-button:hover {
+    background: linear-gradient(45deg, #2575fc, #6a11cb);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+        .card {
+            background-color: #555;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            position: relative;
+            height: 170px; /* 카드 높이 유지 */
+            max-width: 1500px; /* 카드의 최대 너비 제한 추가 */
         }
-        .filters span {
-            margin-right: 10px;
-        }
-        .card-container {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 20px;
-            gap: 10px;
-        }
-        .card-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        .card-container::-webkit-scrollbar-thumb {
-            background-color: #888;
-            border-radius: 10px;
-        }
-        .card-container::-webkit-scrollbar-track {
-            background-color: #333;
-        }
-        .card {
-            background-color: #444;
-            margin: 10;
-            padding: 15px;
-            width: 300px;
-            flex: 0 0 auto;
-            max-width: 250px; /* 최대 크기 제한 */
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-        @media (max-width: 768px) { /* 태블릿 크기 이하 */
-            .card {
-                width: 45%; /* 부모의 45% */
-                max-width: 200px; /* 더 작은 크기로 제한 */
-            }
-        }
-        @media (max-width: 480px) { /* 모바일 크기 이하 */
-            .card {
-                width: 90%; /* 부모의 90% */
-                max-width: 180px; /* 더 작은 크기로 제한 */
-            }
-        }
+
         .card img {
-            width: 100%; /* 카드 너비에 맞게 이미지 크기 조정 */
-            height: 300px; /* 고정된 높이 설정 */
-            object-fit: cover; /* 이미지 비율을 유지하며 잘라냄 */
-            border-radius: 5px; /* 선택 사항: 이미지 모서리 둥글게 처리 */
-        }
-        .card h3 {
-            margin: 15px 0 5px;
-            font-size: 1rem;
-            display: -webkit-box; /* Flexbox 유사 */
-            line-clamp: 2;
-            -webkit-line-clamp: 2; /* 최대 두 줄까지만 표시 */
-            -webkit-box-orient: vertical; /* 세로 방향 정렬 */
-            overflow: hidden; /* 넘치는 텍스트 숨김 */
-            text-overflow: ellipsis; /* 말줄임표 추가 */
-            text-align: center; /* 텍스트 중앙 정렬 */
-            line-height: 1.2; /* 줄 간격 조정 */
-        }
-        .card p {
-            margin: 5px 0 0;
-        }
-        .movie-item {
-            display: flex;
-            align-items: start;
-            background-color: #333;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .movie-item img {
-            width: 100px;
-            height: auto;
+            width: 150px;
+            height: 170px;
+            border-radius: 10px;
             margin-right: 20px;
         }
-        .movie-info {
+
+        .card .content {
             flex: 1;
-        }
-        .movie-info h3 {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .movie-info p {
-            margin: 5px 0;
-        }
-        .movie-rating {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .movie-rating span {
-            margin-right: 10px;
-            font-size: 1.1em;
+
+        .card .content h3 {
+            margin: 0 0 20px;
+            font-size: 1.8rem; /* 제목 크기 증가 */
         }
-        .buttons {
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
+
+        .card .content .rating {
+            margin-top: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD700;
         }
-        .buttons button {
-            margin-right: 10px;
-            padding: 5px 10px;
-            background-color: #616161;
-            color: #fff;
-            border: none;
-            cursor: pointer;
+
+        .card .author {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1rem;
+            color: #ddd;
         }
+
+        .card .timestamp {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.9rem;
+            color: #BFC4C3;
+        }
+
         footer {
             background-color: #333;
             color: #fff;
             padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
+            text-align: center;
         }
+
         footer a {
             color: #BFC4C3;
             text-decoration: none;
@@ -189,11 +147,10 @@
     <header>
         <div>TMOVING</div>
         <nav>
-            <!-- <a href="#">로그인</a>
-            <a href="#">회원가입</a> #이 사항은 보류처리 되었습니다.-->
-            <!-- 사유 : 로그인을 한 상태에서 볼 수 있는 페이지 이기 때문에 -->
+            <!-- Add navigation links if needed -->
         </nav>
     </header>
+
     <div class="main-content">
         <aside class="sidebar">
             <form>
@@ -215,54 +172,58 @@
                 <label><input type="checkbox"> 공상 과학</label><br>
                 <label><input type="checkbox"> 드라마</label>
             </div>
-            <div class="user-rating">
-                <h3>별점</h3>
-                <label><input type="checkbox"> 5점</label><br>
-                <label><input type="checkbox"> 4점</label><br>
-                <label><input type="checkbox"> 3점</label><br>
-                <label><input type="checkbox"> 2점</label><br>
-                <label><input type="checkbox"> 1점</label>
-            </div>
         </aside>
+
         <section class="search-results">
-            <h2>자유 게시판 목록<br><br></h2>
-            <div id="articles" class="card-container"></div>
-            <div class="pagination">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
+            <h2>리뷰 목록</h2>
+            <a href="{% url 'articles:article_create' %}" class="create-button">리뷰 작성</a>
+            <div id="articles">
+                <!-- JavaScript로 데이터를 추가합니다 -->
             </div>
         </section>
     </div>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("http://127.0.0.1:8000/articles/api/") // API URL
-        .then((response) => response.json())
-        .then((data) => {
-            const container = document.getElementById("articles");
-            container.innerHTML = ""; // 기존 내용 초기화
-            data.forEach((article) => {
-                // 카드 형식으로 HTML 생성
-                const cardHTML = `
-                    <div class="card">
-                        <img src="${article.image}" alt="${article.title}">
-                        <h3>${article.title}</h3>
-                        <p>:별: ${article.rating}점</p>
-                        <p>${new Date(article.created_at).toLocaleString()}</p>
-                    </div>
-                `;
-                container.innerHTML += cardHTML; // 카드 추가
-            });
-        })
-        .catch((error) => {
-            console.error("Error fetching articles:", error);
-        });
-});
-    </script>
+
     <footer>
-        <div>TMOVING &copy; <span>teamsparta.co</span> | <span>Team Algorithm Artist</span></div>
+        <div>TMOVING &copy; Team Sparta</div>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://127.0.0.1:8000/articles/api/") // API URL
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById("articles");
+                    container.innerHTML = ""; // 기존 내용 초기화
+    
+                    data.forEach(article => {
+                        // 카드 생성
+                        const cardHTML = `
+                            <div class="card" data-id="${article.id}">
+                                <img src="${article.image}" alt="${article.title}">
+                                <div class="author">작성자: ${article.author}</div>
+                                <div class="content">
+                                    <h3>${article.Article_title}</h3>
+                                    <div class="rating">⭐ ${article.rating}점</div>
+                                </div>
+                                <div class="timestamp">${new Date(article.created_at).toLocaleString()}</div>
+                            </div>
+                        `;
+                        container.innerHTML += cardHTML;
+                    });
+    
+                    // 카드 클릭 이벤트 추가
+                    const cards = document.querySelectorAll(".card");
+                    cards.forEach(card => {
+                        card.addEventListener("click", function () {
+                            const articleId = card.getAttribute("data-id");
+                            window.location.href = `/articles/${articleId}/`; // 상세 페이지로 이동
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching articles:", error);
+                });
+        });
+    </script>
 </body>
 </html>
