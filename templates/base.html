@@ -27,9 +27,24 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        header .logo {
-            font-size: 1.5rem;
+        header .logo .logo-link {
+            font-size: 2rem;
+            /* 글자 크기 */
             font-weight: bold;
+            /* 글자 두께 */
+            text-decoration: none;
+            /* 밑줄 제거 */
+            color: #f0c040;
+            /* 텍스트 색상 */
+            transition: color 0.3s, transform 0.3s;
+            /* 마우스 오버 효과 */
+        }
+
+        header .logo .logo-link:hover {
+            color: #ffcc00;
+            /* 마우스 오버 시 색상 변경 */
+            transform: scale(1.1);
+            /* 살짝 확대 효과 */
         }
 
         header nav a {
@@ -66,40 +81,46 @@
             text-decoration: underline;
         }
 
-        .navbar ul {
+        header .navbar ul {
             list-style: none;
             display: flex;
             padding: 0;
             margin: 0;
         }
 
-        .navbar ul li {
+        header .navbar ul li {
             margin: 0 10px;
         }
 
-        .navbar ul li a {
+        header .navbar ul li a {
             color: white;
             text-decoration: none;
             font-size: 1rem;
             transition: color 0.3s;
         }
 
-        .navbar ul li a:hover {
+        header .navbar ul li a:hover {
             color: #f0c040;
         }
 
-        .quick-links, .contact-us, .social-media {
+        .quick-links,
+        .contact-us,
+        .social-media {
             flex: 1;
             min-width: 150px;
         }
 
-        .quick-links h4, .contact-us h4, .social-media h4 {
+        .quick-links h4,
+        .contact-us h4,
+        .social-media h4 {
             margin-bottom: 10px;
             font-size: 1.2rem;
             color: #f0c040;
         }
 
-        .quick-links a, .contact-us a, .social-media span {
+        .quick-links a,
+        .contact-us a,
+        .social-media span {
             font-size: 0.9rem;
             line-height: 1.6;
         }
@@ -116,7 +137,7 @@
 <body>
     <header>
         <div class="logo">
-            TMOVING
+            <a href="{% url 'Main' %}" class="logo-link">TMOVING</a>
         </div>
         <nav class="navbar">
             <ul class="nav-list">
@@ -127,15 +148,15 @@
         </nav>
         <nav>
             {% if user.is_authenticated %}
-                <a href="{% url 'accounts:profile' %}">내 프로필</a>
-                <form id="logoutForm" style="display: inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.path }}">
-                    <button type="button" id="logoutButton">로그아웃</button>
-                </form>
+            <a href="{% url 'accounts:profile' %}">내 프로필</a>
+            <form id="logoutForm" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="button" id="logoutButton">로그아웃</button>
+            </form>
             {% else %}
-                <a href="{% url 'accounts:signup' %}">회원가입</a>
-                <a href="{% url 'accounts:login' %}">로그인</a>
+            <a href="{% url 'accounts:signup' %}">회원가입</a>
+            <a href="{% url 'accounts:login' %}">로그인</a>
             {% endif %}
         </nav>
     </header>
