@@ -119,44 +119,11 @@
 <body>
     <div class="container">
 
-        <h1>게시글 수정</h1>
+        <h1>댓글 수정</h1>
         <form id="editArticleForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
             {% csrf_token %}
-            <label for="Article_title">글 제목</label>
-            <input type="text" id="Article_title" name="Article_title" placeholder="글 제목을 입력하세요" required>
-
-            <label for="movie_title">영화 제목</label>
-            <input type="text" id="movie_title" name="movie_title" placeholder="영화 제목을 입력하세요" required>
-
             <label for="content">내용</label>
-            <textarea id="content" name="content" placeholder="후기를 작성하세요" required></textarea>
-
-            <label for="image">이미지 업로드</label>
-            <input type="file" id="image" name="image" accept="image/*" required>
-
-            <label for="rating">평점</label>
-            <input type="text" id="rating" name="rating" placeholder="1~5점까지 정수 중 평점을 입력하세요" required>
-
-            <label for="genre">장르</label>
-            <select id="genre" name="genre">
-                <option value="">선택하세요</option>
-                <option value="AC">액션</option>
-                <option value="DR">드라마</option>
-                <option value="CO">코미디</option>
-                <option value="AD">모험</option>
-                <option value="AM">애니메이션</option>
-                <option value="CM">범죄</option>
-                <option value="DM">다큐</option>
-                <option value="FT">판타지</option>
-                <option value="HO">호러</option>
-                <option value="MC">뮤지컬</option>
-                <option value="SF">SF</option>
-                <option value="RM">로맨스</option>
-                <option value="MS">미스테리</option>
-                <option value="SP">스포츠</option>
-                <option value="HR">스릴러</option>
-                <option value="WAR">전쟁</option>
-            </select>
+            <textarea id="content" name="content" placeholder="댓글을 작성하세요" required></textarea>
 
             <div class="buttons">
                 <button type="button" class="button discard" onclick="window.location.href='/articles/'">취소</button>
@@ -165,26 +132,6 @@
         </form>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const currentPath = window.location.pathname; // 현재 URL
-            const articleId = currentPath.split("/")[2]; // 예: /articles/21/edit/
-
-            fetch(`/articles/${articleId}/api/`) // API 엔드포인트 호출
-                .then(response => response.json())
-                .then(article => {
-                    // 가져온 데이터로 폼 필드 채우기
-                    document.getElementById("Article_title").value = article.Article_title;
-                    document.getElementById("movie_title").value = article.movie_title;
-                    document.getElementById("content").value = article.content;
-                    document.getElementById("rating").value = article.rating;
-                    document.getElementById("genre").value = article.genre; // 장르 선택
-                })
-                .catch(error => {
-                    console.error("Error fetching article data:", error);
-                    alert("게시글 데이터를 불러오지 못했습니다.");
-                });
-        });
-
         function handleFormSubmit(event) {
             event.preventDefault(); // 기본 폼 제출 동작 막기
 
@@ -198,9 +145,10 @@
             const formData = new FormData(form); // 폼 데이터 생성
             const currentPath = window.location.pathname;
             const articleId = currentPath.split("/")[2];
+            const commentId = currentPath.split("/")[4];
 
-            fetch(`/articles/${articleId}/articleedit/api/`, {
-                method: "PATCH", // 수정 요청은 PATCH 사용
+            fetch(`/articles/${articleId}/comments/${commentId}/edit/api/`, {
+                method: "Put", // 수정 요청은 PATCH 사용
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
                 },
@@ -213,12 +161,12 @@
                     return response.json();
                 })
                 .then(data => {
-                    alert("게시글이 성공적으로 수정되었습니다!");
+                    alert("댓글이 성공적으로 수정되었습니다!");
                     window.location.href = `/articles/${articleId}/`; // 상세 페이지로 리다이렉트
                 })
                 .catch(error => {
                     console.error("Error updating article:", error);
-                    alert("게시글 수정 중 문제가 발생했습니다.");
+                    alert("댓글 수정 중 문제가 발생했습니다.");
                 });
         }
     </script>

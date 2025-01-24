@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             background-color: #f5f5f5;
             color: #333;
         }
+
         header {
             background-color: #000;
             color: white;
@@ -21,15 +23,18 @@
             padding: 15px 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         header nav a {
             color: #fff;
             text-decoration: none;
             margin: 0 10px;
             transition: color 0.3s;
         }
+
         header nav a:hover {
             color: #f0c040;
         }
+
         .banner {
             position: relative;
             background: linear-gradient(to bottom, #222, #444);
@@ -39,12 +44,49 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 0 20px;
         }
+
         .banner h1 {
             margin: 0;
             font-size: 2.5rem;
             font-weight: bold;
+            flex-grow: 1;
         }
+
+        .banner #edit-link,
+        .banner #delete-link {
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;
+        }
+
+        .banner #edit-link {
+            color: white;
+            background-color: #4caf50;
+        }
+
+        .banner #edit-link:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner #delete-link {
+            color: white;
+            background-color: #e74c3c;
+        }
+
+        .banner #delete-link:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        }
+
         .movie-info {
             display: flex;
             flex-direction: row;
@@ -60,18 +102,21 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             box-sizing: border-box;
         }
+
         .movie-info img {
             width: 500px;
             height: 650px;
             border-radius: 8px;
             margin-right: 20px;
         }
+
         .details {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
+
         .details .title {
             text-align: center;
             font-size: 2rem;
@@ -81,6 +126,7 @@
             border-radius: 8px;
             background-color: #444;
         }
+
         .details .meta {
             display: flex;
             justify-content: space-between;
@@ -89,15 +135,18 @@
             border-radius: 8px;
             background-color: #444;
         }
+
         .details .meta .author {
             font-size: 1rem;
             color: #fff;
         }
+
         .details .meta .rating {
             font-size: 1.2rem;
             font-weight: bold;
             color: #ffd700;
         }
+
         .details .content {
             padding: 20px;
             border: 1px solid #555;
@@ -109,46 +158,95 @@
             height: 300px;
             overflow-y: auto;
         }
+
         .comments {
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #555;
-        border-radius: 8px;
-        background-color: #444;
-        color: #fff;
-        max-height: 300px; /* 댓글 전체 컨테이너의 최대 높이 */
-        overflow-y: auto; /* 스크롤 추가 */
-    }
-    .comments .comment {
-        padding: 5px 10px; /* 내부 여백 조정 */
-        margin-bottom: 10px;
-        border: 1px solid #555;
-        border-radius: 5px;
-        font-size: 0.9rem; /* 폰트 크기 유지 */
-        background-color: #222; /* 댓글 배경 */
-        display: flex;
-        flex-direction: column; /* 작성자와 내용을 세로로 배치 */
-        height: 150px; /* 높이를 자동으로 설정 */
-    }
-    .comments .comment:last-child {
-        margin-bottom: 0;
-    }
-    .comments .comment .author {
-        font-weight: bold;
-        color: #ffd700;
-        margin-bottom: 5px; /* 작성자와 내용 간 간격 */
-    }
-    .comments .comment .content {
-        color: #fff;
-        overflow: hidden; /* 넘치는 텍스트 처리 */
-        text-overflow: ellipsis; /* 넘치는 텍스트 말줄임 */
-        white-space: nowrap; /* 한 줄로 표시 */
-    }
-    .comments .comment .timestamp {
-        font-size: 0.8rem;
-        color: #aaa;
-        margin-top: 5px; /* 내용과 시간 간 간격 */
-    }
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #444;
+            color: #fff;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .comments .comment {
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            background-color: #222;
+            display: flex;
+            flex-direction: column;
+            height: 150px;
+        }
+
+        .comments .comment:last-child {
+            margin-bottom: 0;
+        }
+
+        .comments .comment .author {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .comments .comment .content {
+            color: #fff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .comments .comment .timestamp {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        button {
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* 좋아요 버튼 */
+        .like-comment-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .like-comment-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* 수정 버튼 */
+        .edit-comment-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .edit-comment-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* 삭제 버튼 */
+        .delete-comment-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .delete-comment-btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
         footer {
             background-color: #000;
             color: white;
@@ -158,6 +256,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div>TMOVING</div>
@@ -170,16 +269,110 @@
 
     <div class="banner">
         <h1>리뷰 상세 정보</h1>
-        <a id="edit-link", href="#">수정</a>
+        <a id="edit-link" href="#">수정</a>
+        <form id="deleteForm" method="POST">
+            {% csrf_token %}
+        </form>
+        <a id="delete-link" href="#">삭제</a>
+        <a id="comment-link" href="#">댓글 작성</a>
+        <button id="like-button">좋아요 👍</button> <!-- 좋아요 버튼 추가 -->
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const currentPath = window.location.pathname;
             const articlePk = currentPath.split("/")[2];
-    
+
+            const likeButton = document.getElementById("like-button");
+
+            likeButton.addEventListener("click", function () {
+                fetch(`/articles/${articlePk}/api/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            return response.json().then((data) => {
+                                // 서버에서 에러 메시지가 오면 팝업 표시
+                                if (data.error) {
+                                    alert(data.error);
+                                } else {
+                                    alert("좋아요 처리 중 문제가 발생했습니다.");
+                                }
+                                throw new Error(data.error || "Unknown error");
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data.is_liked) {
+                            alert(data.message); // 좋아요 성공 메시지
+                            likeButton.textContent = "좋아요 취소 👎";
+                        } else {
+                            alert(data.message); // 좋아요 취소 메시지
+                            likeButton.textContent = "좋아요 👍";
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentPath = window.location.pathname;
+            const articlePk = currentPath.split("/")[2];
+
+            // 수정 버튼의 URL 설정
+            const editLink = document.getElementById("comment-link");
+            editLink.href = `/articles/${articlePk}/comments/`;
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentPath = window.location.pathname;
+            const articlePk = currentPath.split("/")[2];
+
             // 수정 버튼의 URL 설정
             const editLink = document.getElementById("edit-link");
             editLink.href = `/articles/${articlePk}/articleedit/`;
+        });
+        document.getElementById("delete-link").addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const currentPath = window.location.pathname;
+            const articlePk = currentPath.split("/")[2];
+
+            const csrfTokenElement = document.querySelector("[name=csrfmiddlewaretoken]");
+            if (!csrfTokenElement) {
+                alert("CSRF 토큰을 찾을 수 없습니다. 페이지를 새로고침하세요.");
+                return;
+            }
+
+            const csrfToken = csrfTokenElement.value;
+
+            if (confirm("이 게시글을 삭제하시겠습니까?")) {
+                fetch(`/articles/${articlePk}/delete/`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("서버 응답이 실패했습니다.");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert("게시글이 성공적으로 삭제되었습니다.");
+                        window.location.href = "/articles/"; // 삭제 후 목록 페이지로 이동
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("게시글 삭제 중 문제가 발생했습니다.");
+                    });
+            }
         });
     </script>
     <div id="movie-container" class="movie-info">
@@ -188,52 +381,124 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const currentPath = window.location.pathname; // 현재 경로 예: /articles/21/api/
-            const pathSegments = currentPath.split("/"); // 슬래시로 분리
-            const articlePk = pathSegments[2]; // 두 번째 세그먼트가 article_pk
+            const currentPath = window.location.pathname;
+            const pathSegments = currentPath.split("/");
+            const articlePk = pathSegments[2]; // 게시글 ID 추출
 
             console.log("Extracted article_pk:", articlePk);
 
             fetch(`http://127.0.0.1:8000/articles/${articlePk}/api/`) // API URL
-                .then(response => response.json())
-                .then(article => {
-                    // DOM 요소 참조
+                .then((response) => response.json())
+                .then((article) => {
                     const container = document.getElementById("movie-container");
 
-                    // 상세 정보 생성
                     const movieHTML = `
-                        <img src="${article.image}" alt="${article.movie_title}">
-                        
-                        <div class="details">
-                            <div class="title">${article.movie_title}</div>
-                            <div class="meta">
-                                <div class="author">작성자: ${article.author}</div>
-                                <div class="rating">평점: ⭐ ${article.rating}</div>
-                            </div>
-                            <div class="content">${article.content}</div>
-                            <div class="comments">
-                                <h3>댓글</h3>
-                                ${article.comments.map(comment => `
-                                    <div class="comment">
+                <img src="${article.image}" alt="${article.movie_title}">
+                <div class="details">
+                    <div class="title">${article.movie_title}</div>
+                    <div class="meta">
+                        <div class="author">작성자: ${article.author}</div>
+                        <div class="rating">평점: ⭐ ${article.rating}</div>
+                    </div>
+                    <div class="content">${article.content}</div>
+                    <div class="comments">
+                        <h3>댓글</h3>
+                        ${article.comments
+                            .map(
+                                (comment) => `
+                                    <div class="comment" data-comment-id="${comment.id}">
                                         <div class="author">${comment.author}</div>
                                         <div class="content">${comment.content}</div>
                                         <div class="timestamp">${new Date(comment.created_at).toLocaleString()}</div>
+                                        <div class="comment-actions">
+                                            <button class="like-comment-btn" data-comment-id="${comment.id}">
+                                                ${comment.is_liked ? "좋아요 취소 👎" : "좋아요 👍"}
+                                            </button>
+                                            <span class="like-count" data-comment-id="${comment.id}">
+                                                좋아요 수: ${comment.total_commentlikes_count}
+                                            </span>
+                                            <a href="/articles/${articlePk}/comments/${comment.id}/edit/" class="edit-comment">수정</a>
+                                            <button class="delete-comment" data-id="${comment.id}">삭제</button>
+                                        </div>
                                     </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
+                                `
+                            )
+                            .join("")}
+                    </div>
+                </div>
+            `;
 
                     container.innerHTML = movieHTML;
+
+                    // 댓글 삭제 버튼 이벤트 추가
+                    addDeleteEventListeners(articlePk);
+
+                    // 댓글 좋아요 버튼 이벤트 추가
+                    addLikeEventListeners(articlePk);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error("Error fetching article:", error);
                 });
         });
+
+        function addDeleteEventListeners(articlePk) {
+            document.querySelectorAll(".delete-comment").forEach((button) => {
+                button.addEventListener("click", function () {
+                    const commentId = this.dataset.id;
+                    if (confirm("이 댓글을 삭제하시겠습니까?")) {
+                        fetch(`/articles/${articlePk}/comments/${commentId}/delete/`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                            },
+                        })
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error("댓글 삭제 실패");
+                                }
+                                alert("댓글이 삭제되었습니다.");
+                                location.reload(); // 페이지 새로고침
+                            })
+                            .catch((error) => {
+                                console.error("Error:", error);
+                                alert("댓글 삭제 중 문제가 발생했습니다.");
+                            });
+                    }
+                });
+            });
+        }
+
+        function addLikeEventListeners(articlePk) {
+            document.querySelectorAll(".like-comment-btn").forEach((button) => {
+                button.addEventListener("click", function () {
+                    const commentId = this.dataset.commentId;
+
+                    fetch(`/articles/${articlePk}/comments/${commentId}/commentlike/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                            "Content-Type": "application/json",
+                        },
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.error) {
+                                alert(data.error); // 에러 메시지
+                            } else {
+                                const likeCountSpan = document.querySelector(`.like-count[data-comment-id="${commentId}"]`);
+                                likeCountSpan.textContent = `좋아요 수: ${data.total_likes}`;
+                                this.textContent = data.is_liked ? "좋아요 취소 👎" : "좋아요 👍";
+                            }
+                        })
+                        .catch((error) => console.error("Error:", error));
+                });
+            });
+        }
     </script>
 
     <footer>
         TMOVING &copy; Team Algorithm Artist
     </footer>
 </body>
+
 </html>

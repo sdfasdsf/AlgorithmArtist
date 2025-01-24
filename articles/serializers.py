@@ -21,7 +21,7 @@ class CommentSerializer(serializers.ModelSerializer):
             "updated_at",  # 댓글 수정 날짜
             "total_commentlikes_count",  # 댓글 좋아요 수
         )
-        read_only_fields = ("article", "like_users") # 읽기 전용 필드 지정
+        read_only_fields = ("article", "total_commentlikes_count") # 읽기 전용 필드 지정
 
 class ArticleListSerializer(serializers.ModelSerializer):
     """게시글 목록 조회 Serializer"""

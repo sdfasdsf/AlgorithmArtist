@@ -75,11 +75,6 @@ class Comment(models.Model):
     created_at = models.DateTimeField("작성일", auto_now_add=True)  # 댓글 작성 날짜
     updated_at = models.DateTimeField("수정일", auto_now=True)  # 댓글 수정 날짜
 
-    writer = models.ForeignKey(
-        User,  # 커스텀 User 모델 사용
-        on_delete=models.CASCADE,    # User가 삭제될 때 게시글도 삭제
-        null=True
-    ) # 작성자 (User 모델과 연결)
     comment_like = models.ManyToManyField('accounts.User', related_name='liked_comments' ,blank=True) # 좋아요를 누른 사용자 목록
     total_commentlikes_count = models.IntegerField("좋아요 수", default=0) # 총 좋아요 수
 

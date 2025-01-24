@@ -88,44 +88,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>게시글 생성</h1>
-        <form id="createArticleForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
+        <h1>댓글 생성</h1>
+        <form id="CommentForm" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
             {% csrf_token %}
-            <label for="Article_title">글 제목</label>
-            <input type="text" id="Article_title" name="Article_title" placeholder="글 제목을 입력하세요" required>
+            <label for="content">댓글</label>
+            <input type="text" id="content" name="content" placeholder="댓글을 입력하세요" required>
 
-            <label for="movie_title">영화 제목</label>
-            <input type="text" id="movie_title" name="movie_title" placeholder="영화 제목을 입력하세요" required>
-
-            <label for="content">내용</label>
-            <textarea id="content" name="content" placeholder="후기를 작성하세요" required></textarea>
-
-            <label for="image">이미지 업로드</label>
-            <input type="file" id="image" name="image" accept="image/*" required>
-
-            <label for="rating">평점</label>
-            <input type="text" id="rating" name="rating" placeholder="1~5점까지 정수 중 평점을 입력하세요" required>
             
-            <label for="genre">장르</label>
-            <select id="genre" name="genre">
-                <option value="">선택하세요</option>
-                <option value="AC">액션</option>
-                <option value="DR">드라마</option>
-                <option value="CO">코미디</option>
-                <option value="AD">모험</option>
-                <option value="AM">애니메이션</option>
-                <option value="CM">범죄</option>
-                <option value="DM">다큐</option>
-                <option value="FT">판타지</option>
-                <option value="HO">호러</option>
-                <option value="MC">뮤지컬</option>
-                <option value="SF">SF</option>
-                <option value="RM">로맨스</option>
-                <option value="MS">미스테리</option>
-                <option value="SP">스포츠</option>
-                <option value="HR">스릴러</option>
-                <option value="WAR">전쟁</option>
-            </select>
             
             <div class="buttons">
                 <button type="button" class="button discard" onclick="window.history.back()">취소</button>
@@ -137,10 +106,13 @@
         function handleFormSubmit(event) {
             event.preventDefault(); // 기본 폼 제출 동작 막기
 
-            const form = document.getElementById("createArticleForm");
+            const currentPath = window.location.pathname;
+            const articlePk = currentPath.split("/")[2];
+
+            const form = document.getElementById("CommentForm");
             const formData = new FormData(form);
 
-            fetch("/articles/ArticleCreate/api/", {
+            fetch(`/articles/${articlePk}/comments/api/`, {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
@@ -154,12 +126,12 @@
                 return response.json();
             })
             .then(data => {
-                alert("게시글이 성공적으로 생성되었습니다!");
+                alert("댓글이 성공적으로 생성되었습니다!");
                 window.location.href = `/articles/${data.article_id}/`;
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("게시글 생성 중 문제가 발생했습니다.");
+                alert("댓글 생성 중 문제가 발생했습니다.");
             });
         }
     </script>
