@@ -159,7 +159,7 @@ class Logout(APIView):
     def post(self, request):
         try:
             # refresh token을 가져옵니다.
-            refresh_token = request.data.get("refresh_token")
+            refresh_token = request.COOKIES.get("refresh_token")
 
             # refresh token을 사용하여 토큰을 블랙리스트 처리
             token = RefreshToken(refresh_token)
@@ -167,7 +167,11 @@ class Logout(APIView):
 
             logout(request)
 
-            return redirect('/')
+            response = redirect('/')
+            response.delete_cookie('access_token')
+            response.delete_cookie('refresh_token')
+
+            return response
 
         except Exception as e:
             return Response({"error": "로그아웃 실패", "details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
