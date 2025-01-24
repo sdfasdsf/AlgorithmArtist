@@ -149,6 +149,7 @@
             movies.forEach(movie => {
                 const card = document.createElement('div'); // 새로운 div 생성
                 card.className = 'card'; // 클래스 추가
+                card.setAttribute('data-id', movie.id); // 영화 ID를 data-id 속성에 추가
 
                 card.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
@@ -160,6 +161,22 @@
             });
         })
         .catch(error => console.error('Error fetching movies:', error));
+
+    // 카드 클릭 이벤트 핸들러 추가
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('latest-movies');
+
+        container.addEventListener('click', (event) => {
+            const card = event.target.closest('.card'); // 클릭한 요소의 상위 카드 요소 탐색
+            if (card) {
+                const movieId = card.getAttribute('data-id'); // `data-id` 속성에서 영화 ID 가져오기
+                if (movieId) {
+                    // 상세 페이지로 이동
+                    window.location.href = `/movie/${movieId}/`; // 영화 ID를 포함하여 URL로 이동
+                }
+            }
+        });
+    });
 </script>
 
 <section class="section latest-releases">
@@ -190,7 +207,7 @@
             .replace(/ +/g, ' ')     // 중복 공백 제거
             .trim();                 // 양쪽 공백 제거
     };
-    // API 호출
+
     // TMDB API에서 영화 데이터를 검색하는 함수
     const fetchMovieFromTMDB = async (movieName) => {
         const processedName = preprocessMovieTitle(movieName); // 전처리된 제목
@@ -233,6 +250,7 @@
 
                 const card = document.createElement('div');
                 card.className = 'card';
+                card.setAttribute('data-id', tmdbMovie?.id || ''); // 영화 ID를 data-id 속성에 추가
                 card.innerHTML = `
                         <img src="${posterPath}" alt="${movieName}">
                         <h3>${movieName}</h3>
@@ -244,5 +262,40 @@
             }
         })
         .catch(error => console.error('KOFIC API Error:', error));
+
+    // 박스오피스 카드 클릭 이벤트 추가
+    document.addEventListener('DOMContentLoaded', () => {
+        const boxOfficeContainer = document.getElementById('box-office-movies');
+
+        boxOfficeContainer.addEventListener('click', (event) => {
+            const card = event.target.closest('.card');
+            if (card) {
+                const movieId = card.getAttribute('data-id');
+                if (movieId) {
+                    // 상세 페이지로 이동
+                    window.location.href = `/movie/${movieId}/`;
+                }
+            }
+        });
+    });
+    // 로그인 여부 확인 로직 추가
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/protected-api/')  // 서버에서 데이터를 가져오는 요청
+            .then(response => {
+                if (response.status === 401) {
+                    // 로그인 팝업 띄우기
+                    alert("로그인이 필요합니다.");
+                    // 로그인 페이지로 리다이렉트
+                    window.location.href = "/login/";
+                } else if (response.status === 403) {
+                    alert("권한이 없습니다.");
+                } else {
+                    return response.json();
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
 </script>
 {% endblock %}
