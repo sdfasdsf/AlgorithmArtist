@@ -13,7 +13,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: grey;
+            background-color: #f5f5f5;
+            color: #333;
         }
 
         header {
@@ -21,36 +22,93 @@
             color: white;
             display: flex;
             justify-content: space-between;
-            padding: 10px 20px;
             align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        header img {
-            height: 50px;
+        header .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
         header nav a {
-            color: rgb(255, 255, 255);
+            color: #fff;
             text-decoration: none;
-            margin: 0 15px;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #f0c040;
         }
 
         footer {
-            background-color: #444;
+            background-color: #333;
             color: #ffffff;
-            padding: 10px 20px;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         footer div {
-            margin: 0 10px;
+            margin: 10px;
+        }
+
+        footer a {
+            color: #f0c040;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
 
         .navbar ul {
             list-style: none;
             display: flex;
-            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar ul li {
+            margin: 0 10px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            color: #f0c040;
+        }
+
+        .quick-links, .contact-us, .social-media {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .quick-links h4, .contact-us h4, .social-media h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #f0c040;
+        }
+
+        .quick-links a, .contact-us a, .social-media span {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: inherit;
         }
     </style>
 </head>
@@ -58,49 +116,70 @@
 <body>
     <header>
         <div class="logo">
-            <span href="">TMOVING</span>
+            TMOVING
         </div>
         <nav class="navbar">
             <ul class="nav-list">
-                <li><a href="AI/TMOVINGBOT/">티무빙봇</a></li>
-                <li><a href="Main/movie/">영화 상세 조회</a></li>
-                <li><a href="articles/">리뷰 목록 조회</a></li>
+                <li><a href="{% url 'AI:TMOVINGBOT' %}">티무빙봇</a></li>
+                <li><a href="{% url 'movie' %}">영화 상세 조회</a></li>
+                <li><a href="{% url 'articles:article_list' %}">리뷰 목록 조회</a></li>
             </ul>
         </nav>
-
         <nav>
             {% if user.is_authenticated %}
                 <a href="{% url 'accounts:profile' %}">내 프로필</a>
-                <form id="logoutForm" method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.path }}">
-                <button type="submit"
-                    style="background: none; border: none; color: inherit; cursor: pointer;">로그아웃</button>
+                <form id="logoutForm" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button type="button" id="logoutButton">로그아웃</button>
+                </form>
             {% else %}
                 <a href="{% url 'accounts:signup' %}">회원가입</a>
                 <a href="{% url 'accounts:login' %}">로그인</a>
             {% endif %}
         </nav>
     </header>
-    <Script>
-    fetch('/accounts/logout/', {
-        method: 'POST',
-        credentials: 'include',
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message === "로그아웃 성공") {
-            alert("로그아웃되었습니다.");
-            window.location.href = "/"; // 홈으로 리다이렉트
-        }
-    })
-    .catch(error => console.error("로그아웃 에러:", error));
-    </Script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const logoutButton = document.getElementById("logoutButton");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", function () {
+                    // CSRF 토큰을 meta 태그로 가져오기
+                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    // 로그아웃 POST 요청 보내기
+                    fetch('/accounts/logout/', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert("로그아웃되었습니다.");
+                                window.location.href = "/"; // 홈으로 리다이렉트
+                            } else {
+                                throw new Error("로그아웃에 실패했습니다.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("로그아웃 에러:", error);
+                            alert("로그아웃 중 문제가 발생했습니다. 다시 시도해 주세요.");
+                        });
+                });
+            }
+        });
+    </script>
+
     <main>
         {% block content %}
         <!-- 개별 페이지에서 채울 내용 -->
         {% endblock %}
     </main>
+
     <footer>
         <div class="quick-links">
             <h4>Quick Links</h4>
