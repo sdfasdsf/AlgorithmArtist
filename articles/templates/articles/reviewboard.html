@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +8,53 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #ccc;
+        }
+
+        .logo-link {
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #f0c040;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .logo-link:hover {
+            color: #ffcc00;
+            transform: scale(1.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a,
+        nav ul li button {
+            color: white;
+            text-decoration: none;
+            /* 밑줄 제거 */
+            font-size: 1rem;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        nav ul li a:hover,
+        nav ul li button:hover {
+            color: #f0c040;
+        }
+
+        nav ul li form {
+            display: inline;
+            /* 버튼과 inline으로 맞춤 */
         }
 
         header {
@@ -47,8 +93,10 @@
             background-color: #444;
             color: #fff;
             padding: 20px;
-            overflow-y: auto; /* 스크롤바 추가 */
-            max-height: 80vh; /* 게시글 영역의 최대 높이 */
+            overflow-y: auto;
+            /* 스크롤바 추가 */
+            max-height: 80vh;
+            /* 게시글 영역의 최대 높이 */
         }
 
         .search-results h2 {
@@ -56,25 +104,27 @@
             display: inline-block;
         }
 
-        .create-button {
-    float: right;
-    padding: 10px 20px;
-    background: linear-gradient(45deg, #6a11cb, #2575fc);
-    color: white;
-    text-decoration: none;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    border: none;
-}
 
-.create-button:hover {
-    background: linear-gradient(45deg, #2575fc, #6a11cb);
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-}
+        .create-button {
+            float: right;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .create-button:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
         .card {
             background-color: #555;
             margin: 15px 0;
@@ -84,8 +134,10 @@
             display: flex;
             align-items: center;
             position: relative;
-            height: 170px; /* 카드 높이 유지 */
-            max-width: 1500px; /* 카드의 최대 너비 제한 추가 */
+            height: 170px;
+            /* 카드 높이 유지 */
+            max-width: 1500px;
+            /* 카드의 최대 너비 제한 추가 */
         }
 
         .card img {
@@ -104,7 +156,8 @@
 
         .card .content h3 {
             margin: 0 0 20px;
-            font-size: 1.8rem; /* 제목 크기 증가 */
+            font-size: 1.8rem;
+            /* 제목 크기 증가 */
         }
 
         .card .content .rating {
@@ -132,24 +185,111 @@
 
         footer {
             background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            text-align: center;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        footer h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #f0c040;
         }
 
         footer a {
-            color: #BFC4C3;
+            color: #f0c040;
             text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <header>
-        <div>TMOVING</div>
+        <div>
+            <a href="{% url 'Main' %}" class="logo-link">TMOVING</a>
+        </div>
         <nav>
-            <!-- Add navigation links if needed -->
+            <ul>
+                <li><a href="#" id="tmovingBotLink">티무빙봇</a></li>
+                <li><a href="{% url 'articles:article_list' %}">리뷰 목록 조회</a></li>
+            </ul>
+        </nav>
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'accounts:profile' %}">내 프로필</a></li>
+                <li>
+                    <form id="logoutForm">
+                        {% csrf_token %}
+                        <button type="button" id="logoutButton">로그아웃</button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'accounts:signup' %}">회원가입</a></li>
+                <li><a href="{% url 'accounts:login' %}">로그인</a></li>
+                {% endif %}
+            </ul>
         </nav>
     </header>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tmovingBotLink = document.getElementById("tmovingBotLink");
+            const logoutButton = document.getElementById("logoutButton");
+            const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // 티무빙봇 링크 클릭 시 로그인 여부 확인
+            tmovingBotLink.addEventListener("click", function (event) {
+                event.preventDefault(); // 기본 이동 방지
+                fetch("{% url 'accounts:checklogin' %}") // 정확한 URL 사용
+                    .then(response => {
+                        if (response.status === 200) {
+                            // 로그인된 경우 티무빙봇 페이지로 이동
+                            window.location.href = "{% url 'AI:TMOVINGBOT' %}";
+                        } else if (response.status === 401) {
+                            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                            window.location.href = "{% url 'accounts:login' %}";
+                        } else {
+                            alert("권한이 없습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error during login check:", error);
+                    });
+            });
+
+            // 로그아웃 버튼 동작
+            if (logoutButton) {
+                logoutButton.addEventListener("click", function () {
+                    fetch('/accounts/logout/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert("로그아웃되었습니다.");
+                                window.location.href = "/";
+                            } else {
+                                alert("로그아웃에 실패했습니다.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("로그아웃 중 에러:", error);
+                        });
+                });
+            }
+        });
+    </script>
 
     <div class="main-content">
         <aside class="sidebar">
@@ -166,12 +306,25 @@
             </form>
             <div class="genres">
                 <h3>장르</h3>
-                <label><input type="checkbox"> 공포</label><br>
-                <label><input type="checkbox"> 코미디</label><br>
-                <label><input type="checkbox"> 액션</label><br>
-                <label><input type="checkbox"> 공상 과학</label><br>
-                <label><input type="checkbox"> 드라마</label>
+                <label><input type="radio" name="genre" value="" checked> 전체</label><br>
+                <label><input type="radio" name="genre" value="AC"> 액션</label><br>
+                <label><input type="radio" name="genre" value="DR"> 드라마</label><br>
+                <label><input type="radio" name="genre" value="CO"> 코미디</label><br>
+                <label><input type="radio" name="genre" value="AD"> 모험</label><br>
+                <label><input type="radio" name="genre" value="AM"> 애니메이션</label><br>
+                <label><input type="radio" name="genre" value="CM"> 범죄</label><br>
+                <label><input type="radio" name="genre" value="DM"> 다큐</label><br>
+                <label><input type="radio" name="genre" value="FT"> 판타지</label><br>
+                <label><input type="radio" name="genre" value="HO"> 호러</label><br>
+                <label><input type="radio" name="genre" value="MC"> 뮤지컬</label><br>
+                <label><input type="radio" name="genre" value="SF"> SF</label><br>
+                <label><input type="radio" name="genre" value="RM"> 로맨스</label><br>
+                <label><input type="radio" name="genre" value="MS"> 미스테리</label><br>
+                <label><input type="radio" name="genre" value="SP"> 스포츠</label><br>
+                <label><input type="radio" name="genre" value="HR"> 스릴러</label><br>
+                <label><input type="radio" name="genre" value="WAR"> 전쟁</label>
             </div>
+            <button type="button" id="searchButton">검색</button>
         </aside>
 
         <section class="search-results">
@@ -184,46 +337,110 @@
     </div>
 
     <footer>
-        <div>TMOVING &copy; Team Sparta</div>
+        <div>
+            <h4>Quick Links</h4>
+            <a href="#">Home</a><br>
+            <a href="#">Movie Lists</a><br>
+            <a href="#">Reviews</a>
+        </div>
+        <div>
+            <h4>Contact Us</h4>
+            <p>팀 스파르타 주식회사</p>
+            <p>Team Algorithm Artist</p>
+        </div>
+        <div>
+            <h4>Follow Us</h4>
+            <span>Icons for social media</span>
+        </div>
     </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://127.0.0.1:8000/articles/api/") // API URL
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById("articles");
-                    container.innerHTML = ""; // 기존 내용 초기화
-    
-                    data.forEach(article => {
-                        // 카드 생성
-                        const cardHTML = `
-                            <div class="card" data-id="${article.id}">
-                                <img src="${article.image}" alt="${article.title}">
-                                <div class="author">작성자: ${article.author}</div>
-                                <div class="content">
-                                    <h3>${article.Article_title}</h3>
-                                    <div class="rating">⭐ ${article.rating}점</div>
-                                </div>
-                                <div class="timestamp">${new Date(article.created_at).toLocaleString()}</div>
+            const container = document.getElementById("articles");
+            const searchButton = document.getElementById("searchButton");
+
+            // 게시글 데이터를 가져오는 함수
+            function fetchArticles(genre = null) {
+                const url = genre
+                    ? `http://127.0.0.1:8000/articles/api/?genre=${genre}`
+                    : `http://127.0.0.1:8000/articles/api/`;
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        container.innerHTML = ""; // 기존 내용 초기화
+
+                        if (data.length === 0) {
+                            container.innerHTML = "<p>게시글이 없습니다.</p>";
+                            return;
+                        }
+
+                        data.forEach(article => {
+                            const cardHTML = `
+                        <div class="card" data-id="${article.id}">
+                            <img src="${article.image}" alt="${article.title}">
+                            <div class="author">작성자: ${article.author}</div>
+                            <div class="content">
+                                <h3>${article.Article_title}</h3>
+                                <div class="rating">⭐ ${article.rating}점</div>
                             </div>
-                        `;
-                        container.innerHTML += cardHTML;
-                    });
-    
-                    // 카드 클릭 이벤트 추가
-                    const cards = document.querySelectorAll(".card");
-                    cards.forEach(card => {
-                        card.addEventListener("click", function () {
-                            const articleId = card.getAttribute("data-id");
-                            window.location.href = `/articles/${articleId}/`; // 상세 페이지로 이동
+                            <div class="timestamp">${new Date(
+                                article.created_at
+                            ).toLocaleString()}</div>
+                        </div>
+                    `;
+                            container.innerHTML += cardHTML;
                         });
+
+                        // 카드 클릭 이벤트 추가
+                        addCardClickEvents();
+                    })
+                    .catch(error => {
+                        console.error("Error fetching articles:", error);
+                        container.innerHTML = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
                     });
-                })
-                .catch(error => {
-                    console.error("Error fetching articles:", error);
+            }
+
+            // 카드 클릭 이벤트 등록 함수
+            function addCardClickEvents() {
+                const cards = document.querySelectorAll(".card");
+
+                if (cards.length === 0) {
+                    console.log("No cards found, skipping event registration."); // 디버깅용
+                    return;
+                }
+
+                cards.forEach(card => {
+                    card.addEventListener("click", function () {
+                        const articleId = card.getAttribute("data-id");
+                        if (articleId) {
+                            window.location.href = `/articles/${articleId}/`;
+                        }
+                    });
                 });
+            }
+
+            // 초기 로드 시 모든 게시글 가져오기
+            fetchArticles();
+
+            // 검색 버튼 클릭 시 필터링된 데이터 가져오기
+            searchButton.addEventListener("click", function (event) {
+                event.preventDefault(); // 기본 동작 방지
+                const selectedGenre = document.querySelector('input[name="genre"]:checked');
+
+                if (selectedGenre) {
+                    fetchArticles(selectedGenre.value);
+                } else {
+                    fetchArticles();
+                }
+            });
         });
     </script>
 </body>
+
 </html>

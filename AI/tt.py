@@ -175,65 +175,94 @@
 #     print(f"API 요청 실패: {response.status_code}, {response.text}")
 
 
-import requests
-import json
-from AIanswer import load_movies_from_file
-import time
+# import requests
+# import json
+# from AIanswer import load_movies_from_file
+# import time
 
-# API 정보
-API_KEY = '528be68f87cd17fbb63cd610049e189b'  # 자신의 API 키 입력
-BASE_URL = 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json'
+# # API 정보
+# API_KEY = '528be68f87cd17fbb63cd610049e189b'  # 자신의 API 키 입력
+# BASE_URL = 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json'
 
-movies = load_movies_from_file("movies.json")
+# movies = load_movies_from_file("movies.json")
 
-all_movies = []
+# all_movies = []
 
-for movie in movies:
+# for movie in movies:
     
-    movieCd = movie.get("movieCd")
-    # 요청 파라미터
-    params = {
-        'key': API_KEY,       # API 키
-        'movieCd': movieCd # 영화 코드
-    }
+#     movieCd = movie.get("movieCd")
+#     # 요청 파라미터
+#     params = {
+#         'key': API_KEY,       # API 키
+#         'movieCd': movieCd # 영화 코드
+#     }
 
-    # API 호출
-    response = requests.get(BASE_URL, params=params)
+#     # API 호출
+#     response = requests.get(BASE_URL, params=params)
 
-    # 응답 처리
-    if response.status_code == 200:
-        try:
-            data = response.json()  # JSON 응답 파싱
+#     # 응답 처리
+#     if response.status_code == 200:
+#         try:
+#             data = response.json()  # JSON 응답 파싱
 
-            # 영화 상세 정보 추출
-            movie_info = data.get("movieInfoResult", {}).get("movieInfo", {})
-            if movie_info:
-                print("\n[영화 상세 정보]")
-                print(json.dumps(movie_info, ensure_ascii=False, indent=4))
-            else:
-                print("영화 상세 정보를 찾을 수 없습니다.")
-            all_movies.append(movie_info)
-            time.sleep(0.5)
-        except json.JSONDecodeError as e:
-            print(f"JSON 디코딩 오류: {e}")
+#             # 영화 상세 정보 추출
+#             movie_info = data.get("movieInfoResult", {}).get("movieInfo", {})
+#             if movie_info:
+#                 print("\n[영화 상세 정보]")
+#                 print(json.dumps(movie_info, ensure_ascii=False, indent=4))
+#             else:
+#                 print("영화 상세 정보를 찾을 수 없습니다.")
+#             all_movies.append(movie_info)
+#             time.sleep(0.5)
+#         except json.JSONDecodeError as e:
+#             print(f"JSON 디코딩 오류: {e}")
             
 
-    else:
-        print(f"API 요청 실패: {response.status_code}")
-        print(response.text)
+#     else:
+#         print(f"API 요청 실패: {response.status_code}")
+#         print(response.text)
 
-if all_movies:
-    with open('movie2.json', 'w', encoding='utf-8') as f:
-        json.dump(all_movies, f, ensure_ascii=False, indent=4)
-    print(f"총 {len(all_movies)}개의 영화 데이터를 저장했습니다.")
+# if all_movies:
+#     with open('movie2.json', 'w', encoding='utf-8') as f:
+#         json.dump(all_movies, f, ensure_ascii=False, indent=4)
+#     print(f"총 {len(all_movies)}개의 영화 데이터를 저장했습니다.")
 
-    # 중복 제거 (title 기준)
-    unique_titles = {item['movieCd']: item for item in all_movies}.values()
+#     # 중복 제거 (title 기준)
+#     unique_titles = {item['movieCd']: item for item in all_movies}.values()
 
-    with open('movie2.json', 'w', encoding='utf-8') as f:
-        json.dump(list(unique_titles), f, ensure_ascii=False, indent=4)
+#     with open('movie2.json', 'w', encoding='utf-8') as f:
+#         json.dump(list(unique_titles), f, ensure_ascii=False, indent=4)
 
-    print(f"중복 제거 후 {len(unique_titles)}개의 영화 데이터를 저장했습니다.")
+#     print(f"중복 제거 후 {len(unique_titles)}개의 영화 데이터를 저장했습니다.")
+# else:
+#     print("수집된 데이터가 없습니다.")
+
+
+import requests
+
+# 조회할 영화 ID
+movie_id = 27205  # Inception의 ID
+
+# 요청 URL
+url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=ko-KR"
+
+# 요청 헤더
+headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTlhZmFlZTVmNTBmMTQxNzk2NTcyMjVkMTYzNGI1MCIsIm5iZiI6MTczNjkwMTc3Ny4wOTEsInN1YiI6IjY3ODcwNDkxYmQ3OTNjMDM1NDRmMTVhZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.x_BLnc_T-WkxuE_3ECOtbzxNH6OVjz7kXR1eNB2vS3w"
+}
+
+# API 요청
+response = requests.get(url, headers=headers)
+
+# 결과 출력
+if response.status_code == 200:
+    movie_data = response.json()  # JSON 응답을 파이썬 딕셔너리로 변환
+    print(movie_data)
+    print(f"제목: {movie_data['title']}")
+    print(f"개봉일: {movie_data['release_date']}")
+    print(f"평점: {movie_data['vote_average']}")
+    print(f"개요: {movie_data['overview']}")
 else:
-    print("수집된 데이터가 없습니다.")
-
+    print(f"에러 발생: {response.status_code}")
+    print(response.text)

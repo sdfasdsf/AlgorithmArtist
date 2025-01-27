@@ -35,7 +35,14 @@ class ArticleListAPI(APIView):
 
     def get(self, request):
         """게시글 목록 조회"""
-        articles = Article.objects.all().order_by('-created_at') # 모든 게시글을 가져옴
+        # genre_filter = request.query_params.get('genre', '')  # 기본값 '' 설정
+        # print("Genre filter received:", genre_filter)  # 디버깅용
+        genre_filter = request.query_params.get('genre')  # 쿼리 매개변수로 'genre' 값을 가져옴
+        if genre_filter:
+            # 선택된 장르로 필터링
+            articles = Article.objects.filter(genre=genre_filter).order_by('-created_at')
+        else:
+            articles = Article.objects.all().order_by('-created_at') # 모든 게시글을 가져옴
         serializer = ArticleListSerializer(
             articles, many=True
         )  # 목록용 Serializer 사용

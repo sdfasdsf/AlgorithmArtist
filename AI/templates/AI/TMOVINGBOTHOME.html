@@ -1,208 +1,215 @@
-<!DOCTYPE html>
-<html lang="kr">
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}홈 - TMOVING{% endblock %}
+
+{% block content %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlickChat</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #222;
-            color: #fff;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #222;
+        color: #fff;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-        .navbar {
-            background-color: #333;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 77vh; /* 화면 전체 높이 */
+    }
 
-        .navbar .logo {
-            font-size: 20px;
-            font-weight: bold;
-        }
+    .chat-box-wrapper {
+        flex: 1; /* 남은 공간을 채움 */
+        overflow-y: auto; /* 채팅 내역만 스크롤 가능 */
+        background-color: #444;
+        padding: 10px;
+    }
 
-        .navbar .menu {
-            font-size: 12px;
-        }
+    .chat-box {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* 메시지 간 간격 */
+    }
 
-        .chat-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 40px);
-        }
+    .message {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 3px;
+        max-width: 70%; /* 메시지 최대 너비 */
+    }
 
-        .chat-box {
-            background-color: #444;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 0 10px #000;
-            max-width: 600px;
-            width: 100%;
-        }
+    .message.user {
+        align-self: flex-end; /* 사용자 메시지를 오른쪽 정렬 */
+        background-color: #ff0;
+        color: #000;
+    }
 
-        .message {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-        }
+    .message.user .text {
+        background-color: transparent; /* 배경색 제거 */
+        color: inherit; /* 부모의 색상 상속 */
+    }
 
-        .message .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #555;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
+    .message.assistant {
+        align-self: flex-start; /* AI 메시지를 왼쪽 정렬 */
+        background-color: #333;
+        color: #fff;
+    }
 
-        .message .text {
-            background-color: #666;
-            border-radius: 3px;
-            padding: 10px;
-            color: #fff;
-            max-width: 400px;
-        }
+    .message .text {
+        padding: 10px;
+        border-radius: 3px;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
 
-        .message.user .text {
-            background-color: #ff0;
-            color: #000;
-        }
+    .input-container {
+        display: flex;
+        padding: 10px;
+        background-color: #333;
+        align-items: center;
+        height: 60px; /* 고정된 높이 */
+        flex-shrink: 0;
+    }
 
-        .message.assistant .text {
-            background-color: #666;
-        }
+    .input-box {
+        flex: 1;
+        padding: 10px;
+        background-color: #222;
+        border: none;
+        color: #fff;
+        outline: none;
+        border-radius: 3px 0 0 3px;
+    }
 
-        .input-container {
-            display: flex;
-            padding: 5px;
-            background-color: #333;
-        }
+    .send-button {
+        background-color: #ff0;
+        border: none;
+        padding: 10px;
+        border-radius: 0 3px 3px 0;
+        cursor: pointer;
+        font-weight: bold;
+    }
 
-        .input-box {
-            flex: 1;
-            padding: 10px;
-            background-color: #222;
-            border: none;
-            color: #fff;
-            outline: none;
-            border-radius: 3px 0 0 3px;
-        }
-
-        .send-button {
-            background-color: #ff0;
-            border: none;
-            padding: 10px;
-            border-radius: 0 3px 3px 0;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
     </style>
 </head>
 
-<body>
-    <div class="navbar">
-        <div class="logo">TMOVINGBOT</div>
-        <div class="menu">AI CHATBOT &nbsp; PROFILE &nbsp; MOVIE INFORMATION</div>
-    </div>
-    <div class="chat-container">
-        <div class="chat-box" id="chatBox">
-            <div class="message assistant">
-                <div class="avatar"></div>
-                <div class="text">Hello! I'm Flick, your AI assistant. How can I help you today?</div>
-            </div>
-            <div class="message user">
-                <div class="avatar"></div>
-                <div class="text">Can you recommend a good movie?</div>
-            </div>
-            <div class="message assistant">
-                <div class="avatar"></div>
-                <div class="text">Sure! I recommend watching 'Inception'. It's a mind-bending thriller that keeps you on
-                    the edge of your seat.</div>
-            </div>
-            <div class="input-container">
+<div class="chat-container">
 
-                <form id="chatForm" method="post">
-                    {% csrf_token %}
-                </form>
-                <input type="text" class="input-box" id="userMessage" placeholder="Type your message...">
-                <button class="send-button" id="sendButton">SEND</button>
-            </div>
+    <div class="chat-box-wrapper" id="chatBox">
+        <div class="chat-box">
+
         </div>
     </div>
-    <script>
-        document.getElementById("sendButton").addEventListener("click", function () {
-            const messageInput = document.getElementById("userMessage");
-            const userMessage = messageInput.value;
 
-            if (userMessage.trim() === "") {
-                return; // 빈 메시지 전송 방지
-            }
+    <div class="input-container">
+        <form id="chatForm" method="post">
+            {% csrf_token %}
+        </form>
+        <input type="text" class="input-box" id="userMessage" placeholder="최신 영화나 인기 영화를 물어보세요...">
+        <button class="send-button" id="sendButton">SEND</button>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendButton = document.getElementById("sendButton");
+        const messageInput = document.getElementById("userMessage");
+        const chatBox = document.getElementById("chatBox");
 
-            // 사용자 메시지 표시
-            const userMessageHTML = `
-                <div class="message user">
-                    <div class="avatar"></div>
-                    <div class="text">${userMessage}</div>
+        // 사용자 메시지와 봇 응답을 추가하는 함수
+        function addMessageToChatBox(sender, message) {
+            const messageHTML = `
+                <div class="message ${sender}">
+                    <div class="text">${message}</div>
                 </div>
             `;
+            chatBox.querySelector(".chat-box").insertAdjacentHTML("beforeend", messageHTML);
+            chatBox.scrollTo(0, chatBox.scrollHeight); // 새 메시지가 추가될 때 자동 스크롤
+        }
 
-            const chatBox = document.getElementById("chatBox");
-            chatBox.innerHTML += userMessageHTML;
-            messageInput.value = ""; // 입력창 초기화
+        // 메시지를 전송하는 함수
+        function sendMessage() {
+            const userMessage = messageInput.value.trim();
 
-            chatBox.scrollTo(0, chatBox.scrollHeight);
+            if (!userMessage) {
+                return; // 빈 메시지는 전송하지 않음
+            }
 
+            // 사용자 메시지 추가
+            addMessageToChatBox("user", userMessage);
+
+            // 입력창 초기화 및 비활성화
+            messageInput.value = "";
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+
+            // CSRF 토큰 가져오기
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            // 서버로 메시지 전송
             const formData = new FormData();
             formData.append("user_question", userMessage);
 
-            messageInput.disabled = true;
-            document.getElementById("sendButton").disabled = true;
-
-            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-            // POST 요청 보내기
             fetch("http://127.0.0.1:8000/AI/TMOVINGBOT/api/", { // DRF API 주소
                 method: "POST",
                 headers: {
                     'X-CSRFToken': csrftoken
                 },
-                body: formData // 사용자 메시지를 JSON 형태로 전송
+                body: formData
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error("Network response was not ok");
                     }
                     return response.json();
                 })
                 .then(data => {
-                    // 서버 응답에서 bot_response만 가져오기
+                    // 서버 응답 메시지 추가
                     const botResponse = data.bot_response || "죄송합니다, 현재 답변을 제공할 수 없습니다.";
+                    addMessageToChatBox("assistant", botResponse);
 
-                    // AI 응답 표시
-                    const assistantMessageHTML = `
-                    <div class="message assistant">
-                        <div class="avatar"></div>
-                        <div class="text">${botResponse}</div> <!-- bot_response 사용 -->
-                    </div>
-                `;
-                    document.getElementById("chatBox").innerHTML += assistantMessageHTML;
-                    // 입력 박스 활성화
+                    // 입력창 활성화
                     messageInput.disabled = false;
-                    document.getElementById("sendButton").disabled = false;
-                    messageInput.focus(); // 입력 박스로 포커스
+                    sendButton.disabled = false;
+                    messageInput.focus();
                 })
                 .catch(error => {
                     console.error("Error:", error);
+                    addMessageToChatBox("assistant", "오류가 발생했습니다. 다시 시도해 주세요.");
                     messageInput.disabled = false;
-                    document.getElementById("sendButton").disabled = false;
+                    sendButton.disabled = false;
                 });
-        });
-    </script>
-</body>
+        }
 
-</html>
+        // 버튼 클릭 시 메시지 전송
+        sendButton.addEventListener("click", sendMessage);
+
+        // Enter 키로 메시지 전송
+        messageInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendButton.click();
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

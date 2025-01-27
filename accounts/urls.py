@@ -13,6 +13,7 @@ urlpatterns = [
     path("signup/", views.signup.as_view(), name="signup"),
     path("signout/", views.signout.as_view(), name="signout"),
     path("login/", views.Login.as_view(), name="login"),
+    path("checklogin/", views.CheckLoginStatus.as_view(), name="checklogin"),
     path("logout/", views.Logout.as_view(), name="logout"),
     path("profile/", views.profile.as_view(), name="profile"),  # 회원정보 조회 및 수정
     path("profile/api/",views.profileAPI.as_view(), name= "profile_API"), # 프로필 API

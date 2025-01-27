@@ -140,7 +140,7 @@ class Login(APIView):
 
             # 쿠키에 토큰 저장
             response = TemplateResponse(
-                request, 'home.html', {'user': request.user})
+                request, 'Main/home.html', {'user': request.user})
             response.set_cookie('access_token', access_token, httponly=True)
             response.set_cookie('refresh_token', refresh_token, httponly=True)
             print(response)
@@ -151,6 +151,18 @@ class Login(APIView):
                 {"error": "이메일 또는 비밀번호가 올바르지 않습니다."}, status=400
             )
 
+class CheckLoginStatus(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """
+        로그인 여부 확인 API
+        - 로그인된 사용자: 상태 200과 사용자 정보 반환
+        - 로그인되지 않은 사용자: 상태 401 반환
+        """
+        if request.user.is_authenticated:
+            return Response({"message": "로그인 상태입니다.", "user": request.user.username}, status=200)
+        return Response({"error": "로그인이 필요합니다."}, status=401)
 
 class Logout(APIView):
     # 로그인 사용자만 로그아웃 가능
