@@ -21,6 +21,10 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 MOVIEDATA_API_KEY = os.getenv("MOVIEDATA_API_KEY")
 
+import os
+
+MOVIEDATA_TOKEN = os.getenv("MOVIEDATA_TOKEN", "")
+THE_FILM_COUNCIL_API_KEY = os.getenv("THE_FILM_COUNCIL_API_KEY", "")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

@@ -128,8 +128,9 @@
     </div>
 </section>
 
-<!-- config.js 로드 -->
-<script src="{% static 'config.js' %}"></script>
+
+<script>const MOVIEDATA_TOKEN = "{{ MOVIEDATA_TOKEN }}";
+    const THE_FILM_COUNCIL_API_KEY = "{{ THE_FILM_COUNCIL_API_KEY }}";</script>
 <script>
     // API 호출
     fetch('https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&region=KR&page=1', {
@@ -218,7 +219,7 @@
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
-                    Authorization: `Bearer ${CONFIG.API_KEY}` // TMDB API 키 사용
+                    Authorization: `Bearer ${MOVIEDATA_TOKEN}` // TMDB API 키 사용
                 }
             });
 
@@ -232,7 +233,7 @@
     };
 
     // KOFIC 박스오피스 API 호출
-    fetch(`https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${boxCONFIG.API_KEY}&targetDt=${getYesterdayDate()}`)
+    fetch(`https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${THE_FILM_COUNCIL_API_KEY}&targetDt=${getYesterdayDate()}`)
         .then(response => response.json())
         .then(async data => {
             const movies = data.boxOfficeResult.dailyBoxOfficeList;

@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.throttling import AnonRateThrottle
+import os
 
 
 
@@ -16,7 +17,11 @@ class Main(APIView):
 
     def get(self,request):
         '''리뷰 목록 폼'''
-        return Response({'message': '리뷰 목록 페이지입니다.'})
+        context = {
+            "MOVIEDATA_TOKEN": os.getenv("MOVIEDATA_TOKEN", ""),
+            "THE_FILM_COUNCIL_API_KEY": os.getenv("THE_FILM_COUNCIL_API_KEY", "")
+        }
+        return Response(context)
     
 class Movie(APIView):
 
