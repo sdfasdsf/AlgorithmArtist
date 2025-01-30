@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import SignupSerializer, UserUpdateSerializer, UserProfileSerializer, passwordchangeSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.contrib.auth import authenticate, logout, get_user_model, login as auth_login
+from django.contrib.auth import authenticate, logout, get_user_model, login as auth_login, update_session_auth_hash
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -17,8 +17,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.template.response import TemplateResponse
 
+from django.contrib.auth.hashers import check_password
 
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -143,7 +143,6 @@ class Login(APIView):
                 request, 'Main/home.html', {'user': request.user})
             response.set_cookie('access_token', access_token, httponly=True)
             response.set_cookie('refresh_token', refresh_token, httponly=True)
-            print(response)
             return response
 
         else:
@@ -191,105 +190,94 @@ class Logout(APIView):
 
 class profile(APIView):
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 접근 가능
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'accounts/profile.html'
-    throttle_classes = [AnonRateThrottle]  # Rate limiting 적용
 
     def get(self, request):
         """프로필 폼 표시"""
-        # 헤더에서 Authorization 토큰 가져오기
-        auth_header = request.headers.get('Authorization')
-        print(f"Request Headers: {request.headers}")
-        print(f"Request Cookies: {request.COOKIES}")
-        token = None
-        if auth_header and auth_header.startswith('Bearer '):
-            token = auth_header.split(' ')[1]  # Bearer <token> 형식에서 token 추출
+        user = request.user  # 현재 로그인한 사용자
+        serializer = UserProfileSerializer(user, context={'request': request})
 
-        # 또는 쿠키에서 토큰 가져오기
-        access_token = request.COOKIES.get('access_token')
+        access_token = request.COOKIES.get('access_token', None)
+        
+        # 템플릿에 필요한 데이터 전달
+        context = {
+            'profile_data': serializer.data,  # 프로필 정보
 
-        refresh_token_from_cookie = request.COOKIES.get('refresh_token')
-        # 토큰이 존재하는지 확인
+            'access_token': access_token,   # 토큰도 템플릿에 전달
+        }
 
-        # 토큰이 존재하는지 확인
-        if token:
-            print(f"헤더에서 가져온 토큰: {token}")
-        elif access_token:
-            print(f"쿠키에서 가져온 토큰: {access_token}")
-            print(f"쿠키에서 가져온 refresh_token: {refresh_token_from_cookie}")
-        else:
-            print("토큰이 존재하지 않습니다.")
-        return Response({'message': '프로필 페이지입니다.'})
+        return Response(context)
 
 
-class profileAPI(APIView):
+class profileedit(APIView):
     # 로그인 사용자만 정보 조회 및 수정 가능
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated] # 인증된 사용자만 접근 가능
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'accounts/profileedit.html'  # 프로필 템플릿
 
     def get(self, request):
-        # 헤더에서 Authorization 토큰 가져오기
-        auth_header = request.headers.get('Authorization')
-        token = None
-        if auth_header and auth_header.startswith('Bearer '):
-            token = auth_header.split(' ')[1]  # Bearer <token> 형식에서 token 추출
+        """프로필 수정 페이지 렌더링"""
+        return Response({'message': '프로필 수정 페이지입니다.'})
+    
 
-        # 또는 쿠키에서 토큰 가져오기
-        access_token = request.COOKIES.get('access_token')
+class ProfileEditAPI(APIView):
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 접근 가능
 
-        refresh_token_from_cookie = request.COOKIES.get('refresh_token')
-        # 토큰이 존재하는지 확인
-
-        # 토큰이 존재하는지 확인
-        if token:
-            print(f"헤더에서 가져온 토큰: {token}")
-        elif access_token:
-            print(f"쿠키에서 가져온 토큰: {access_token}")
-            print(f"쿠키에서 가져온 refresh_token: {refresh_token_from_cookie}")
-        else:
-            print("토큰이 존재하지 않습니다.")
-
-        user = request.user  # JWT 인증을 통해 얻은 현재 사용자
-
-        serializer = UserProfileSerializer(user, context={"request": request})
-
-        return Response(serializer.data, status=200)
-
-    def put(self, request):
+    def get(self, request):
+        """프로필 데이터 반환 (JSON 형식)"""
         user = request.user
-        serializer = UserUpdateSerializer(
-            instance=user, data=request.data, partial=True
-        )  # partial=True로 일부 업데이트 허용
+        serializer = UserUpdateSerializer(user)
+        return Response(serializer.data)  # ✅ JSON 데이터 반환
 
+    def patch(self, request):
+        """프로필 수정 처리"""
+        user = request.user
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+        
         if serializer.is_valid():
-            serializer.save()  # 수정 내용 저장
-            return Response(
-                {
-                    "message": "회원정보가 성공적으로 수정되었습니다.",
-                    "user": serializer.data,
-                },
-                status=status.HTTP_200_OK,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            return Response(serializer.data, status=200)  # ✅ 수정된 데이터 JSON 반환
 
+        return Response(serializer.errors, status=400)
 
 class passwordchange(APIView):
-    def put(self, request):
-        user = request.user  # JWT 인증을 통해 얻은 현재 사용자
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 접근 가능
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'accounts/passwordchange.html'  # 프로필 템플릿
 
-        serializer = passwordchangeSerializer(
-            instance=user, data=request.data, partial=True
-        )  # partial=True로 일부 업데이트 허용
+    def get(self, request):
+        """비밀번호 변경 페이지 렌더링"""
+        return Response()
+
+    def post(self, request):
+        """비밀번호 변경 처리"""
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('password')
+        new_password_confirm = request.data.get('password_confirm')
+
+        # 현재 비밀번호 확인
+        if not check_password(current_password, request.user.password):
+            return JsonResponse({'error': '현재 비밀번호가 올바르지 않습니다.'}, status=400)
+
+        # 새 비밀번호 확인
+        if new_password != new_password_confirm:
+            return JsonResponse({'error': '새 비밀번호가 일치하지 않습니다.'}, status=400)
+
+
+        # 비밀번호 유효성 검사
+        serializer = passwordchangeSerializer(instance=request.user, data={'password': new_password}) 
         if serializer.is_valid():
-            serializer.save()  # 수정 내용 저장
-            return Response(
-                {
-                    "message": "비밀번호가 성공적으로 수정되었습니다.",
-                    "user": serializer.data,
-                },
-                status=status.HTTP_200_OK,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # 비밀번호 변경
+            serializer.save()
+
+            # 세션 업데이트 (로그인 유지)
+            update_session_auth_hash(request, request.user)  # 세션 업데이트
+            
+            return redirect('accounts:profile')  # 프로필 페이지로 리디렉션
+
+        return Response({'error': '비밀번호 변경에 실패했습니다.'}, status=400)
 
 
 class follow(APIView):

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 수정</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: #212121;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #3a3a3a;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .save {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .save:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .cancel {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .cancel:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>프로필 수정</h1>
+        <form id="profileEditForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="username">사용자명</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="profile_image">프로필 이미지</label>
+            <input type="file" id="profile_image" name="profile_image" accept="image/*">
+
+            <div class="buttons">
+                <button type="button" class="button cancel" onclick="window.location.href='/accounts/profile/'">취소</button>
+                <button type="submit" class="button save">저장</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("/accounts/profileedit/api/")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("username").value = data.username;
+                    document.getElementById("email").value = data.email;
+                })
+                .catch(error => {
+                    console.error("프로필 데이터를 불러오는 중 오류 발생:", error);
+                    alert("프로필 정보를 가져오지 못했습니다.");
+                });
+        });
+
+        document.getElementById("profileEditForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            fetch("/accounts/profileedit/api/", {
+                method: "PATCH",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("프로필이 성공적으로 수정되었습니다!");
+                window.location.href = "/accounts/profile/";
+            })
+            .catch(error => {
+                console.error("프로필 수정 중 오류 발생:", error);
+                alert("프로필 수정 중 문제가 발생했습니다.");
+            });
+        });
+    </script>
+</body>
+
+</html>

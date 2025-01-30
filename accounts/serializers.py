@@ -141,12 +141,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "profile_image")  # 수정 가능한 필드
+        fields = ("username", "email", "profile_image")  # 수정 가능한 필드
 
 class passwordchangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["password"]  # 수정 가능한 필드
+
+    def validate_password(self, value):
+        """비밀번호 유효성 검사"""
+        if len(value) < 8:
+            raise serializers.ValidationError("비밀번호는 8자리 이상이어야 합니다.")
+        # 다른 비밀번호 강도 관련 검사를 추가할 수도 있습니다.
+        return value
     
     def update(self, instance, validated_data):
         instance.set_password(validated_data['password'])  # 비밀번호 해시화
